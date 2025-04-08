@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teklif Hazırlayıcı", "Teklif Hazırlayıcı.csproj", "{506EFA77-9737-4007-BCAB-19C7F0367DBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{506EFA77-9737-4007-BCAB-19C7F0367DBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{506EFA77-9737-4007-BCAB-19C7F0367DBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{506EFA77-9737-4007-BCAB-19C7F0367DBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{506EFA77-9737-4007-BCAB-19C7F0367DBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E42B729B-A5C4-4C75-906F-79DEBD89B016}
+	EndGlobalSection
+EndGlobal
