@@ -28,26 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
+            this.btnSettings = new System.Windows.Forms.Button();
+            this.btnLogout = new System.Windows.Forms.Button();
+            this.btnOffer = new System.Windows.Forms.Button();
+            this.btnProduct = new System.Windows.Forms.Button();
+            this.btnAuth = new System.Windows.Forms.Button();
+            this.btnCompany = new System.Windows.Forms.Button();
+            this.btnHome = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button7);
-            this.panel1.Controls.Add(this.button6);
-            this.panel1.Controls.Add(this.button5);
-            this.panel1.Controls.Add(this.button4);
-            this.panel1.Controls.Add(this.button3);
-            this.panel1.Controls.Add(this.button2);
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.btnSettings);
+            this.panel1.Controls.Add(this.btnLogout);
+            this.panel1.Controls.Add(this.btnOffer);
+            this.panel1.Controls.Add(this.btnProduct);
+            this.panel1.Controls.Add(this.btnAuth);
+            this.panel1.Controls.Add(this.btnCompany);
+            this.panel1.Controls.Add(this.btnHome);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
@@ -55,76 +58,96 @@
             this.panel1.Size = new System.Drawing.Size(100, 681);
             this.panel1.TabIndex = 0;
             // 
-            // button1
+            // btnSettings
             // 
-            this.button1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.Location = new System.Drawing.Point(25, 25);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(50, 50);
-            this.button1.TabIndex = 0;
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSettings.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnSettings.Location = new System.Drawing.Point(25, 556);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(50, 50);
+            this.btnSettings.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.btnSettings, "Ayarlar");
+            this.btnSettings.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnLogout
             // 
-            this.button2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button2.FlatAppearance.BorderSize = 0;
-            this.button2.Location = new System.Drawing.Point(25, 75);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(50, 50);
-            this.button2.TabIndex = 1;
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnLogout.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnLogout.Location = new System.Drawing.Point(25, 606);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(50, 50);
+            this.btnLogout.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.btnLogout, "Çıkış Yap");
+            this.btnLogout.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // btnOffer
             // 
-            this.button3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button3.Location = new System.Drawing.Point(25, 125);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(50, 50);
-            this.button3.TabIndex = 2;
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnOffer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnOffer.Location = new System.Drawing.Point(25, 225);
+            this.btnOffer.Name = "btnOffer";
+            this.btnOffer.Size = new System.Drawing.Size(50, 50);
+            this.btnOffer.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.btnOffer, "Teklifler");
+            this.btnOffer.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // btnProduct
             // 
-            this.button4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button4.Location = new System.Drawing.Point(25, 175);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(50, 50);
-            this.button4.TabIndex = 3;
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnProduct.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnProduct.Location = new System.Drawing.Point(25, 175);
+            this.btnProduct.Name = "btnProduct";
+            this.btnProduct.Size = new System.Drawing.Size(50, 50);
+            this.btnProduct.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.btnProduct, "Ürünler");
+            this.btnProduct.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // btnAuth
             // 
-            this.button5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button5.Location = new System.Drawing.Point(25, 225);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(50, 50);
-            this.button5.TabIndex = 4;
-            this.button5.UseVisualStyleBackColor = true;
+            this.btnAuth.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnAuth.Location = new System.Drawing.Point(25, 125);
+            this.btnAuth.Name = "btnAuth";
+            this.btnAuth.Size = new System.Drawing.Size(50, 50);
+            this.btnAuth.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.btnAuth, "Yetkililer");
+            this.btnAuth.UseVisualStyleBackColor = true;
             // 
-            // button6
+            // btnCompany
             // 
-            this.button6.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button6.Location = new System.Drawing.Point(25, 606);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(50, 50);
-            this.button6.TabIndex = 6;
-            this.button6.UseVisualStyleBackColor = true;
+            this.btnCompany.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnCompany.FlatAppearance.BorderSize = 0;
+            this.btnCompany.Location = new System.Drawing.Point(25, 75);
+            this.btnCompany.Name = "btnCompany";
+            this.btnCompany.Size = new System.Drawing.Size(50, 50);
+            this.btnCompany.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.btnCompany, "Firmalar");
+            this.btnCompany.UseVisualStyleBackColor = true;
             // 
-            // button7
+            // btnHome
             // 
-            this.button7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button7.Location = new System.Drawing.Point(25, 556);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(50, 50);
-            this.button7.TabIndex = 5;
-            this.button7.UseVisualStyleBackColor = true;
+            this.btnHome.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnHome.FlatAppearance.BorderSize = 0;
+            this.btnHome.Location = new System.Drawing.Point(25, 25);
+            this.btnHome.Name = "btnHome";
+            this.btnHome.Size = new System.Drawing.Size(50, 50);
+            this.btnHome.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.btnHome, "Anasayfa");
+            this.btnHome.UseVisualStyleBackColor = true;
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ToolTipTitle = "Teklif Hazırlayıcı";
+            // 
+            // panel2
+            // 
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(100, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1164, 681);
+            this.panel2.TabIndex = 1;
             // 
             // dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "dashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -137,12 +160,14 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button btnHome;
+        private System.Windows.Forms.Button btnCompany;
+        private System.Windows.Forms.Button btnOffer;
+        private System.Windows.Forms.Button btnProduct;
+        private System.Windows.Forms.Button btnAuth;
+        private System.Windows.Forms.Button btnSettings;
+        private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Panel panel2;
     }
 }
