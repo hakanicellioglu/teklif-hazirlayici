@@ -84,6 +84,7 @@
       <DependentUpon>_teklif_hazirlayiciDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Validation\StringValidator.cs" />
+    <Compile Include="Validation\TextboxValidator.cs" />
     <EmbeddedResource Include="Forms\company.resx">
       <DependentUpon>company.cs</DependentUpon>
     </EmbeddedResource>
