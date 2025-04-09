@@ -62,5 +62,13 @@ namespace Teklif_Hazırlayıcı
                 btnTogglePassword.Text = "Göster";
             }
         }
+
+        private void lnkRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Hide();
+            register register = new register();
+            register.ShowDialog();
+            Show();
+        }
     }
 }

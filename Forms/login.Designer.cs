@@ -28,25 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblUsername = new System.Windows.Forms.Label();
             this.txtUsername = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblPassword = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnTogglePassword = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkRememberMe = new System.Windows.Forms.CheckBox();
             this.btnLogin = new System.Windows.Forms.Button();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
+            this.lnkForgotPassword = new System.Windows.Forms.LinkLabel();
+            this.lnkRegister = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
-            // label1
+            // lblUsername
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(53, 50);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(64, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Kullanıcı Adı";
+            this.lblUsername.AutoSize = true;
+            this.lblUsername.Location = new System.Drawing.Point(53, 50);
+            this.lblUsername.Name = "lblUsername";
+            this.lblUsername.Size = new System.Drawing.Size(64, 13);
+            this.lblUsername.TabIndex = 0;
+            this.lblUsername.Text = "Kullanıcı Adı";
             // 
             // txtUsername
             // 
@@ -55,14 +55,14 @@
             this.txtUsername.Size = new System.Drawing.Size(150, 20);
             this.txtUsername.TabIndex = 1;
             // 
-            // label2
+            // lblPassword
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(53, 109);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(37, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Parola";
+            this.lblPassword.AutoSize = true;
+            this.lblPassword.Location = new System.Drawing.Point(53, 109);
+            this.lblPassword.Name = "lblPassword";
+            this.lblPassword.Size = new System.Drawing.Size(37, 13);
+            this.lblPassword.TabIndex = 2;
+            this.lblPassword.Text = "Parola";
             // 
             // txtPassword
             // 
@@ -82,15 +82,15 @@
             this.btnTogglePassword.UseVisualStyleBackColor = true;
             this.btnTogglePassword.Click += new System.EventHandler(this.btnTogglePassword_Click);
             // 
-            // checkBox1
+            // chkRememberMe
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(53, 254);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(80, 17);
-            this.checkBox1.TabIndex = 5;
-            this.checkBox1.Text = "Beni Hatırla";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.chkRememberMe.AutoSize = true;
+            this.chkRememberMe.Location = new System.Drawing.Point(53, 254);
+            this.chkRememberMe.Name = "chkRememberMe";
+            this.chkRememberMe.Size = new System.Drawing.Size(80, 17);
+            this.chkRememberMe.TabIndex = 5;
+            this.chkRememberMe.Text = "Beni Hatırla";
+            this.chkRememberMe.UseVisualStyleBackColor = true;
             // 
             // btnLogin
             // 
@@ -102,41 +102,42 @@
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
-            // linkLabel1
+            // lnkForgotPassword
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.linkLabel1.Location = new System.Drawing.Point(53, 284);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(94, 13);
-            this.linkLabel1.TabIndex = 7;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Şifreni mi unuttun?";
+            this.lnkForgotPassword.AutoSize = true;
+            this.lnkForgotPassword.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkForgotPassword.Location = new System.Drawing.Point(53, 284);
+            this.lnkForgotPassword.Name = "lnkForgotPassword";
+            this.lnkForgotPassword.Size = new System.Drawing.Size(94, 13);
+            this.lnkForgotPassword.TabIndex = 7;
+            this.lnkForgotPassword.TabStop = true;
+            this.lnkForgotPassword.Text = "Şifreni mi unuttun?";
             // 
-            // linkLabel2
+            // lnkRegister
             // 
-            this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(53, 310);
-            this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(161, 13);
-            this.linkLabel2.TabIndex = 8;
-            this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "Hesabın mı yok? Hemen kayıt ol.";
+            this.lnkRegister.AutoSize = true;
+            this.lnkRegister.Location = new System.Drawing.Point(53, 310);
+            this.lnkRegister.Name = "lnkRegister";
+            this.lnkRegister.Size = new System.Drawing.Size(161, 13);
+            this.lnkRegister.TabIndex = 8;
+            this.lnkRegister.TabStop = true;
+            this.lnkRegister.Text = "Hesabın mı yok? Hemen kayıt ol.";
+            this.lnkRegister.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkRegister_LinkClicked);
             // 
             // login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 361);
-            this.Controls.Add(this.linkLabel2);
-            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.lnkRegister);
+            this.Controls.Add(this.lnkForgotPassword);
             this.Controls.Add(this.btnLogin);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.chkRememberMe);
             this.Controls.Add(this.btnTogglePassword);
             this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.txtUsername);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblUsername);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(300, 400);
             this.MinimumSize = new System.Drawing.Size(300, 400);
@@ -151,15 +152,15 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblUsername;
         private System.Windows.Forms.TextBox txtUsername;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnTogglePassword;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkRememberMe;
         private System.Windows.Forms.Button btnLogin;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.LinkLabel linkLabel2;
+        private System.Windows.Forms.LinkLabel lnkForgotPassword;
+        private System.Windows.Forms.LinkLabel lnkRegister;
     }
 }
 
