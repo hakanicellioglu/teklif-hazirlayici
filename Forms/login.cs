@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
+using Teklif_Hazırlayıcı.Forms;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
 
@@ -40,7 +41,10 @@ namespace Teklif_Hazırlayıcı
 
             if (UserManager.UserExists(txtUsername.Text, txtPassword.Text))
             {
-                MessageHelper.ShowInfo("Giriş Başarılı");
+                Hide();
+                dashboard dashboard = new dashboard();
+                dashboard.ShowDialog();
+                Close();
             }
             else
             {
