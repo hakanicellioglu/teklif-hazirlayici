@@ -118,6 +118,7 @@
             this.btnCompany.TabIndex = 1;
             this.toolTip1.SetToolTip(this.btnCompany, "Firmalar");
             this.btnCompany.UseVisualStyleBackColor = true;
+            this.btnCompany.Click += new System.EventHandler(this.btnCompany_Click);
             // 
             // btnHome
             // 
@@ -129,6 +130,7 @@
             this.btnHome.TabIndex = 0;
             this.toolTip1.SetToolTip(this.btnHome, "Anasayfa");
             this.btnHome.UseVisualStyleBackColor = true;
+            this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
             // 
             // toolTip1
             // 
@@ -149,6 +151,7 @@
             this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "dashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";

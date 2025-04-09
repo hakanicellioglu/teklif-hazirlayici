@@ -16,5 +16,24 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             InitializeComponent();
         }
+
+        private void LoadForm(Form formToLoad)
+        {
+            panel2.Controls.Clear();
+            formToLoad.TopLevel = false;
+            formToLoad.Dock = DockStyle.Fill;
+            panel2.Controls.Add(formToLoad);
+            formToLoad.Show();
+        }
+
+        private void btnHome_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCompany_Click(object sender, EventArgs e)
+        {
+            LoadForm(new company());
+        }
     }
 }
