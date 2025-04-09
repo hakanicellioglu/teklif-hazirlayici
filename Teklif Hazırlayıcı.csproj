@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\CompanyManager.cs" />
     <Compile Include="Business\UserManager.cs" />
     <Compile Include="DataAccess\DbConnection.cs" />
     <Compile Include="Forms\company.cs">
