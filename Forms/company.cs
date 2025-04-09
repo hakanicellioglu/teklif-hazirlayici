@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Teklif_Hazırlayıcı.Business;
 
 namespace Teklif_Hazırlayıcı.Forms
 {
@@ -15,6 +16,13 @@ namespace Teklif_Hazırlayıcı.Forms
         public company()
         {
             InitializeComponent();
+            LoadCompany();
+        }
+
+        private void LoadCompany()
+        {
+            CompanyManager manager = new CompanyManager();
+            dataGridView1.DataSource = manager.GetCompany();
         }
     }
 }
