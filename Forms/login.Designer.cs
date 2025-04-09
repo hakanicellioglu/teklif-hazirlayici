@@ -42,7 +42,7 @@
             // lblUsername
             // 
             this.lblUsername.AutoSize = true;
-            this.lblUsername.Location = new System.Drawing.Point(53, 50);
+            this.lblUsername.Location = new System.Drawing.Point(62, 44);
             this.lblUsername.Name = "lblUsername";
             this.lblUsername.Size = new System.Drawing.Size(64, 13);
             this.lblUsername.TabIndex = 0;
@@ -50,7 +50,7 @@
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(53, 76);
+            this.txtUsername.Location = new System.Drawing.Point(62, 70);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(150, 20);
             this.txtUsername.TabIndex = 1;
@@ -58,7 +58,7 @@
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(53, 109);
+            this.lblPassword.Location = new System.Drawing.Point(62, 103);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(37, 13);
             this.lblPassword.TabIndex = 2;
@@ -66,15 +66,15 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(53, 135);
+            this.txtPassword.Location = new System.Drawing.Point(62, 129);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(150, 20);
             this.txtPassword.TabIndex = 3;
+            this.txtPassword.UseSystemPasswordChar = true;
             // 
             // btnTogglePassword
             // 
-            this.btnTogglePassword.Location = new System.Drawing.Point(53, 168);
+            this.btnTogglePassword.Location = new System.Drawing.Point(62, 162);
             this.btnTogglePassword.Name = "btnTogglePassword";
             this.btnTogglePassword.Size = new System.Drawing.Size(100, 30);
             this.btnTogglePassword.TabIndex = 4;
@@ -85,7 +85,7 @@
             // chkRememberMe
             // 
             this.chkRememberMe.AutoSize = true;
-            this.chkRememberMe.Location = new System.Drawing.Point(53, 254);
+            this.chkRememberMe.Location = new System.Drawing.Point(62, 248);
             this.chkRememberMe.Name = "chkRememberMe";
             this.chkRememberMe.Size = new System.Drawing.Size(80, 17);
             this.chkRememberMe.TabIndex = 5;
@@ -94,7 +94,7 @@
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(53, 211);
+            this.btnLogin.Location = new System.Drawing.Point(62, 205);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(100, 30);
             this.btnLogin.TabIndex = 6;
@@ -106,7 +106,7 @@
             // 
             this.lnkForgotPassword.AutoSize = true;
             this.lnkForgotPassword.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkForgotPassword.Location = new System.Drawing.Point(53, 284);
+            this.lnkForgotPassword.Location = new System.Drawing.Point(62, 278);
             this.lnkForgotPassword.Name = "lnkForgotPassword";
             this.lnkForgotPassword.Size = new System.Drawing.Size(94, 13);
             this.lnkForgotPassword.TabIndex = 7;
@@ -116,7 +116,7 @@
             // lnkRegister
             // 
             this.lnkRegister.AutoSize = true;
-            this.lnkRegister.Location = new System.Drawing.Point(53, 310);
+            this.lnkRegister.Location = new System.Drawing.Point(62, 304);
             this.lnkRegister.Name = "lnkRegister";
             this.lnkRegister.Size = new System.Drawing.Size(161, 13);
             this.lnkRegister.TabIndex = 8;

@@ -51,16 +51,7 @@ namespace Teklif_Hazırlayıcı
 
         private void btnTogglePassword_Click(object sender, EventArgs e)
         {
-            if(txtPassword.PasswordChar == '*')
-            {
-                txtPassword.PasswordChar = '\n';
-                btnTogglePassword.Text = "Gizle";
-            }
-            else
-            {
-                txtPassword.PasswordChar = '*';
-                btnTogglePassword.Text = "Göster";
-            }
+            TogglePassword togglePassword = new TogglePassword(txtPassword, btnTogglePassword);
         }
 
         private void lnkRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
