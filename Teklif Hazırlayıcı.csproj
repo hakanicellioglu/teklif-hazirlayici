@@ -49,6 +49,12 @@
   <ItemGroup>
     <Compile Include="Business\UserManager.cs" />
     <Compile Include="DataAccess\DbConnection.cs" />
+    <Compile Include="Forms\company.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\company.Designer.cs">
+      <DependentUpon>company.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\dashboard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,6 +83,9 @@
       <DependentUpon>_teklif_hazirlayiciDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Validation\StringValidator.cs" />
+    <EmbeddedResource Include="Forms\company.resx">
+      <DependentUpon>company.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\dashboard.resx">
       <DependentUpon>dashboard.cs</DependentUpon>
     </EmbeddedResource>
