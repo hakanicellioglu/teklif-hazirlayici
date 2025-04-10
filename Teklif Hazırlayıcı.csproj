@@ -62,6 +62,12 @@
     <Compile Include="Forms\dashboard.Designer.cs">
       <DependentUpon>dashboard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editor\companyEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editor\companyEditor.Designer.cs">
+      <DependentUpon>companyEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\dashboard.resx">
       <DependentUpon>dashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editor\companyEditor.resx">
+      <DependentUpon>companyEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\login.resx">
       <DependentUpon>login.cs</DependentUpon>
