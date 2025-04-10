@@ -35,5 +35,15 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             LoadForm(new company());
         }
+
+        private void btnAuth_Click(object sender, EventArgs e)
+        {
+            LoadForm(new auth());
+        }
+
+        private void dashboard_Resize(object sender, EventArgs e)
+        {
+
+        }
     }
 }

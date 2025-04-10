@@ -107,6 +107,7 @@
             this.btnAuth.TabIndex = 2;
             this.toolTip1.SetToolTip(this.btnAuth, "Yetkililer");
             this.btnAuth.UseVisualStyleBackColor = true;
+            this.btnAuth.Click += new System.EventHandler(this.btnAuth_Click);
             // 
             // btnCompany
             // 
@@ -155,6 +156,7 @@
             this.Name = "dashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.pnlMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
