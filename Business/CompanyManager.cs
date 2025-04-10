@@ -24,7 +24,7 @@ namespace Teklif_Hazırlayıcı.Business
 
         public DataTable GetCompany()
         {
-            string query = "SELECT * FROM Firmalar";
+            string query = "SELECT * FROM firmalar";
             using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
             {
                 OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
