@@ -59,7 +59,7 @@ namespace Teklif_Hazırlayıcı.Business
                                     return false;
                                 }
                             }
-                                
+
                         }
                     }
                     catch (Exception ex)
@@ -73,35 +73,27 @@ namespace Teklif_Hazırlayıcı.Business
 
         private bool isThere(string parameter)
         {
-            try
+            using (OleDbConnection conn = _connection.GetConnection())
             {
-                _connection.Open();
-                using (OleDbConnection conn = _connection.GetConnection())
+                conn.Open();
+                string query = "SELECT COUNT(*) FROM kullanicilar WHERE kullanici_adi = @Parameter";
+                using (OleDbCommand command = new OleDbCommand(query, _connection.GetConnection()))
                 {
-                    string query = "SELECT COUNT(*) FROM kullanicilar WHERE kullanici_adi = @Parameter";
-                    using (OleDbCommand command = new OleDbCommand(query, _connection.GetConnection()))
-                    {
-                        command.Parameters.AddWithValue("@Parameter", parameter);
-                        int count = (int)command.ExecuteScalar();
-                        return count > 0;
-                    }
+                    command.Parameters.AddWithValue("@Parameter", parameter);
+                    int count = (int)command.ExecuteScalar();
+                    return count > 0;
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageHelper.ShowError("Hata: " + ex.Message);
-                return false;
             }
         }
 
         public bool UserExists(string username, string password)
         {
-            try
+            using (OleDbConnection conn = _connection.GetConnection())
             {
-                _connection.Open();
 
+                conn.Open();
                 string query = "SELECT COUNT(*) FROM kullanicilar WHERE kullanici_adi = @Username AND parola = @Password";
-                using (OleDbCommand command = new OleDbCommand(query, _connection.GetConnection()))
+                using (OleDbCommand command = new OleDbCommand(query, conn))
                 {
                     command.Parameters.AddWithValue("@Username", username);
                     command.Parameters.AddWithValue("@Password", password);
@@ -109,10 +101,6 @@ namespace Teklif_Hazırlayıcı.Business
                     int count = (int)command.ExecuteScalar();
                     return count > 0;
                 }
-            }
-            finally
-            {
-                _connection.Close();
             }
         }
     }

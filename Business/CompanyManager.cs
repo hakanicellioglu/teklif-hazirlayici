@@ -38,24 +38,25 @@ namespace Teklif_Hazırlayıcı.Business
 
             DataTable dt = new DataTable();
 
-            _connection.Open();
-
-            using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
+            using (OleDbConnection conn = _connection.GetConnection())
             {
-                // Parametreleri ekle
-                cmd.Parameters.Clear();
-                cmd.Parameters.AddWithValue("@ad", $"%{search}%");
-                //cmd.Parameters.AddWithValue("@adres", $"%{search}%");
-                //cmd.Parameters.AddWithValue("@telefon", $"%{search}%");
-                //cmd.Parameters.AddWithValue("@eposta", $"%{search}%");
-
-                using (OleDbDataAdapter adapter = new OleDbDataAdapter(cmd))
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
                 {
-                    adapter.Fill(dt);
-                }
-            }
+                    // Parametreleri ekle
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@ad", $"%{search}%");
+                    //cmd.Parameters.AddWithValue("@adres", $"%{search}%");
+                    //cmd.Parameters.AddWithValue("@telefon", $"%{search}%");
+                    //cmd.Parameters.AddWithValue("@eposta", $"%{search}%");
 
-            _connection.Close();
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(cmd))
+                    {
+                        adapter.Fill(dt);
+                    }
+                }
+                conn.Close();
+            }
 
             if (dt.Rows.Count == 0)
             {
@@ -68,18 +69,24 @@ namespace Teklif_Hazırlayıcı.Business
         public bool CompanyExists(string parameter)
         {
             string query = "SELECT adi FROM firmalar WHERE name = @Name";
-            using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
+            using (OleDbConnection conn = _connection.GetConnection())
             {
-                cmd.Parameters.AddWithValue("@Name", parameter);
-                OleDbDataReader reader = cmd.ExecuteReader();
-                string company_name = reader["adi"].ToString().ToLower();
-                if (company_name == parameter.ToLower())
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
                 {
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    cmd.Parameters.AddWithValue("@Name", parameter);
+                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string company_name = reader["adi"].ToString().ToLower();
+                            return company_name == parameter.ToLower();
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
         }
@@ -88,24 +95,34 @@ namespace Teklif_Hazırlayıcı.Business
         {
             if (!CompanyExists(name))
             {
-                string query = "INSERT INTO firmalar(adi,adres,telefon,eposta) VALUES(@Name, @Address, @PhoneNumber, @Email)";
-                using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
+                string query = "INSERT INTO firmalar(adi, adres, telefon, eposta) VALUES(@Name, @Address, @PhoneNumber, @Email)";
+                using (OleDbConnection conn = _connection.GetConnection())
                 {
-                    cmd.Parameters.AddWithValue("@Name", name);
-                    cmd.Parameters.AddWithValue("@Address", address);
-                    cmd.Parameters.AddWithValue("@PhoneNumber", phone_number);
-                    cmd.Parameters.AddWithValue("@Email", email);
-                    int result = cmd.ExecuteNonQuery();
-                    if (result > 0)
+                    conn.Open();
+                    using (OleDbCommand cmd = new OleDbCommand(query, conn))
                     {
-                        MessageHelper.ShowSuccess("Firma başarıyla eklendi");
-                    }
-                    else
-                    {
-                        MessageHelper.ShowError("Firma eklenirken hata oluştu.");
+                        cmd.Parameters.AddWithValue("@Name", name);
+                        cmd.Parameters.AddWithValue("@Address", address);
+                        cmd.Parameters.AddWithValue("@PhoneNumber", phone_number);
+                        cmd.Parameters.AddWithValue("@Email", email);
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            MessageHelper.ShowSuccess("Firma başarıyla eklendi");
+                        }
+                        else
+                        {
+                            MessageHelper.ShowError("Firma eklenirken hata oluştu.");
+                        }
                     }
                 }
             }
+            else
+            {
+                MessageHelper.ShowWarning("Bu isimde bir firma zaten var.");
+            }
         }
+
     }
 }
