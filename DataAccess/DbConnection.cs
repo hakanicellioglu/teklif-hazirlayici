@@ -11,11 +11,12 @@ namespace Teklif_Hazırlayıcı.DataAccess
     public class DbConnection
     {
         private readonly OleDbConnection _connection;
+        private readonly string _connectionString;
 
         public DbConnection()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            _connection = new OleDbConnection(connectionString);
+            _connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+            _connection = new OleDbConnection(_connectionString);
         }
 
         public void Open()
@@ -32,7 +33,7 @@ namespace Teklif_Hazırlayıcı.DataAccess
 
         public OleDbConnection GetConnection()
         {
-            return _connection;
+            return new OleDbConnection(_connectionString);
         }
     }
 }
