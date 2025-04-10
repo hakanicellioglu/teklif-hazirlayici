@@ -1,0 +1,149 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Teklif_Hazırlayıcı.Business;
+using Teklif_Hazırlayıcı.Helpers;
+using Teklif_Hazırlayıcı.Validation;
+
+namespace Teklif_Hazırlayıcı.Forms.Editor
+{
+    public partial class authEditor : Form
+    {
+        string editor_mode;
+        int? auth_id;
+        CompanyManager CompanyManager = new CompanyManager();
+        AuthManager AuthManager = new AuthManager();
+
+        public authEditor(int? authId, string editorMode)
+        {
+            InitializeComponent();
+            auth_id = authId;
+            editor_mode = editorMode;
+            LoadCompany();
+            SelectionMode();
+        }
+
+        private void LoadCompany()
+        {
+            var dt = CompanyManager.GetCompany(); // DataTable
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                MessageBox.Show("Şirket verileri yüklenemedi.");
+                return;
+            }
+
+            comboBox1.DataSource = dt;
+            comboBox1.DisplayMember = "adi"; // Görünen
+            comboBox1.ValueMember = "firma_id";    // Firma ID (veritabanı ID'si)
+        }
+
+        private void SelectionMode()
+        {
+            if (editor_mode == "Add")
+            {
+                button1.Text = "Ekle";
+                btnCancel.Visible = false;
+            }
+            else if (editor_mode == "Edit")
+            {
+                button1.Text = "Kaydet";
+                btnCancel.Visible = true;
+
+                AuthManager manager = new AuthManager();
+                CompanyManager companyManager = new CompanyManager();
+                var data = manager.GetAuthById(auth_id);
+
+                if (data.Any())
+                {
+                    var auth = data.First();
+
+                    var authList = companyManager.GetCompanyById(Convert.ToInt32(auth["firma_id"]));
+                    if (authList.Count > 0)
+                    {
+                        string firmaAdi = authList[0]["adi"].ToString();
+                        int index = comboBox1.FindStringExact(firmaAdi);
+                        if (index >= 0)
+                        {
+                            comboBox1.SelectedIndex = index;
+                        }
+                    }
+
+                    textBox1.Text = auth["isim"];
+                    textBox2.Text = auth["soyisim"];
+
+                    int index2 = comboBox2.FindStringExact(auth["hitap"]);
+                    if (index2 >= 0)
+                    {
+                        comboBox2.SelectedIndex = index2;
+                    }
+
+                    textBox3.Text = auth["adres"];
+                    textBox4.Text = auth["telefon"];
+                    textBox5.Text = auth["eposta"];
+                }
+                else
+                {
+                    MessageBox.Show("Firma bulunamadı.");
+                }
+
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int companyId;
+            if (editor_mode == "Add")
+            {
+                if (TextboxValidator.IsNullOrWhiteSpace(textBox1))
+                {
+                    MessageHelper.ShowError("Firma isim alanı boş bırakılamaz.");
+                }
+                else
+                {
+                    companyId = Convert.ToInt32(comboBox1.SelectedValue);
+                    AuthManager.AddAuth(companyId, textBox1.Text, textBox2.Text, comboBox2.Text, textBox3.Text, textBox4.Text, textBox5.Text);
+                    DialogResult = DialogResult.OK;
+                }
+            }
+            else if (editor_mode == "Edit")
+            {
+                if (MessageHelper.ShowQuestion("Kaydetmek istediğinize emin misiniz? Bu işlem geri alınamaz.") == DialogResult.Yes)
+                {
+                    if (comboBox1.SelectedValue == null)
+                    {
+                        MessageBox.Show("Lütfen bir firma seçin.");
+                        return;
+                    }
+
+                    // Ardından çağrı
+                    companyId = Convert.ToInt32(comboBox1.SelectedValue);
+
+                    AuthManager.UpdateAuth(
+                        auth_id,
+                        companyId,
+                        textBox1.Text,
+                        textBox2.Text,
+                        comboBox2.Text,
+                        textBox3.Text,
+                        textBox4.Text,
+                        textBox5.Text
+                    );
+                    DialogResult = DialogResult.OK;
+                }
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+    }
+}

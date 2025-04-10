@@ -150,6 +150,8 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "companyEditor";
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
