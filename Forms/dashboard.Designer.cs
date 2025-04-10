@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlMenu = new System.Windows.Forms.Panel();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnOffer = new System.Windows.Forms.Button();
@@ -38,25 +38,25 @@
             this.btnCompany = new System.Windows.Forms.Button();
             this.btnHome = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel1.SuspendLayout();
+            this.pnlForm = new System.Windows.Forms.Panel();
+            this.pnlMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // pnlMenu
             // 
-            this.panel1.Controls.Add(this.btnSettings);
-            this.panel1.Controls.Add(this.btnLogout);
-            this.panel1.Controls.Add(this.btnOffer);
-            this.panel1.Controls.Add(this.btnProduct);
-            this.panel1.Controls.Add(this.btnAuth);
-            this.panel1.Controls.Add(this.btnCompany);
-            this.panel1.Controls.Add(this.btnHome);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(25);
-            this.panel1.Size = new System.Drawing.Size(100, 681);
-            this.panel1.TabIndex = 0;
+            this.pnlMenu.Controls.Add(this.btnSettings);
+            this.pnlMenu.Controls.Add(this.btnLogout);
+            this.pnlMenu.Controls.Add(this.btnOffer);
+            this.pnlMenu.Controls.Add(this.btnProduct);
+            this.pnlMenu.Controls.Add(this.btnAuth);
+            this.pnlMenu.Controls.Add(this.btnCompany);
+            this.pnlMenu.Controls.Add(this.btnHome);
+            this.pnlMenu.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlMenu.Location = new System.Drawing.Point(0, 0);
+            this.pnlMenu.Name = "pnlMenu";
+            this.pnlMenu.Padding = new System.Windows.Forms.Padding(25);
+            this.pnlMenu.Size = new System.Drawing.Size(100, 681);
+            this.pnlMenu.TabIndex = 0;
             // 
             // btnSettings
             // 
@@ -136,33 +136,33 @@
             // 
             this.toolTip1.ToolTipTitle = "Teklif Hazırlayıcı";
             // 
-            // panel2
+            // pnlForm
             // 
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(100, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1164, 681);
-            this.panel2.TabIndex = 1;
+            this.pnlForm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlForm.Location = new System.Drawing.Point(100, 0);
+            this.pnlForm.Name = "pnlForm";
+            this.pnlForm.Size = new System.Drawing.Size(1164, 681);
+            this.pnlForm.TabIndex = 1;
             // 
             // dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 681);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.pnlForm);
+            this.Controls.Add(this.pnlMenu);
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "dashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";
-            this.panel1.ResumeLayout(false);
+            this.pnlMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pnlMenu;
         private System.Windows.Forms.Button btnHome;
         private System.Windows.Forms.Button btnCompany;
         private System.Windows.Forms.Button btnOffer;
@@ -171,6 +171,6 @@
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel pnlForm;
     }
 }

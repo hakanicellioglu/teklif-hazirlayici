@@ -19,10 +19,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void LoadForm(Form formToLoad)
         {
-            panel2.Controls.Clear();
+            pnlForm.Controls.Clear();
             formToLoad.TopLevel = false;
             formToLoad.Dock = DockStyle.Fill;
-            panel2.Controls.Add(formToLoad);
+            pnlForm.Controls.Add(formToLoad);
             formToLoad.Show();
         }
 
