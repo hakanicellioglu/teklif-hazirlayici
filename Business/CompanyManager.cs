@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Teklif_Hazırlayıcı.Helpers;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -157,6 +160,28 @@ namespace Teklif_Hazırlayıcı.Business
                     else
                     {
                         MessageHelper.ShowError("Firma güncellenirken hata oluştu.");
+                    }
+                }
+            }
+        }
+        public void DeleteCompany(int id)
+        {
+            string query = "DELETE FROM firmalar WHERE firma_id = @CompanyId";
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@CompanyId", id);
+                    int result = cmd.ExecuteNonQuery();
+
+                    if (result > 0)
+                    {
+                        MessageHelper.ShowSuccess("Firma başarıyla silindi");
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError("Firma silerken hata oluştu.");
                     }
                 }
             }
