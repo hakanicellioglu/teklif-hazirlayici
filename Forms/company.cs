@@ -64,13 +64,16 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddCompany_Click(object sender, EventArgs e)
         {
-            companyEditor companyEditor = new companyEditor("Add");
+            companyEditor companyEditor = new companyEditor(null, "Add");
             companyEditor.ShowDialog();
             LoadCompany();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            dataGridView1.DataSource = null;
+            dataGridView1.Rows.Clear();
+
             if (TextboxValidator.IsNullOrWhiteSpace(txtSearch))
             {
                 MessageHelper.ShowError("Arama alanı boş bırakılamaz.");
@@ -79,9 +82,9 @@ namespace Teklif_Hazırlayıcı.Forms
             {
                 if (CompanyManager.Search(txtSearch.Text) != null)
                 {
-                    CompanyManager.Search(txtSearch.Text);
                     SetupGridColumnProperties();
                     SetupCompanyGridColumns();
+                    dataGridView1.DataSource = CompanyManager.Search(txtSearch.Text);
                 }
                 else
                 {
@@ -98,6 +101,17 @@ namespace Teklif_Hazırlayıcı.Forms
             txtSearch.Clear();
             dataGridView1.DataSource = null;
             LoadCompany();
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                int? value = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value?.ToString());
+                companyEditor companyEditor = new companyEditor(value, "Edit");
+                companyEditor.ShowDialog();
+                LoadCompany();
+            }
         }
     }
 }
