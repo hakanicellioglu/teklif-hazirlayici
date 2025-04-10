@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
+using Teklif_Hazırlayıcı.Forms.Custom_Item;
 using Teklif_Hazırlayıcı.Forms.Editor;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
@@ -108,9 +109,23 @@ namespace Teklif_Hazırlayıcı.Forms
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
                 int? value = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value?.ToString());
-                companyEditor companyEditor = new companyEditor(value, "Edit");
-                companyEditor.ShowDialog();
-                LoadCompany();
+                var result = CustomMessageBox.Show("Bu şirketi düzenlemek veya silmek istiyor musunuz?");
+
+                if (result == CustomMessageBox.CustomResult.Duzenle)
+                {
+                    companyEditor editor = new companyEditor(value, "Edit");
+                    editor.ShowDialog();
+                    LoadCompany();
+                }
+                else if (result == CustomMessageBox.CustomResult.Sil)
+                {
+                    var confirm = MessageBox.Show("Bu şirketi silmek istediğinize emin misiniz?", "Onay", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (confirm == DialogResult.Yes)
+                    {
+                        CompanyManager.DeleteCompany(value.Value);
+                        LoadCompany();
+                    }
+                }
             }
         }
     }
