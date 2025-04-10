@@ -32,7 +32,6 @@ namespace Teklif_Hazırlayıcı.Forms
             SetupCompanyGridColumns();
         }
 
-
         private void SetupGridColumnProperties()
         {
             foreach (DataGridViewColumn col in dataGridView1.Columns)
@@ -83,9 +82,9 @@ namespace Teklif_Hazırlayıcı.Forms
             {
                 if (CompanyManager.Search(txtSearch.Text) != null)
                 {
+                    dataGridView1.DataSource = CompanyManager.Search(txtSearch.Text);
                     SetupGridColumnProperties();
                     SetupCompanyGridColumns();
-                    dataGridView1.DataSource = CompanyManager.Search(txtSearch.Text);
                 }
                 else
                 {
