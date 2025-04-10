@@ -65,10 +65,6 @@ namespace Teklif_Hazırlayıcı.Business
             return dt;
         }
 
-
-
-
-
         public bool CompanyExists(string parameter)
         {
             string query = "SELECT adi FROM firmalar WHERE name = @Name";
