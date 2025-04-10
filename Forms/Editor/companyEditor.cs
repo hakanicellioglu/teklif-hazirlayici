@@ -42,14 +42,15 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         {
             if (editor_mode == "Add")
             {
-                if (TextboxValidator.IsNullOrWhiteSpace(textBox1) || TextboxValidator.IsNullOrWhiteSpace(textBox2) || TextboxValidator.IsNullOrWhiteSpace(textBox3) || TextboxValidator.IsNullOrWhiteSpace(textBox4))
+                if (TextboxValidator.IsNullOrWhiteSpace(textBox1))
                 {
-                    MessageHelper.ShowError("Zorunlu alan(lar) boş bırakılamaz. Lütfen alan(ları) doldurunuz.");
+                    MessageHelper.ShowError("Firma isim alanı boş bırakılamaz.");
                 }
                 else
                 {
                     CompanyManager companyManager = new CompanyManager();
                     companyManager.AddCompany(textBox1.Text, textBox2.Text, textBox3.Text, textBox4.Text);
+                    DialogResult = DialogResult.OK;
                 }
             }
             else if(editor_mode == "Edit")

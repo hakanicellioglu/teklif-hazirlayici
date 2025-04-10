@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
+using Teklif_Hazırlayıcı.Forms.Editor;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
 
@@ -29,6 +30,7 @@ namespace Teklif_Hazırlayıcı.Forms
             SetupGridColumnProperties();
             SetupCompanyGridColumns();
         }
+
 
         private void SetupGridColumnProperties()
         {
@@ -62,7 +64,9 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddCompany_Click(object sender, EventArgs e)
         {
-            // Yeni form
+            companyEditor companyEditor = new companyEditor("Add");
+            companyEditor.ShowDialog();
+            LoadCompany();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
