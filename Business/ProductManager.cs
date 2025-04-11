@@ -61,7 +61,7 @@ namespace Teklif_Hazırlayıcı.Business
                 {
                     cmd.Parameters.AddWithValue("@MoldNumber", mold_number);
                     cmd.Parameters.AddWithValue("@Product", product);
-                    cmd.Parameters.AddWithValue("@Weight", weight);
+                    cmd.Parameters.Add("@Weight", OleDbType.Double).Value = weight;
                     cmd.Parameters.AddWithValue("@Category", category);
                     int result = cmd.ExecuteNonQuery();
 
@@ -128,7 +128,7 @@ namespace Teklif_Hazırlayıcı.Business
                 {
                     updateCmd.Parameters.AddWithValue("@MoldNumber", mold_number);
                     updateCmd.Parameters.AddWithValue("@Product", product);
-                    updateCmd.Parameters.AddWithValue("@Weight", weight);
+                    updateCmd.Parameters.Add("@Weight", OleDbType.Double).Value = weight;
                     updateCmd.Parameters.AddWithValue("@Category", category);
                     updateCmd.Parameters.AddWithValue("@ProductId", product_id);
 
