@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Business\AuthManager.cs" />
     <Compile Include="Business\CompanyManager.cs" />
+    <Compile Include="Business\OfferManager.cs" />
     <Compile Include="Business\ProductManager.cs" />
     <Compile Include="Business\UserManager.cs" />
     <Compile Include="DataAccess\DbConnection.cs" />
@@ -88,6 +89,12 @@
     <Compile Include="Forms\Editor\companyEditor.Designer.cs">
       <DependentUpon>companyEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editor\offerEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editor\offerEditor.Designer.cs">
+      <DependentUpon>offerEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editor\productEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,6 +106,12 @@
     </Compile>
     <Compile Include="Forms\login.Designer.cs">
       <DependentUpon>login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\offer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\offer.Designer.cs">
+      <DependentUpon>offer.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\product.cs">
       <SubType>Form</SubType>
@@ -146,6 +159,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\login.resx">
       <DependentUpon>login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\offer.resx">
+      <DependentUpon>offer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\product.resx">
       <DependentUpon>product.cs</DependentUpon>
