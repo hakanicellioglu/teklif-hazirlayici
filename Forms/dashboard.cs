@@ -50,5 +50,10 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             LoadForm(new product());
         }
+
+        private void btnOffer_Click(object sender, EventArgs e)
+        {
+            LoadForm(new offer());
+        }
     }
 }

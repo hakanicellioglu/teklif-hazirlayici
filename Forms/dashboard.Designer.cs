@@ -87,6 +87,7 @@
             this.btnOffer.TabIndex = 4;
             this.toolTip1.SetToolTip(this.btnOffer, "Teklifler");
             this.btnOffer.UseVisualStyleBackColor = true;
+            this.btnOffer.Click += new System.EventHandler(this.btnOffer_Click);
             // 
             // btnProduct
             // 
