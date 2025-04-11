@@ -13,13 +13,10 @@ namespace Teklif_Hazırlayıcı.Business
     public class AuthManager
     {
         private readonly DataAccess.DbConnection _connection;
-
         public AuthManager()
         {
             _connection = new DataAccess.DbConnection();
         }
-
-
         public DataTable GetAuth()
         {
             string query = "SELECT * FROM yetkililer";
@@ -31,7 +28,6 @@ namespace Teklif_Hazırlayıcı.Business
                 return dt;
             }
         }
-
         public DataTable GetAuthWithCompanyName()
         {
             string query = @"
@@ -47,8 +43,6 @@ namespace Teklif_Hazırlayıcı.Business
                 return dt;
             }
         }
-
-
         public DataTable Search(string search)
         {
             string query = @"
@@ -82,8 +76,6 @@ namespace Teklif_Hazırlayıcı.Business
 
             return dt.Rows.Count > 0 ? dt : null;
         }
-
-
         public void AddAuth(int company_id, string name, string surname, string honorific, string address, string phone_number, string email)
         {
             string query = "INSERT INTO yetkililer(firma_id, isim, soyisim, hitap, adres, telefon, eposta) VALUES(@CompanyId, @Name, @Surname, @Honorific, @Address, @PhoneNumber, @Email)";
@@ -112,7 +104,6 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
-
         public void UpdateAuth(int? auth_id, int? company_id, string name, string surname, string honorific, string address, string phone_number, string email)
         {
             if (!auth_id.HasValue)
@@ -189,7 +180,6 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
-
         public void DeleteAuth(int auth_id)
         {
             string query = "DELETE FROM yetkililer WHERE yetkili_id = @AuthId";
@@ -212,7 +202,6 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
-
         public List<Dictionary<string, string>> GetAuthById(int? authId)
         {
             List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
