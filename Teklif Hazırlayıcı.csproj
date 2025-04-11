@@ -87,6 +87,12 @@
     <Compile Include="Forms\Editor\companyEditor.Designer.cs">
       <DependentUpon>companyEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editor\productEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editor\productEditor.Designer.cs">
+      <DependentUpon>productEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +133,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editor\companyEditor.resx">
       <DependentUpon>companyEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editor\productEditor.resx">
+      <DependentUpon>productEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\login.resx">
       <DependentUpon>login.cs</DependentUpon>
