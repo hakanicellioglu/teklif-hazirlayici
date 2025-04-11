@@ -15,11 +15,9 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 {
     public partial class companyEditor : Form
     {
-
         string editor_mode;
         int? company_id;
         CompanyManager companyManager = new CompanyManager();
-
         public companyEditor(int? companyId, string editorMode)
         {
             InitializeComponent();
@@ -27,7 +25,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             company_id = companyId;
             SelectionMode();
         }
-
         private void SelectionMode()
         {
             if (editor_mode == "Add")
@@ -58,9 +55,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
             }
         }
-
-
-
         private void button1_Click(object sender, EventArgs e)
         {
             if (editor_mode == "Add")
@@ -85,7 +79,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
 
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;

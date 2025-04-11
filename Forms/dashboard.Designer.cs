@@ -97,6 +97,7 @@
             this.btnProduct.TabIndex = 3;
             this.toolTip1.SetToolTip(this.btnProduct, "Ürünler");
             this.btnProduct.UseVisualStyleBackColor = true;
+            this.btnProduct.Click += new System.EventHandler(this.btnProduct_Click);
             // 
             // btnAuth
             // 

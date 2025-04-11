@@ -45,5 +45,10 @@ namespace Teklif_Hazırlayıcı.Forms
         {
 
         }
+
+        private void btnProduct_Click(object sender, EventArgs e)
+        {
+            LoadForm(new product());
+        }
     }
 }

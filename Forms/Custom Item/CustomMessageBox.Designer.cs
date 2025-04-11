@@ -89,7 +89,7 @@
             this.Name = "CustomMessageBox";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "CustomMessageBox";
+            this.Text = "Teklif Hazırlayıcı";
             this.ResumeLayout(false);
             this.PerformLayout();
 

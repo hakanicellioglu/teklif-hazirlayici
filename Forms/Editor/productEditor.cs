@@ -11,6 +11,8 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
+using System.Globalization;
+using System.Threading;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {
@@ -24,23 +26,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             InitializeComponent();
             editor_mode = editorMode;
             product_id = productId;
-            LoadProduct();
             SelectionMode();
-        }
-
-        private void LoadProduct()
-        {
-            var dt = productManager.GetProduct(); // DataTable
-
-            if (dt == null || dt.Rows.Count == 0)
-            {
-                MessageBox.Show("Ürün verileri yüklenemedi.");
-                return;
-            }
-
-            comboBox1.DataSource = dt;
-            comboBox1.DisplayMember = "urun"; // Görünen
-            comboBox1.ValueMember = "urun";    // Firma ID (veritabanı ID'si)
         }
 
         private void SelectionMode()
@@ -49,16 +35,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             {
                 button1.Text = "Ekle";
                 btnCancel.Visible = false;
-                comboBox1.DataSource = null;
             }
             else if (editor_mode == "Edit")
             {
                 button1.Text = "Kaydet";
                 btnCancel.Visible = true;
-
-
-
-                comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
 
                 ProductManager manager = new ProductManager();
                 var data = manager.GetProductById(product_id);
@@ -68,12 +49,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     var product = data.First();
                     textBox2.Text = product["kalip_no"];
 
-                    int index = comboBox1.FindStringExact(product["urun"]);
-                    if (index >= 0)
-                    {
-                        comboBox1.SelectedIndex = index;
-                    }
-
+                    textBox1.Text = product["urun"];
                     textBox3.Text = product["gramaj"].ToString();
                     int index2 = comboBox2.FindStringExact(product["kategori"]);
                     if (index2 >= 0)
@@ -91,25 +67,51 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         {
             if (editor_mode == "Add")
             {
-                if (StringValidator.IsValid(comboBox1.Text))
+                if (!StringValidator.IsValid(textBox1.Text))
                 {
                     MessageHelper.ShowError("Ürün isim alanı boş bırakılamaz.");
                 }
-                else if(StringValidator.IsValid(comboBox2.Text))
+                else if (!StringValidator.IsValid(comboBox2.Text))
                 {
                     MessageHelper.ShowError("Kategori alanı boş bırakılamaz.");
                 }
                 else
                 {
-                    productManager.AddProduct(textBox2.Text, comboBox1.Text, Convert.ToDecimal(textBox3.Text), comboBox2.Text);
-                    DialogResult = DialogResult.OK;
+                    if (StringValidator.IsValid(textBox1.Text))
+                    {
+                        string gramajMetin = textBox3.Text.Trim();
+
+                        // 1️⃣ Kullanıcı ister nokta, ister virgül girsin → hepsini "." yap
+                        // Çünkü biz parse işlemini InvariantCulture ile yapacağız
+                        gramajMetin = gramajMetin.Replace(',', '.');
+
+                        decimal gramaj;
+                        bool isValid = decimal.TryParse(
+                            gramajMetin,
+                            NumberStyles.AllowDecimalPoint,
+                            CultureInfo.InvariantCulture, // . = ondalık
+                            out gramaj
+                        );
+
+                        if (!isValid || gramaj <= 0)
+                        {
+                            MessageBox.Show("Lütfen geçerli ve pozitif bir gramaj değeri giriniz. Örnek: 1,1 veya 1.1", "Hatalı Giriş", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        // ✅ Başarılı şekilde göster
+                        MessageBox.Show($"Girilen gramaj değeri: {gramaj.ToString(CultureInfo.InvariantCulture)}", "Başarılı Giriş", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        //productManager.AddProduct(textBox2.Text, textBox1.Text, gramaj, comboBox2.Text);
+                        //DialogResult = DialogResult.OK;
+                    }
                 }
             }
             else if (editor_mode == "Edit")
             {
                 if (MessageHelper.ShowQuestion("Kaydetmek istediğinize emin misiniz? Bu işlem geri alınamaz.") == DialogResult.Yes)
                 {
-                    productManager.UpdateProduct(product_id, textBox2.Text, comboBox1.Text, Convert.ToDecimal(textBox3.Text), comboBox2.Text);
+                    productManager.UpdateProduct(product_id, textBox2.Text, textBox1.Text, Convert.ToDecimal(textBox3.Text), comboBox2.Text);
                     DialogResult = DialogResult.OK;
                 }
             }
