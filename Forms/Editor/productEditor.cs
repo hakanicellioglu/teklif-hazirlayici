@@ -79,31 +79,10 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 {
                     if (StringValidator.IsValid(textBox1.Text))
                     {
-                        string gramajMetin = textBox3.Text.Trim();
-
-                        // 1️⃣ Kullanıcı ister nokta, ister virgül girsin → hepsini "." yap
-                        // Çünkü biz parse işlemini InvariantCulture ile yapacağız
-                        gramajMetin = gramajMetin.Replace(',', '.');
-
                         decimal gramaj;
-                        bool isValid = decimal.TryParse(
-                            gramajMetin,
-                            NumberStyles.AllowDecimalPoint,
-                            CultureInfo.InvariantCulture, // . = ondalık
-                            out gramaj
-                        );
-
-                        if (!isValid || gramaj <= 0)
-                        {
-                            MessageBox.Show("Lütfen geçerli ve pozitif bir gramaj değeri giriniz. Örnek: 1,1 veya 1.1", "Hatalı Giriş", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
-
-                        // ✅ Başarılı şekilde göster
-                        MessageBox.Show($"Girilen gramaj değeri: {gramaj.ToString(CultureInfo.InvariantCulture)}", "Başarılı Giriş", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        //productManager.AddProduct(textBox2.Text, textBox1.Text, gramaj, comboBox2.Text);
-                        //DialogResult = DialogResult.OK;
+                        ExtractGramaj(out gramaj);
+                        productManager.AddProduct(textBox2.Text, textBox1.Text, gramaj, comboBox2.Text);
+                        DialogResult = DialogResult.OK;
                     }
                 }
             }
@@ -111,15 +90,44 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             {
                 if (MessageHelper.ShowQuestion("Kaydetmek istediğinize emin misiniz? Bu işlem geri alınamaz.") == DialogResult.Yes)
                 {
-                    productManager.UpdateProduct(product_id, textBox2.Text, textBox1.Text, Convert.ToDecimal(textBox3.Text), comboBox2.Text);
+                    decimal gramaj;
+                    ExtractGramaj(out gramaj);
+                    productManager.UpdateProduct(product_id, textBox2.Text, textBox1.Text, gramaj, comboBox2.Text);
                     DialogResult = DialogResult.OK;
                 }
             }
 
         }
+
+        private void ExtractGramaj(out decimal gramaj)
+        {
+            string gramajMetin = textBox3.Text.Trim();
+            gramajMetin = gramajMetin.Replace(',', '.');
+            bool isValid = decimal.TryParse(
+                gramajMetin,
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture, // . = ondalık
+                out gramaj
+            );
+
+            if (!isValid || gramaj <= 0)
+            {
+                MessageBox.Show("Lütfen geçerli ve pozitif bir gramaj değeri giriniz. Örnek: 1,1 veya 1.1", "Hatalı Giriş", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+        }
+
+        private void textBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLetter(e.KeyChar))
+            {
+                e.Handled = true; // karakter girişini iptal eder
+            }
         }
     }
 }
