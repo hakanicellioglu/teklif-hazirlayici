@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Business\AuthManager.cs" />
     <Compile Include="Business\CompanyManager.cs" />
+    <Compile Include="Business\ProductManager.cs" />
     <Compile Include="Business\UserManager.cs" />
     <Compile Include="DataAccess\DbConnection.cs" />
     <Compile Include="Forms\auth.cs">
@@ -99,6 +100,12 @@
     <Compile Include="Forms\login.Designer.cs">
       <DependentUpon>login.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\product.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\product.Designer.cs">
+      <DependentUpon>product.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\MessageHelper.cs" />
     <Compile Include="Helpers\TogglePassword.cs" />
     <Compile Include="Program.cs" />
@@ -139,6 +146,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\login.resx">
       <DependentUpon>login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\product.resx">
+      <DependentUpon>product.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
