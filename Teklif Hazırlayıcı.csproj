@@ -154,6 +154,9 @@
     <EmbeddedResource Include="Forms\Editor\companyEditor.resx">
       <DependentUpon>companyEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editor\offerEditor.resx">
+      <DependentUpon>offerEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editor\productEditor.resx">
       <DependentUpon>productEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -203,9 +206,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataAccess\teklif-hazirlayici.mdb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="DataAccess\teklif-hazirlayici.mdb" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
