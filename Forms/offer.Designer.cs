@@ -85,6 +85,7 @@
             this.btnAddOffer.TabIndex = 4;
             this.btnAddOffer.Text = "Ekle";
             this.btnAddOffer.UseVisualStyleBackColor = true;
+            this.btnAddOffer.Click += new System.EventHandler(this.btnAddOffer_Click);
             // 
             // dataGridView1
             // 

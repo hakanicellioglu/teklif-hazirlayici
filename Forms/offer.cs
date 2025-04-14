@@ -130,5 +130,12 @@ namespace Teklif_Hazırlayıcı.Forms
                 }
             }
         }
+
+        private void btnAddOffer_Click(object sender, EventArgs e)
+        {
+            offerEditor offerEditor = new offerEditor(null, "Add");
+            offerEditor.ShowDialog();
+
+        }
     }
 }
