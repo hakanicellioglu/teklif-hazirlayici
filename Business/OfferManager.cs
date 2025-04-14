@@ -23,7 +23,7 @@ namespace Teklif_Hazırlayıcı.Business
             SELECT y.isim, y.soyisim, y.hitap, f.adi, t.teklif_tarih, t.durum
             FROM (teklifler AS t
             LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
-            LEFT JOIN yetkililer AS y ON y.firma_id = f.firma_id;";
+            LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id;";
 
             using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
             {
