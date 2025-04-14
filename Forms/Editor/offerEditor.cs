@@ -218,7 +218,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            ValidateForm();
+            if(ValidateForm() == true)
+            {
+                MessageBox.Show("Firma: " + chkFirmalar.SelectedValue.ToString());
+                MessageBox.Show("Yetkili: " + chkYetkililer.SelectedValue.ToString()); 
+                //OfferManager offerManager = new OfferManager();
+                //offerManager.AddOffer(Convert.ToInt32(chkFirmalar.SelectedValue), Convert.ToInt32(chkYetkililer.SelectedValue), Convert.ToDateTime(dateTimePicker1.Text), chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, Convert.ToInt32(txtLME.Text), Convert.ToInt32(txtIskonto.Text), Convert.ToInt32(txtKDV.Text), true, Convert.ToInt32(txtTevkifat.Text), chkDurum.Text);
+            }
+            
         }
     }
 }
