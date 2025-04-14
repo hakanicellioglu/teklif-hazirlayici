@@ -55,5 +55,10 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             LoadForm(new offer());
         }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
+        }
     }
 }

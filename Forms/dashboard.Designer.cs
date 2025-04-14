@@ -77,6 +77,7 @@
             this.btnLogout.TabIndex = 6;
             this.toolTip1.SetToolTip(this.btnLogout, "Çıkış Yap");
             this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // btnOffer
             // 
