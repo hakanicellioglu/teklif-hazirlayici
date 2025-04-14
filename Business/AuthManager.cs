@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using Teklif_Hazırlayıcı.Helpers;
+using Teklif_Hazırlayıcı.Forms;
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -135,7 +136,8 @@ namespace Teklif_Hazırlayıcı.Business
                             string currentEmail = reader["eposta"].ToString();
 
                             // Farklılık var mı kontrol et
-                            if (currentName == name &&
+                            if (currentCompanyId == company_id &&
+                                currentName == name &&
                                 currentSurname == surname &&
                                 currentHonorific == honorific &&
                                 currentAddress == address &&
@@ -226,6 +228,31 @@ namespace Teklif_Hazırlayıcı.Business
                             row["adres"] = reader["adres"].ToString();
                             row["telefon"] = reader["telefon"].ToString();
                             row["eposta"] = reader["eposta"].ToString();
+                            result.Add(row);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        public List<Dictionary<string,string>> GetAuthByCompanyId(long? companyId)
+        {
+            List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+
+            string query = "SELECT isim FROM yetkililer WHERE firma_id = @CompanyId";
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@CompanyId", companyId ?? (object)DBNull.Value);
+
+                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Dictionary<string, string> row = new Dictionary<string, string>();
+                            row["isim"] = reader["isim"].ToString();
                             result.Add(row);
                         }
                     }
