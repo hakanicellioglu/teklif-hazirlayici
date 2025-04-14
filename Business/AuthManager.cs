@@ -239,7 +239,7 @@ namespace Teklif_Hazırlayıcı.Business
         {
             List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
-            string query = "SELECT isim FROM yetkililer WHERE firma_id = @CompanyId";
+            string query = "SELECT isim, hitap FROM yetkililer WHERE firma_id = @CompanyId";
             using (OleDbConnection conn = _connection.GetConnection())
             {
                 conn.Open();
@@ -253,6 +253,7 @@ namespace Teklif_Hazırlayıcı.Business
                         {
                             Dictionary<string, string> row = new Dictionary<string, string>();
                             row["isim"] = reader["isim"].ToString();
+                            row["hitap"] = reader["hitap"] != DBNull.Value ? reader["hitap"].ToString() : "";
                             result.Add(row);
                         }
                     }
