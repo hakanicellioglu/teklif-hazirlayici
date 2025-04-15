@@ -11,13 +11,32 @@ namespace Teklif_Hazırlayıcı.Business
 {
     public class ProductManager
     {
+        /*
+        *
+        * Veritabanı işlemleri için kullanılan bağlantı nesnesi. 
+        * Uygulama boyunca yalnızca okunabilir (readonly) olarak tanımlanmıştır.
+        *
+        */
         private readonly DataAccess.DbConnection _connection;
         public ProductManager()
         {
+            /*
+             *
+             * DbConnection sınıfından yeni bir örnek oluşturularak 
+             * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
+             *
+             */
             _connection = new DataAccess.DbConnection();
         }
         public DataTable GetProduct()
         {
+            /*
+             *
+             * "urunler" tablosundaki tüm ürün kayıtlarını getirir.
+             * OleDbCommand ile oluşturulan sorgu OleDbDataAdapter ile çalıştırılır.
+             * Elde edilen veriler bir DataTable nesnesine aktarılır ve döndürülür.
+             *
+             */
             string query = "SELECT * FROM urunler";
             using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
             {
@@ -29,6 +48,14 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public DataTable Search(string search)
         {
+            /*
+             *
+             * "urunler" tablosunda ürün adı (`urun`) veya kalıp numarası (`kalip_no`) arama terimiyle eşleşen kayıtları getirir.
+             * LIKE operatörü ile hem ürün adı hem de kalıp numarası alanlarında filtreleme yapılır.
+             * Uygun kayıtlar bir DataTable nesnesine doldurulur.
+             * Sonuç bulunamazsa null, varsa doldurulmuş DataTable döndürülür.
+             *
+             */
             string query = @"SELECT * FROM urunler WHERE urun LIKE @Product OR kalip_no LIKE @MoldNumber";
 
             DataTable dt = new DataTable();
@@ -53,6 +80,14 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void AddProduct(string mold_number, string product, decimal weight, string category)
         {
+            /*
+             *
+             * Yeni bir ürün kaydını "urunler" tablosuna ekler.
+             * Parametre olarak verilen kalıp numarası, ürün adı, gramaj (decimal) ve kategori bilgileri sorguya eklenir.
+             * Gramaj alanı `OleDbType.Double` olarak tanımlanarak veri türü uyumluluğu sağlanır.
+             * Ekleme işlemi sonucunda başarı ya da hata mesajı kullanıcıya gösterilir.
+             *
+             */
             string query = "INSERT INTO urunler(kalip_no, urun, gramaj, kategori) VALUES(@MoldNumber, @Product, @Weight, @Category)";
             using (OleDbConnection conn = _connection.GetConnection())
             {
@@ -78,6 +113,15 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void UpdateProduct(int? product_id, string mold_number, string product, decimal weight, string category)
         {
+            /*
+             *
+             * Belirtilen `product_id` değerine sahip ürün kaydını günceller.
+             * Önce veritabanından mevcut ürün bilgileri çekilir ve yeni parametrelerle karşılaştırılır.
+             * Eğer herhangi bir değişiklik yoksa güncelleme yapılmaz ve kullanıcı bilgilendirilir.
+             * Değişiklik varsa kalıp numarası, ürün adı, gramaj ve kategori alanları güncellenir.
+             * İşlem sonucuna göre başarı veya hata mesajı gösterilir.
+             *
+             */
             if (!product_id.HasValue)
             {
                 MessageHelper.ShowError("Geçersiz yetkili kimlik numarası.");
@@ -147,6 +191,13 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void DeleteProduct(int product_id)
         {
+            /*
+             *
+             * Belirtilen `product_id` değerine sahip ürünü "urunler" tablosundan siler.
+             * Silme işlemi başarıyla gerçekleşirse kullanıcıya bilgilendirme mesajı gösterilir.
+             * Silme başarısız olursa hata mesajı gösterilir.
+             *
+             */
             string query = "DELETE FROM urunler WHERE urun_id = @ProductId";
             using (OleDbConnection conn = _connection.GetConnection())
             {
@@ -169,6 +220,14 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public List<Dictionary<string, string>> GetProductById(int? product_id)
         {
+            /*
+             *
+             * Belirtilen `product_id` değerine sahip ürün bilgilerini getirir.
+             * "urunler" tablosundan urun_id, kalip_no, urun, gramaj ve kategori alanları çekilir.
+             * Her sonuç bir sözlük (Dictionary) olarak oluşturulup listeye eklenir.
+             * Liste doluysa ürün bilgileri, boşsa boş liste döndürülür.
+             *
+             */
             List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
             string query = "SELECT urun_id, kalip_no, urun, gramaj, kategori FROM urunler WHERE urun_id = @ProductId";
