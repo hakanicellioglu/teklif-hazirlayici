@@ -218,14 +218,26 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            if(ValidateForm() == true)
+            if (ValidateForm() == true)
             {
-                MessageBox.Show("Firma: " + chkFirmalar.SelectedValue.ToString());
-                MessageBox.Show("Yetkili: " + chkYetkililer.SelectedValue.ToString()); 
-                //OfferManager offerManager = new OfferManager();
-                //offerManager.AddOffer(Convert.ToInt32(chkFirmalar.SelectedValue), Convert.ToInt32(chkYetkililer.SelectedValue), Convert.ToDateTime(dateTimePicker1.Text), chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, Convert.ToInt32(txtLME.Text), Convert.ToInt32(txtIskonto.Text), Convert.ToInt32(txtKDV.Text), true, Convert.ToInt32(txtTevkifat.Text), chkDurum.Text);
+                OfferManager offerManager = new OfferManager();
+                int teklifId = offerManager.AddOffer(Convert.ToInt32(chkFirmalar.SelectedValue), Convert.ToInt32(chkYetkililer.SelectedValue), Convert.ToDateTime(dateTimePicker1.Text), chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, Convert.ToInt32(txtLME.Text), Convert.ToInt32(txtIskonto.Text), Convert.ToInt32(txtKDV.Text), true, Convert.ToInt32(txtTevkifat.Text), chkDurum.Text); // Tüm parametreler
+
+                if (teklifId > 0)
+                {
+                    if (MessageHelper.ShowQuestion("Teklif başarıyla oluşturuldu. Ürün eklemek ister misiniz?") == DialogResult.Yes)
+                    {
+                        Hide();
+                        itemEditor itemEditor = new itemEditor(teklifId);
+                        itemEditor.ShowDialog();
+                        Close();
+                    }
+                }
+                else
+                {
+                    MessageHelper.ShowError("Teklif eklenirken bir hata oluştu.");
+                }
             }
-            
         }
     }
 }

@@ -135,6 +135,7 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             offerEditor offerEditor = new offerEditor(null, "Add");
             offerEditor.ShowDialog();
+            LoadCompany();
 
         }
     }
