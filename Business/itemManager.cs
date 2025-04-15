@@ -11,15 +11,34 @@ namespace Teklif_Hazırlayıcı.Business
 {
     public class itemManager
     {
+        /*
+        *
+        * Veritabanı işlemleri için kullanılan bağlantı nesnesi. 
+        * Uygulama boyunca yalnızca okunabilir (readonly) olarak tanımlanmıştır.
+        *
+        */
         private readonly DataAccess.DbConnection _connection;
         public itemManager()
         {
+            /*
+             *
+             * DbConnection sınıfından yeni bir örnek oluşturularak 
+             * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
+             *
+             */
             _connection = new DataAccess.DbConnection();
 
         }
 
         public string GetCategory(int? urun_id)
         {
+            /*
+             *
+             * Belirtilen `urun_id` değerine sahip ürünün kategori bilgisini getirir.
+             * Eğer `urun_id` null ise veya kategori bilgisi bulunamazsa null döndürülür.
+             * Kategori bilgisi, "urunler" tablosundan çekilir ve string olarak döndürülür.
+             *
+             */
             if (urun_id == null)
                 return null;
 
@@ -45,6 +64,13 @@ namespace Teklif_Hazırlayıcı.Business
 
         public DataTable GetProduct()
         {
+            /*
+             *
+             * Veritabanındaki "urunler" tablosundaki tüm ürün kayıtlarını getirir.
+             * OleDbCommand ile hazırlanan sorgu, OleDbDataAdapter kullanılarak bir DataTable nesnesine aktarılır.
+             * Doldurulan DataTable döndürülür.
+             *
+             */
             string query = "SELECT * FROM urunler";
             using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
             {
@@ -57,6 +83,15 @@ namespace Teklif_Hazırlayıcı.Business
 
         public void AddProduct(int? teklif_id, int urun_id, string yuzey, string yuzey_kodu, int adet, int boy, decimal kg, decimal birim_fiyat, decimal toplam_tutar)
         {
+            /*
+             *
+             * Belirtilen teklif ve ürün bilgileri ile "kalemler" tablosuna yeni bir ürün kalemi ekler.
+             * Teklif ID boş ise işlem yapılmaz ve kullanıcıya hata mesajı gösterilir.
+             * Yüzey ve yüzey kodu boşsa veritabanına NULL olarak gönderilir.
+             * Kg, birim fiyat ve toplam tutar parametreleri manuel olarak OleDbType ile tanımlanarak eklenir.
+             * İşlem başarıyla gerçekleşirse bilgi mesajı, aksi takdirde hata mesajı gösterilir.
+             *
+             */
             if (teklif_id == null)
             {
                 MessageHelper.ShowError("Teklif ID boş olamaz.");
@@ -111,6 +146,13 @@ namespace Teklif_Hazırlayıcı.Business
 
         public decimal GetLMEFromTeklif(int teklif_id)
         {
+            /*
+             *
+             * Belirtilen `teklif_id` değerine ait teklif kaydından LME (London Metal Exchange) değerini getirir.
+             * LME değeri `teklifler` tablosundan alınır ve decimal türünde döndürülür.
+             * Eğer değer bulunamazsa veya dönüşüm başarısız olursa varsayılan olarak 0 döndürülür.
+             *
+             */
             string query = "SELECT lme FROM teklifler WHERE teklif_id = @TeklifId";
 
             using (OleDbConnection conn = _connection.GetConnection())
@@ -129,10 +171,15 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
 
-
-
         public decimal GetGramaj(int urun_id)
         {
+            /*
+             *
+             * Belirtilen `urun_id` değerine sahip ürünün gramaj bilgisini getirir.
+             * "urunler" tablosundan alınan gramaj değeri decimal türüne çevrilerek döndürülür.
+             * Eğer değer bulunamazsa varsayılan olarak 0 döndürülür.
+             *
+             */
             string query = "SELECT gramaj FROM urunler WHERE urun_id = @ProductId";
             using (OleDbConnection conn = _connection.GetConnection())
             {
