@@ -12,15 +12,36 @@ namespace Teklif_Hazırlayıcı.Business
 {
     public class UserManager
     {
+        /*
+        *
+        * Veritabanı işlemleri için kullanılan bağlantı nesnesi. 
+        * Uygulama boyunca yalnızca okunabilir (readonly) olarak tanımlanmıştır.
+        *
+        */
         private readonly DataAccess.DbConnection _connection;
 
         public UserManager()
         {
+            /*
+             *
+             * DbConnection sınıfından yeni bir örnek oluşturularak 
+             * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
+             *
+             */
             _connection = new DataAccess.DbConnection();
         }
 
         public bool AddUser(string name, string surname, string username, string email, string password)
         {
+            /*
+             *
+             * Yeni bir kullanıcıyı "kullanicilar" tablosuna ekler.
+             * Önce kullanıcı adı ve e-posta adresinin veritabanında olup olmadığı kontrol edilir.
+             * Eğer bu bilgiler mevcutsa işlem iptal edilir ve kullanıcıya hata mesajı gösterilir.
+             * Bilgiler benzersizse veritabanına isim, soyisim, kullanıcı adı, e-posta ve parola bilgileri kaydedilir.
+             * İşlem sonucuna göre kullanıcıya bilgi veya hata mesajı verilir.
+             *
+             */
             if (isThere(username))
             {
                 MessageHelper.ShowError($"\"{username}\" kullanıcı adı zaten kullanılmaktadır.");
@@ -73,6 +94,13 @@ namespace Teklif_Hazırlayıcı.Business
 
         private bool isThere(string parameter)
         {
+            /*
+             *
+             * Verilen `parameter` değerine sahip kullanıcı adının "kullanicilar" tablosunda olup olmadığını kontrol eder.
+             * Sorguda COUNT(*) kullanılarak eşleşen kayıt sayısı alınır.
+             * Sonuç 0'dan büyükse true (mevcut), değilse false (yok) döndürülür.
+             *
+             */
             using (OleDbConnection conn = _connection.GetConnection())
             {
                 conn.Open();
@@ -88,6 +116,13 @@ namespace Teklif_Hazırlayıcı.Business
 
         public bool UserExists(string username, string password)
         {
+            /*
+             *
+             * Verilen kullanıcı adı ve parola bilgilerine sahip bir kullanıcının olup olmadığını kontrol eder.
+             * "kullanicilar" tablosunda kullanıcı adı ve parola eşleşmesi aranır.
+             * Eşleşme varsa true, yoksa false döndürülür.
+             *
+             */
             using (OleDbConnection conn = _connection.GetConnection())
             {
 
