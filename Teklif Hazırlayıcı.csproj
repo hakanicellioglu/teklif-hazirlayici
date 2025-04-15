@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Business\AuthManager.cs" />
     <Compile Include="Business\CompanyManager.cs" />
+    <Compile Include="Business\itemManager.cs" />
     <Compile Include="Business\OfferManager.cs" />
     <Compile Include="Business\ProductManager.cs" />
     <Compile Include="Business\UserManager.cs" />
@@ -91,6 +92,12 @@
     </Compile>
     <Compile Include="Forms\Editor\companyEditor.Designer.cs">
       <DependentUpon>companyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editor\itemEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editor\itemEditor.Designer.cs">
+      <DependentUpon>itemEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Editor\offerEditor.cs">
       <SubType>Form</SubType>
@@ -156,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editor\companyEditor.resx">
       <DependentUpon>companyEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editor\itemEditor.resx">
+      <DependentUpon>itemEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editor\offerEditor.resx">
       <DependentUpon>offerEditor.cs</DependentUpon>
