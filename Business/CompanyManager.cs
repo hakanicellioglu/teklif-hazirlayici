@@ -15,15 +15,34 @@ namespace Teklif_Hazırlayıcı.Business
 {
     public class CompanyManager
     {
+        /*
+        *
+        * Veritabanı işlemleri için kullanılan bağlantı nesnesi. 
+        * Uygulama boyunca yalnızca okunabilir (readonly) olarak tanımlanmıştır.
+        *
+        */
         private readonly DataAccess.DbConnection _connection;
 
         public CompanyManager()
         {
+            /*
+             *
+             * DbConnection sınıfından yeni bir örnek oluşturularak 
+             * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
+             *
+             */
             _connection = new DataAccess.DbConnection();
         }
 
         public DataTable GetCompany()
         {
+            /*
+             *
+             * Veritabanındaki "firmalar" tablosundaki tüm kayıtları getirir.
+             * OleDbCommand ile sorgu hazırlanır ve OleDbDataAdapter ile DataTable nesnesine doldurulur.
+             * Doldurulmuş DataTable nesnesi döndürülür.
+             *
+             */
             string query = "SELECT * FROM firmalar";
             using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
             {
@@ -35,6 +54,14 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public DataTable Search(string search)
         {
+            /*
+             *
+             * Firma adını içeren arama terimine göre "firmalar" tablosunda arama yapar.
+             * Sadece firma adı (adi) alanı üzerinden LIKE operatörü ile eşleşme sağlanır.
+             * Elde edilen sonuçlar bir DataTable nesnesine aktarılır.
+             * Sonuç bulunamazsa null döndürülür, aksi halde doldurulmuş DataTable döndürülür.
+             *
+             */
             string query = "SELECT * FROM firmalar WHERE adi LIKE @ad";
             DataTable dt = new DataTable();
 
@@ -67,6 +94,14 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void AddCompany(string name, string address, string phone_number, string email)
         {
+            /*
+             *
+             * Verilen firma bilgilerini kullanarak "firmalar" tablosuna yeni bir kayıt ekler.
+             * Öncesinde aynı ada sahip bir firma olup olmadığı `CompanyExistsName` fonksiyonu ile kontrol edilir.
+             * Firma zaten varsa uyarı mesajı gösterilir.
+             * Kayıt işlemi başarılı olursa kullanıcı bilgilendirilir, aksi durumda hata mesajı gösterilir.
+             *
+             */
             if (!CompanyExistsName(name))
             {
                 string query = "INSERT INTO firmalar(adi, adres, telefon, eposta) VALUES(@Name, @Address, @PhoneNumber, @Email)";
@@ -99,6 +134,14 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void UpdateCompany(int? id, string name, string address, string phone_number, string email)
         {
+            /*
+             *
+             * Belirtilen `id` değerine sahip firmanın bilgilerini günceller.
+             * Güncelleme öncesinde mevcut kayıtlar veritabanından alınır ve gelen parametrelerle karşılaştırılır.
+             * Eğer bilgilerde bir değişiklik yoksa işlem yapılmaz, kullanıcı bilgilendirilir.
+             * Değişiklik varsa veritabanı güncellenir ve işlem sonucu kullanıcıya bildirilir.
+             *
+             */
             if (!id.HasValue)
             {
                 MessageHelper.ShowError("Geçersiz firma ID.");
@@ -166,6 +209,13 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void DeleteCompany(int id)
         {
+            /*
+             *
+             * Belirtilen `id` değerine sahip firma kaydını "firmalar" tablosundan siler.
+             * Silme işlemi başarıyla gerçekleşirse kullanıcıya başarı mesajı gösterilir.
+             * Herhangi bir hata durumunda kullanıcıya hata mesajı verilir.
+             *
+             */
             string query = "DELETE FROM firmalar WHERE firma_id = @CompanyId";
             using (OleDbConnection conn = _connection.GetConnection())
             {
@@ -188,6 +238,13 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public bool CompanyExistsName(string parameter)
         {
+            /*
+             *
+             * Verilen firma adının "firmalar" tablosunda zaten mevcut olup olmadığını kontrol eder.
+             * Sorgu ile eşleşen bir kayıt varsa true, yoksa false döndürülür.
+             * Karşılaştırma büyük/küçük harf duyarsız yapılır.
+             *
+             */
             string query = "SELECT adi FROM firmalar WHERE adi = @Name";
             using (OleDbConnection conn = _connection.GetConnection())
             {
@@ -212,6 +269,14 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public List<Dictionary<string, string>> GetCompanyById(int? companyId)
         {
+            /*
+             *
+             * Belirtilen `companyId` değerine sahip firmanın bilgilerini getirir.
+             * Sorgu sonucunda firma adı, adres, telefon ve e-posta bilgileri çekilir.
+             * Her kayıt bir sözlük (Dictionary) olarak oluşturulup listeye eklenir.
+             * Elde edilen sözlük listesi döndürülür.
+             *
+             */
             List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
             string query = "SELECT adi,adres,telefon,eposta FROM firmalar WHERE firma_id = @CompanyId";
