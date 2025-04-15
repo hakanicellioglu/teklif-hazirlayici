@@ -13,13 +13,36 @@ namespace Teklif_Hazırlayıcı.Business
 {
     public class AuthManager
     {
+
+        /*
+        *
+        * Veritabanı işlemleri için kullanılan bağlantı nesnesi. 
+        * Uygulama boyunca yalnızca okunabilir (readonly) olarak tanımlanmıştır.
+        *
+        */
         private readonly DataAccess.DbConnection _connection;
+
+
         public AuthManager()
         {
+            /*
+             *
+             * DbConnection sınıfından yeni bir örnek oluşturularak 
+             * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
+             *
+             */
             _connection = new DataAccess.DbConnection();
+
         }
         public DataTable GetAuth()
         {
+            /*
+            *
+            * Veritabanındaki "yetkililer" tablosundaki tüm kayıtları getirir.
+            * OleDbCommand ile sorgu hazırlanır ve OleDbDataAdapter ile DataTable nesnesine doldurulur.
+            * Sonuç olarak doldurulmuş DataTable döndürülür.
+            *
+            */
             string query = "SELECT * FROM yetkililer";
             using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
             {
@@ -31,10 +54,17 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public DataTable GetAuthWithCompanyName()
         {
+            /*
+             *
+             * "yetkililer" tablosundaki kayıtları firma adı ile birlikte getirir.
+             * LEFT JOIN ile "firmalar" tablosundaki firma adları eşleştirilir.
+             * Sorgu sonucunda yetkili bilgileri ve ilişkili firma adı DataTable'a doldurularak döndürülür.
+             *
+             */
             string query = @"
-        SELECT y.yetkili_id, f.adi AS Firma, y.isim, y.soyisim, y.hitap, y.adres, y.telefon, y.eposta
-        FROM yetkililer y
-        LEFT JOIN firmalar f ON y.firma_id = f.firma_id";
+            SELECT y.yetkili_id, f.adi AS Firma, y.isim, y.soyisim, y.hitap, y.adres, y.telefon, y.eposta
+            FROM yetkililer y
+            LEFT JOIN firmalar f ON y.firma_id = f.firma_id";
 
             using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
             {
@@ -44,16 +74,25 @@ namespace Teklif_Hazırlayıcı.Business
                 return dt;
             }
         }
+
         public DataTable Search(string search)
         {
+            /*
+             *
+             * Girilen arama terimine göre "yetkililer" ve "firmalar" tablolarında arama yapar.
+             * Arama; isim, soyisim, telefon ve e-posta alanlarında LIKE operatörü ile gerçekleştirilir.
+             * Elde edilen sonuçlar bir DataTable içine doldurulur.
+             * Sonuç bulunamazsa null döndürülür.
+             *
+             */
             string query = @"
-        SELECT y.*, f.adi AS Firma 
-        FROM yetkililer y 
-        LEFT JOIN firmalar f ON y.firma_id = f.firma_id 
-        WHERE y.isim LIKE @Isim 
-           OR y.soyisim LIKE @Soyisim 
-           OR y.telefon LIKE @Telefon 
-           OR y.eposta LIKE @Eposta";
+            SELECT y.*, f.adi AS Firma 
+            FROM yetkililer y 
+            LEFT JOIN firmalar f ON y.firma_id = f.firma_id 
+            WHERE y.isim LIKE @Isim 
+               OR y.soyisim LIKE @Soyisim 
+               OR y.telefon LIKE @Telefon 
+               OR y.eposta LIKE @Eposta";
 
             DataTable dt = new DataTable();
 
@@ -79,6 +118,13 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void AddAuth(int company_id, string name, string surname, string honorific, string address, string phone_number, string email)
         {
+            /*
+             *
+             * Yeni bir yetkili kaydını "yetkililer" tablosuna ekler.
+             * Parametreler ile gelen bilgiler sorguya eklenir ve veritabanına kaydedilir.
+             * Kayıt başarılı olursa bilgilendirme mesajı gösterilir, aksi durumda hata mesajı verilir.
+             *
+             */
             string query = "INSERT INTO yetkililer(firma_id, isim, soyisim, hitap, adres, telefon, eposta) VALUES(@CompanyId, @Name, @Surname, @Honorific, @Address, @PhoneNumber, @Email)";
             using (OleDbConnection conn = _connection.GetConnection())
             {
@@ -107,6 +153,15 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void UpdateAuth(int? auth_id, int? company_id, string name, string surname, string honorific, string address, string phone_number, string email)
         {
+            /*
+             *
+             * Belirtilen `auth_id` değerine sahip yetkilinin bilgilerini günceller.
+             * İlk olarak veritabanından mevcut bilgiler alınır ve parametreler ile gelen bilgiler karşılaştırılır.
+             * Eğer herhangi bir değişiklik yoksa güncelleme yapılmaz, kullanıcı bilgilendirilir.
+             * Değişiklik varsa veritabanında ilgili kayıt güncellenir.
+             * İşlem sonucuna göre kullanıcıya bilgi veya hata mesajı gösterilir.
+             *
+             */
             if (!auth_id.HasValue)
             {
                 MessageHelper.ShowError("Geçersiz yetkili kimlik numarası.");
@@ -184,6 +239,13 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void DeleteAuth(int auth_id)
         {
+            /*
+             *
+             * Belirtilen `auth_id` değerine sahip yetkili kaydını veritabanından siler.
+             * Silme işlemi başarılı olursa kullanıcıya bilgilendirme mesajı gösterilir.
+             * Herhangi bir sorun oluşursa hata mesajı verilir.
+             *
+             */
             string query = "DELETE FROM yetkililer WHERE yetkili_id = @AuthId";
             using (OleDbConnection conn = _connection.GetConnection())
             {
@@ -206,6 +268,14 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public List<Dictionary<string, string>> GetAuthById(int? authId)
         {
+            /*
+             *
+             * Belirtilen `authId` değerine sahip yetkili kaydını getirir.
+             * Sorgu sonucunda elde edilen bilgiler bir sözlük (Dictionary) yapısında toplanır ve listeye eklenir.
+             * Her kayıt için firma_id, isim, soyisim, hitap, adres, telefon ve eposta alanları alınır.
+             * Sonuç olarak bu bilgileri içeren sözlük listesini döndürür.
+             *
+             */
             List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
             string query = "SELECT firma_id, isim, soyisim, hitap, adres, telefon, eposta FROM yetkililer WHERE yetkili_id = @AuthId";
@@ -235,8 +305,17 @@ namespace Teklif_Hazırlayıcı.Business
             }
             return result;
         }
-        public List<Dictionary<string,string>> GetAuthByCompanyId(long? companyId)
+        public List<Dictionary<string, string>> GetAuthByCompanyId(long? companyId)
         {
+            /*
+             *
+             * Belirtilen `companyId` değerine sahip firmanın yetkililerini getirir.
+             * "yetkililer" tablosundan yalnızca isim ve hitap alanları seçilir.
+             * Her kayıt bir sözlük olarak oluşturulup listeye eklenir.
+             * Hitap alanı null ise boş string atanır.
+             * Sonuç olarak bu bilgileri içeren sözlük listesi döndürülür.
+             *
+             */
             List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
             string query = "SELECT isim, hitap FROM yetkililer WHERE firma_id = @CompanyId";
