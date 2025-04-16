@@ -55,9 +55,18 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     if (firmaIndex >= 0) chkFirmalar.SelectedIndex = firmaIndex;
 
                     // Yetkili ComboBox eşleşmesi
-                    string yetkiliAdi = offer["isim"].ToString();
-                    int yetkiliIndex = chkYetkililer.FindStringExact(yetkiliAdi);
-                    if (yetkiliIndex >= 0) chkYetkililer.SelectedIndex = yetkiliIndex;
+                    string yetkiliAdi = offer["yetkili_adi"].ToString().Trim().ToLower();
+
+                    for (int i = 0; i < chkYetkililer.Items.Count; i++)
+                    {
+                        string itemText = chkYetkililer.Items[i].ToString().Trim().ToLower();
+
+                        if (itemText.Contains(yetkiliAdi))
+                        {
+                            chkYetkililer.SelectedIndex = i;
+                            break;
+                        }
+                    }
 
                     // Temel alanlar
                     dateTimePicker1.Value = Convert.ToDateTime(offer["teklif_tarih"]);
