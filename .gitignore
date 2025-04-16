@@ -364,3 +364,5 @@ FodyWeavers.xsd
 /DataAccess/teklif-hazirlayici.ldb
 .py
 .xlsx
+*.py
+*.xlsx
