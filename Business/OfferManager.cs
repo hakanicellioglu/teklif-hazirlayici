@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.OleDb;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Teklif_Hazırlayıcı.Helpers;
+using System.Data.OleDb;
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -29,6 +24,58 @@ namespace Teklif_Hazırlayıcı.Business
             _connection = new DataAccess.DbConnection();
 
         }
+
+        #region Teklif Güncelleme
+        public bool UpdateOffer(int teklifId)
+        {
+            int toplamAdet = 0;
+            decimal toplamKg = 0;
+
+            string selectQuery = @"
+        SELECT 
+            IIF(ISNULL(SUM(k.adet)), 0, SUM(k.adet)) AS ToplamAdet,
+            IIF(ISNULL(SUM(k.kg)), 0, SUM(k.kg)) AS ToplamKg,
+            IIF(ISNULL(SUM(k.toplam_tutar)), 0, SUM(k.toplam_tutar)) AS ToplamTutar
+        FROM kalemler k
+        INNER JOIN urunler u ON k.urun_id = u.urun_id
+        WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar')";
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+
+                // 1. Seçim (Toplamlar)
+                using (OleDbCommand cmd = new OleDbCommand(selectQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@teklifId", teklifId);
+
+                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            toplamAdet = reader["ToplamAdet"] != DBNull.Value ? Convert.ToInt32(reader["ToplamAdet"]) : 0;
+                            toplamKg = reader["ToplamKg"] != DBNull.Value ? Convert.ToDecimal(reader["ToplamKg"]) : 0;
+                        }
+                    }
+                }
+
+                // 2. Güncelleme
+                string updateQuery = "UPDATE teklifler SET toplam_adet = @toplamAdet, toplam_kg = @toplamKg WHERE teklif_id = @teklifId";
+                using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
+                {
+                    cmd.Parameters.Add("@toplamAdet", OleDbType.Integer).Value = toplamAdet;
+                    cmd.Parameters.Add("@toplamKg", OleDbType.Double).Value = toplamKg;
+                    cmd.Parameters.Add("@teklifId", OleDbType.Integer).Value = teklifId;
+
+                    int result = cmd.ExecuteNonQuery();
+                    return result > 0;
+                }
+
+            }
+        }
+        #endregion
+
+        #region Teklif Listeleme
         public DataTable GetOffer()
         {
             /*
@@ -53,6 +100,9 @@ namespace Teklif_Hazırlayıcı.Business
                 return dt;
             }
         }
+        #endregion
+
+        #region Teklif Arama
         public DataTable Search(string search)
         {
             /*
@@ -93,6 +143,9 @@ namespace Teklif_Hazırlayıcı.Business
 
             return dt.Rows.Count > 0 ? dt : null;
         }
+        #endregion
+
+        #region Teklif Ekleme
         public int AddOffer(int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, int lme, decimal iskonto_orani, decimal kdv_orani, bool tevkifat, decimal tevkifat_orani, string durum)
         {
             /*
@@ -146,5 +199,8 @@ namespace Teklif_Hazırlayıcı.Business
 
             return teklifId;
         }
+
+        #endregion
+
     }
 }
