@@ -49,10 +49,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(101, 47);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 13);
+            this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Teklif Hazırlayıcı";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.label1.Text = "Ürün Editörü";
             // 
             // label2
             // 
@@ -135,6 +134,7 @@
             this.chkYuzey.Size = new System.Drawing.Size(121, 21);
             this.chkYuzey.TabIndex = 8;
             this.chkYuzey.Visible = false;
+            this.chkYuzey.SelectedIndexChanged += new System.EventHandler(this.chkYuzey_SelectedIndexChanged);
             // 
             // lblYuzeyKodu
             // 

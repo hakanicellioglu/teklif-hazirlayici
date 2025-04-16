@@ -25,13 +25,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             LoadProduct();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
-
 
         private bool LoadProduct()
         {
@@ -66,8 +59,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     txtBoy.Visible = true;
                     lblYuzey.Visible = true;
                     chkYuzey.Visible = true;
-                    lblYuzeyKodu.Visible = true;
-                    txtYuzeyKodu.Visible = true;
                 }
                 else
                 {
@@ -164,6 +155,22 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
             // ✅ Veritabanına kayıt
             itemManager.AddProduct(teklif_id, urun_id, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar);
+
+            DialogResult = DialogResult.OK;
+        }
+
+        private void chkYuzey_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(chkYuzey.Text == "Press")
+            {
+                lblYuzeyKodu.Visible = false;
+                txtYuzeyKodu.Visible = false;
+            }
+            else
+            {
+                lblYuzeyKodu.Visible = true;
+                txtYuzeyKodu.Visible = true;
+            }
         }
     }
 }
