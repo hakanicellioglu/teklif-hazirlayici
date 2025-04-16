@@ -164,9 +164,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             return true;
         }
 
-
-
-
         private bool LoadCompany()
         {
             var dt = CompanyManager.GetCompany(); // DataTable
@@ -268,8 +265,13 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     {
                         Hide();
                         itemEditor itemEditor = new itemEditor(teklifId);
-                        itemEditor.ShowDialog();
+                        if(itemEditor.ShowDialog() == DialogResult.OK)
+                        {
+                            offerManager.UpdateOffer(teklifId);
+                        }
                     }
+                    else Close();
+
                 }
                 else
                 {
