@@ -21,10 +21,10 @@ namespace Teklif_Hazırlayıcı.Forms
         public offer()
         {
             InitializeComponent();
-            LoadCompany();
+            LoadOffer();
         }
 
-        private void LoadCompany()
+        private void LoadOffer()
         {
             dataGridView1.DataSource = offerManager.GetOffer();
             SetupGridColumnProperties();
@@ -53,9 +53,6 @@ namespace Teklif_Hazırlayıcı.Forms
 
             if (dataGridView1.Columns["isim"] != null)
                 dataGridView1.Columns["isim"].HeaderText = "Yetkili İsmi";
-
-            if (dataGridView1.Columns["soyisim"] != null)
-                dataGridView1.Columns["soyisim"].HeaderText = "Yetkili Soyismi";
 
             if (dataGridView1.Columns["hitap"] != null)
                 dataGridView1.Columns["hitap"].HeaderText = "Hitap";
@@ -103,7 +100,7 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             txtSearch.Clear();
             dataGridView1.DataSource = null;
-            LoadCompany();
+            LoadOffer();
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -117,7 +114,8 @@ namespace Teklif_Hazırlayıcı.Forms
                 {
                     offerEditor editor = new offerEditor(value, "Edit");
                     editor.ShowDialog();
-                    LoadCompany();
+                    LoadOffer();
+
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)
                 {
@@ -125,7 +123,7 @@ namespace Teklif_Hazırlayıcı.Forms
                     if (confirm == DialogResult.Yes)
                     {
                         //offerEditor.DeleteCompany(value.Value);
-                        LoadCompany();
+                        LoadOffer();
                     }
                 }
             }
@@ -135,7 +133,7 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             offerEditor offerEditor = new offerEditor(null, "Add");
             offerEditor.ShowDialog();
-            LoadCompany();
+            LoadOffer();
 
         }
     }

@@ -40,7 +40,7 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = @"
-            SELECT y.isim, y.soyisim, y.hitap, f.adi, t.teklif_tarih, t.durum
+            SELECT y.isim, y.hitap, f.adi, t.teklif_tarih, t.durum
             FROM (teklifler AS t
             LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id;";
@@ -115,22 +115,23 @@ namespace Teklif_Hazırlayıcı.Business
                 conn.Open();
                 using (OleDbCommand cmd = new OleDbCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@CompanyId", firma_id);
-                    cmd.Parameters.AddWithValue("@AuthorizedPersonId", yetkili_id);
-                    cmd.Parameters.AddWithValue("@OfferDate", teklif_tarih);
-                    cmd.Parameters.AddWithValue("@DeliveryMethod", teslim_sekli);
-                    cmd.Parameters.AddWithValue("@PaymentMethod", odeme_sekli);
-                    cmd.Parameters.AddWithValue("@PaymentDue", odeme_vadesi);
-                    cmd.Parameters.AddWithValue("@OfferValidity", teklif_suresi);
-                    cmd.Parameters.AddWithValue("@ExchangeRate", doviz_kuru);
-                    cmd.Parameters.AddWithValue("@CurrencyUnit", doviz_birimi);
-                    cmd.Parameters.AddWithValue("@Term", vade);
-                    cmd.Parameters.AddWithValue("@Lme", lme);
-                    cmd.Parameters.AddWithValue("@DiscountRate", iskonto_orani);
-                    cmd.Parameters.AddWithValue("@VatRate", kdv_orani);
-                    cmd.Parameters.AddWithValue("@Withholding", tevkifat);
-                    cmd.Parameters.AddWithValue("@WithholdingRate", tevkifat_orani);
-                    cmd.Parameters.AddWithValue("@Status", durum);
+                    cmd.Parameters.Add("@CompanyId", OleDbType.Integer).Value = firma_id;
+                    cmd.Parameters.Add("@AuthorizedPersonId", OleDbType.Integer).Value = yetkili_id;
+                    cmd.Parameters.Add("@OfferDate", OleDbType.Date).Value = teklif_tarih;
+                    cmd.Parameters.Add("@DeliveryMethod", OleDbType.VarChar).Value = teslim_sekli;
+                    cmd.Parameters.Add("@PaymentMethod", OleDbType.VarChar).Value = odeme_sekli;
+                    cmd.Parameters.Add("@PaymentDue", OleDbType.Integer).Value = odeme_vadesi;
+                    cmd.Parameters.Add("@OfferValidity", OleDbType.Integer).Value = teklif_suresi;
+                    cmd.Parameters.Add("@ExchangeRate", OleDbType.VarChar).Value = doviz_kuru;
+                    cmd.Parameters.Add("@CurrencyUnit", OleDbType.VarChar).Value = doviz_birimi.ToString(); // char -> string
+                    cmd.Parameters.Add("@Term", OleDbType.VarChar).Value = vade;
+                    cmd.Parameters.Add("@Lme", OleDbType.Integer).Value = lme;
+                    cmd.Parameters.Add("@DiscountRate", OleDbType.Decimal).Value = iskonto_orani;
+                    cmd.Parameters.Add("@VatRate", OleDbType.Decimal).Value = kdv_orani;
+                    cmd.Parameters.Add("@Withholding", OleDbType.Boolean).Value = tevkifat;
+                    cmd.Parameters.Add("@WithholdingRate", OleDbType.Decimal).Value = tevkifat_orani;
+                    cmd.Parameters.Add("@Status", OleDbType.VarChar).Value = durum;
+
 
                     int result = cmd.ExecuteNonQuery();
 
