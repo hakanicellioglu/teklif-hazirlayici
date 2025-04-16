@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -87,7 +88,7 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = @"
-            SELECT y.isim, y.hitap, f.adi, t.teklif_tarih, t.durum
+            SELECT t.teklif_id, t.yetkili_id, y.isim, y.hitap, f.adi, t.teklif_tarih, t.durum
             FROM (teklifler AS t
             LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id;";
@@ -100,7 +101,68 @@ namespace Teklif_Hazırlayıcı.Business
                 return dt;
             }
         }
+
+        public DataTable GetOfferById(int? offer_id)
+        {
+            string query = @"
+    SELECT 
+        t.teklif_id,
+        t.firma_id,
+        t.yetkili_id,
+        f.adi AS firma_adi,
+        y.isim AS yetkili_adi,
+        y.soyisim AS yetkili_soyadi,
+        y.hitap,
+        t.teklif_tarih,
+        t.teslim_sekli,
+        t.odeme_sekli,
+        t.odeme_vadesi,
+        t.teklif_suresi,
+        t.doviz_kuru,
+        t.doviz_birimi,
+        t.vade,
+        t.lme,
+        t.toplam_adet,
+        t.toplam_kg,
+        t.mal_hizmet_tutari,
+        t.iskonto_orani,
+        t.iskonto_tutari,
+        t.kdv_orani,
+        t.kdv_tutari,
+        t.tevkifat,
+        t.tevkifat_orani,
+        t.tevkifat_tutari,
+        t.genel_toplam,
+        t.odenecek_tutar,
+        t.durum
+    FROM 
+        (teklifler AS t
+        LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
+        LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id
+    WHERE t.teklif_id = ?";
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("?", offer_id); // OleDb: parametre adı değil, sırası önemli
+
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        return dt.Rows.Count > 0 ? dt : null;
+                    }
+                }
+            }
+        }
+
+
+
         #endregion
+
+
 
         #region Teklif Arama
         public DataTable Search(string search)

@@ -107,12 +107,25 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                int? value = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value?.ToString());
+                int offer_id = 0;
+                var cellVal = dataGridView1.Rows[e.RowIndex].Cells["teklif_id"].Value;
+
+                if (cellVal != null && int.TryParse(cellVal.ToString(), out int parsedId))
+                {
+                    offer_id = parsedId;
+                }
+                else
+                {
+                    MessageBox.Show("Geçersiz teklif ID'si.");
+                    return;
+                }
+
+
                 var result = CustomMessageBox.Show("Bu şirketi düzenlemek veya silmek istiyor musunuz?");
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    offerEditor editor = new offerEditor(value, "Edit");
+                    offerEditor editor = new offerEditor(offer_id, "Edit");
                     editor.ShowDialog();
                     LoadOffer();
 

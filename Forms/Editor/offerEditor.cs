@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {
@@ -26,7 +27,65 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             offer_id = offerId;
             editor_mode = editMode;
             LoadOffer();
-            //SelectionMode();
+            SelectionMode();
+        }
+
+        private void SelectionMode()
+        {
+            if (editor_mode == "Add")
+            {
+                button1.Text = "Ekle";
+                btnCancel.Visible = false;
+            }
+            else if (editor_mode == "Edit")
+            {
+                button1.Text = "Kaydet";
+                btnCancel.Visible = true;
+
+                OfferManager manager = new OfferManager();
+                var data = manager.GetOfferById(offer_id);
+
+                if (data != null && data.Rows.Count > 0)
+                {
+                    var offer = data.Rows[0];
+
+                    // Firma ComboBox eşleşmesi
+                    string firmaAdi = offer["firma_adi"].ToString();
+                    int firmaIndex = chkFirmalar.FindStringExact(firmaAdi);
+                    if (firmaIndex >= 0) chkFirmalar.SelectedIndex = firmaIndex;
+
+                    // Yetkili ComboBox eşleşmesi
+                    string yetkiliAdi = offer["isim"].ToString();
+                    int yetkiliIndex = chkYetkililer.FindStringExact(yetkiliAdi);
+                    if (yetkiliIndex >= 0) chkYetkililer.SelectedIndex = yetkiliIndex;
+
+                    // Temel alanlar
+                    dateTimePicker1.Value = Convert.ToDateTime(offer["teklif_tarih"]);
+                    chkTeslimSekli.SelectedItem = offer["teslim_sekli"].ToString();
+                    chkOdemeSekli.SelectedItem = offer["odeme_sekli"].ToString();
+                    txtOdemeVadesi.Text = offer["odeme_vadesi"].ToString();
+                    chkDovizBirimi.SelectedItem = offer["doviz_birimi"].ToString();
+                    txtDovizKuru.Text = offer["doviz_kuru"].ToString();
+                    txtTeklifSuresi.Text = offer["teklif_suresi"].ToString();
+                    txtLME.Text = offer["lme"].ToString();
+                    txtIskonto.Text = offer["iskonto_orani"].ToString();
+                    txtKDV.Text = offer["kdv_orani"].ToString();
+
+                    // Tevkifat alanı
+                    txtTevkifat.Text = offer["tevkifat_orani"].ToString();
+                    decimal oran = 0;
+                    decimal.TryParse(offer["tevkifat_orani"].ToString(), out oran);
+                    chkTevkifat.Checked = oran > 0;
+
+                    // Diğer alanlar
+                    chkDurum.SelectedItem = offer["durum"].ToString();
+                    chkVade.SelectedItem = offer["vade"].ToString();
+                }
+                else
+                {
+                    MessageBox.Show("Teklif bulunamadı.");
+                }
+            }
         }
         private bool ValidateForm()
         {
@@ -74,18 +133,18 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
 
             // TextBox kontrolleri
-            if (!IsValidInt(txtTeklifSuresi, "Teklif süresi")) return false;
-            if (!IsValidInt(txtLME, "LME")) return false;
-            if (!IsValidInt(txtIskonto, "İskonto")) return false;
-            //if (!IsValidInt(txtTevkifat, "Tevkifat")) return false;
-            if (!IsValidInt(txtDovizKuru, "Döviz kuru")) return false;
-            if (!IsValidInt(txtOdemeVadesi, "Ödeme vadesi")) return false;
-            if (!IsValidInt(txtKDV, "KDV")) return false;
+            //if (!IsValidInt(txtTeklifSuresi, "Teklif süresi")) return false;
+            //if (!IsValidInt(txtLME, "LME")) return false;
+            //if (!IsValidInt(txtIskonto, "İskonto")) return false;
+            ////if (!IsValidInt(txtTevkifat, "Tevkifat")) return false;
+            //if (!IsValidInt(txtDovizKuru, "Döviz kuru")) return false;
+            //if (!IsValidInt(txtOdemeVadesi, "Ödeme vadesi")) return false;
+            //if (!IsValidInt(txtKDV, "KDV")) return false;
 
             // CheckBox kontrolü
             if (chkTevkifat.Checked)
             {
-                if (!IsValidInt(txtTevkifat, "Tevkifat"))
+                //if (!IsValidInt(txtTevkifat, "Tevkifat"))
                     return false;
             }
             else
@@ -96,7 +155,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
             return true;
         }
-        private bool IsValidInt(TextBox tb, string fieldName)
+
+        private bool IsValidInt(System.Windows.Forms.TextBox tb, string fieldName)
         {
             if (TextboxValidator.IsNullOrWhiteSpace(tb))
             {
