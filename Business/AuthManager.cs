@@ -318,7 +318,7 @@ namespace Teklif_Hazırlayıcı.Business
              */
             List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
-            string query = "SELECT isim, hitap FROM yetkililer WHERE firma_id = @CompanyId";
+            string query = "SELECT yetkili_id, isim, hitap FROM yetkililer WHERE firma_id = @CompanyId";
             using (OleDbConnection conn = _connection.GetConnection())
             {
                 conn.Open();
@@ -331,6 +331,7 @@ namespace Teklif_Hazırlayıcı.Business
                         while (reader.Read())
                         {
                             Dictionary<string, string> row = new Dictionary<string, string>();
+                            row["yetkili_id"] = reader["yetkili_id"].ToString();  // BU satır ekleniyor!
                             row["isim"] = reader["isim"].ToString();
                             row["hitap"] = reader["hitap"] != DBNull.Value ? reader["hitap"].ToString() : "";
                             result.Add(row);
