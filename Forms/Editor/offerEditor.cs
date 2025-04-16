@@ -275,7 +275,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 {
                     MessageHelper.ShowError("Teklif eklenirken bir hata oluştu.");
                 }
-                Close();
             }
         }
     }
