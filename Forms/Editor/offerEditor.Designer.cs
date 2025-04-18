@@ -61,6 +61,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.txtKDV = new System.Windows.Forms.TextBox();
             this.chkVade = new System.Windows.Forms.ComboBox();
+            this.btnEdit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -259,7 +260,6 @@
             this.txtTevkifat.Name = "txtTevkifat";
             this.txtTevkifat.Size = new System.Drawing.Size(121, 20);
             this.txtTevkifat.TabIndex = 28;
-            this.txtTevkifat.Visible = false;
             // 
             // chkTevkifat
             // 
@@ -297,9 +297,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(456, 358);
+            this.button1.Location = new System.Drawing.Point(429, 356);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(102, 23);
             this.button1.TabIndex = 31;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
@@ -307,9 +307,9 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(456, 387);
+            this.btnCancel.Location = new System.Drawing.Point(429, 385);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(102, 23);
             this.btnCancel.TabIndex = 32;
             this.btnCancel.Text = "İptal";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -365,11 +365,23 @@
             this.chkVade.Size = new System.Drawing.Size(121, 21);
             this.chkVade.TabIndex = 20;
             // 
+            // btnEdit
+            // 
+            this.btnEdit.Location = new System.Drawing.Point(430, 327);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(100, 23);
+            this.btnEdit.TabIndex = 33;
+            this.btnEdit.Text = "Ürünleri Düzenle";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Visible = false;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            // 
             // offerEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 461);
+            this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.chkVade);
             this.Controls.Add(this.txtKDV);
             this.Controls.Add(this.label15);
@@ -406,7 +418,7 @@
             this.Name = "offerEditor";
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Teklif Hazırlayıcı";
+            this.Text = "<";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -447,5 +459,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox txtKDV;
         private System.Windows.Forms.ComboBox chkVade;
+        private System.Windows.Forms.Button btnEdit;
     }
 }

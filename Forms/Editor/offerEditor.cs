@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,11 +37,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             {
                 button1.Text = "Ekle";
                 btnCancel.Visible = false;
+                btnEdit.Visible = false;
             }
             else if (editor_mode == "Edit")
             {
                 button1.Text = "Kaydet";
                 btnCancel.Visible = true;
+                btnEdit.Visible = true;
+
 
                 OfferManager manager = new OfferManager();
                 var data = manager.GetOfferById(offer_id);
@@ -153,8 +157,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             // CheckBox kontrolü
             if (chkTevkifat.Checked)
             {
-                //if (!IsValidInt(txtTevkifat, "Tevkifat"))
-                    return false;
+                if (!IsValidInt(txtTevkifat, "Tevkifat"))
+                return false;
             }
             else
             {
@@ -204,14 +208,12 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         private bool LoadAuth(long firma_id)
         {
             var authList = AuthManager.GetAuthByCompanyId(firma_id);
-
-
-            chkYetkililer.Items.Clear();
+            chkYetkililer.DataSource = null; // eski kaynakları sıfırla
 
             if (authList == null || authList.Count == 0)
                 return false;
 
-            chkYetkililer.DisplayMember = "Value"; // Çok önemli!
+            var authComboList = new List<KeyValuePair<string, string>>();
 
             foreach (var auth in authList)
             {
@@ -222,7 +224,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     if (auth.ContainsKey("hitap") && !string.IsNullOrWhiteSpace(auth["hitap"]))
                         displayText = $"{auth["isim"]} {auth["hitap"]}";
 
-                    chkYetkililer.Items.Add(new KeyValuePair<string, string>(auth["yetkili_id"], displayText));
+                    authComboList.Add(new KeyValuePair<string, string>(auth["yetkili_id"], displayText));
                 }
                 else
                 {
@@ -230,8 +232,13 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
             }
 
+            chkYetkililer.DisplayMember = "Value";
+            chkYetkililer.ValueMember = "Key";
+            chkYetkililer.DataSource = authComboList;
+
             return true;
         }
+
 
         private bool LoadCompany()
         {
@@ -282,25 +289,100 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 chkYetkililer.Enabled = false;
             }
         }
+
+        string exValue;
         private void chkTevkifat_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkTevkifat.Checked) txtTevkifat.Visible = true;
-            else txtTevkifat.Visible = false;
+            if (chkTevkifat.Checked)
+            {
+                txtTevkifat.Enabled = true;
+
+                if (!string.IsNullOrEmpty(exValue))
+                    txtTevkifat.Text = exValue; // saklanan değeri geri getir
+            }
+            else
+            {
+                exValue = txtTevkifat.Text;
+
+                txtTevkifat.Enabled = false;
+
+                // Eğer tevkifat değeri zaten 0 değilse ve sıfırlamak istiyorsan
+                if (string.IsNullOrEmpty(txtTevkifat.Text) || txtTevkifat.Text != "0")
+                    txtTevkifat.Text = "0";
+            }
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            if (ValidateForm() == true)
+            if (editor_mode == "Add")
+            {
+                if (ValidateForm() == true)
+                {
+
+                    OfferManager offerManager = new OfferManager();
+                    int tevkifat = string.IsNullOrWhiteSpace(txtTevkifat.Text) ? 0 : Convert.ToInt32(txtTevkifat.Text);
+                    bool tevkifatVarMi = !string.IsNullOrWhiteSpace(txtTevkifat.Text) && Convert.ToDecimal(txtTevkifat.Text) > 0;
+                    decimal tevkifatOrani = tevkifatVarMi ? Convert.ToDecimal(txtTevkifat.Text.Trim()) : 0;
+                    int yetkiliId;
+
+                    if (chkYetkililer.SelectedItem is KeyValuePair<string, string> selectedAuth)
+                    {
+                        yetkiliId = Convert.ToInt32(selectedAuth.Key);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Lütfen bir yetkili seçiniz.");
+                        return;
+                    }
+
+
+                    int teklifId = offerManager.AddOffer(
+                        Convert.ToInt32(chkFirmalar.SelectedValue),
+                        yetkiliId,
+                        dateTimePicker1.Value,
+                        chkTeslimSekli.Text,
+                        chkOdemeSekli.Text,
+                        Convert.ToInt32(txtOdemeVadesi.Text.Trim()),
+                        Convert.ToInt32(txtTeklifSuresi.Text.Trim()),
+                        txtDovizKuru.Text.Trim(),
+                        Convert.ToChar(chkDovizBirimi.Text.Trim().Substring(0, 1)),
+                        chkVade.Text,
+                        Convert.ToInt32(txtLME.Text.Trim()),
+                        Convert.ToDecimal(txtIskonto.Text.Trim()),
+                        Convert.ToDecimal(txtKDV.Text.Trim()),
+                        tevkifatVarMi,
+                        tevkifatOrani,
+                        chkDurum.Text
+                    );
+
+                    if (teklifId > 0)
+                    {
+                        if (MessageHelper.ShowQuestion("Teklif başarıyla oluşturuldu. Ürün eklemek ister misiniz?") == DialogResult.Yes)
+                        {
+                            Hide();
+                            itemEditor itemEditor = new itemEditor(teklifId);
+                            if (itemEditor.ShowDialog() == DialogResult.OK)
+                            {
+                                //offerManager.UpdateOfferByOfferId(teklifId);
+                            }
+                        }
+                        else Close();
+
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError("Teklif eklenirken bir hata oluştu.");
+                    }
+                }
+            }
+            else if (editor_mode == "Edit")
             {
 
                 OfferManager offerManager = new OfferManager();
-                int tevkifat = string.IsNullOrWhiteSpace(txtTevkifat.Text) ? 0 : Convert.ToInt32(txtTevkifat.Text);
-                bool tevkifatVarMi = !string.IsNullOrWhiteSpace(txtTevkifat.Text) && Convert.ToDecimal(txtTevkifat.Text) > 0;
-                decimal tevkifatOrani = tevkifatVarMi ? Convert.ToDecimal(txtTevkifat.Text.Trim()) : 0;
-                int yetkiliId;
 
-                if (chkYetkililer.SelectedItem is KeyValuePair<string, string> selectedAuth)
+                int yetkiliId;
+                if (chkYetkililer.SelectedIndex >= 0 && chkYetkililer.SelectedValue != null)
                 {
-                    yetkiliId = Convert.ToInt32(selectedAuth.Key);
+                    yetkiliId = Convert.ToInt32(chkYetkililer.SelectedValue);
                 }
                 else
                 {
@@ -309,44 +391,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
 
-                int teklifId = offerManager.AddOffer(
-                    Convert.ToInt32(chkFirmalar.SelectedValue),
-                    yetkiliId,
-                    dateTimePicker1.Value,
-                    chkTeslimSekli.Text,
-                    chkOdemeSekli.Text,
-                    Convert.ToInt32(txtOdemeVadesi.Text.Trim()),
-                    Convert.ToInt32(txtTeklifSuresi.Text.Trim()),
-                    txtDovizKuru.Text.Trim(),
-                    Convert.ToChar(chkDovizBirimi.Text.Trim().Substring(0, 1)),
-                    chkVade.Text,
-                    Convert.ToInt32(txtLME.Text.Trim()),
-                    Convert.ToDecimal(txtIskonto.Text.Trim()),
-                    Convert.ToDecimal(txtKDV.Text.Trim()),
-                    tevkifatVarMi,
-                    tevkifatOrani,
-                    chkDurum.Text
-                );
-
-                if (teklifId > 0)
-                {
-                    if (MessageHelper.ShowQuestion("Teklif başarıyla oluşturuldu. Ürün eklemek ister misiniz?") == DialogResult.Yes)
-                    {
-                        Hide();
-                        itemEditor itemEditor = new itemEditor(teklifId);
-                        if(itemEditor.ShowDialog() == DialogResult.OK)
-                        {
-                            offerManager.UpdateOffer(teklifId);
-                        }
-                    }
-                    else Close();
-
-                }
-                else
-                {
-                    MessageHelper.ShowError("Teklif eklenirken bir hata oluştu.");
-                }
+                offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, Convert.ToInt32(txtLME.Text), txtIskonto.Text, txtKDV.Text, chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
+                Close();
             }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
