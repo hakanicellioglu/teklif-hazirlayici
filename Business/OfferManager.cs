@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Data.OleDb;
+using System.Globalization;
+using System.Windows.Forms;
+using Teklif_Hazırlayıcı.Forms;
+using Teklif_Hazırlayıcı.Helpers;
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -26,7 +30,7 @@ namespace Teklif_Hazırlayıcı.Business
         }
 
         #region Teklif Güncelleme
-        public bool UpdateOffer(int teklifId)
+        public bool UpdateOfferById(int teklifId)
         {
             int toplamAdet = 0;
             decimal toplamKg = 0;
@@ -100,7 +104,6 @@ namespace Teklif_Hazırlayıcı.Business
                 return dt;
             }
         }
-
         public DataTable GetOfferById(int? offer_id)
         {
             string query = @"
@@ -156,12 +159,7 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
-
-
-
         #endregion
-
-
 
         #region Teklif Arama
         public DataTable Search(string search)
@@ -263,5 +261,118 @@ namespace Teklif_Hazırlayıcı.Business
 
         #endregion
 
+        #region Teklif Güncelleme
+        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, int lme, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
+        {
+            iskonto_orani = iskonto_orani.Replace(",", ".");
+            decimal iskontoDecimal = decimal.Parse(iskonto_orani, CultureInfo.InvariantCulture);
+
+            kdv_orani = kdv_orani.Replace(',', '.');
+            decimal kdvDecimal = decimal.Parse(kdv_orani, CultureInfo.InvariantCulture);
+
+            tevkifat_orani = tevkifat_orani.Replace(",", ".");
+            decimal tevkifatDecimal = decimal.Parse(tevkifat_orani, CultureInfo.InvariantCulture);
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+
+
+                // Mevcut teklifi çek
+                string selectQuery = "SELECT * FROM teklifler WHERE teklif_id = @TeklifId";
+                using (OleDbCommand selectCmd = new OleDbCommand(selectQuery, conn))
+                {
+                    selectCmd.Parameters.AddWithValue("@TeklifId", teklif_id);
+
+                    using (OleDbDataReader reader = selectCmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            bool isDifferent =
+                                (int)reader["firma_id"] != firma_id ||
+                                (int)reader["yetkili_id"] != yetkili_id ||
+                                Convert.ToDateTime(reader["teklif_tarih"]) != teklif_tarih ||
+                                reader["teslim_sekli"].ToString() != teslim_sekli ||
+                                reader["odeme_sekli"].ToString() != odeme_sekli ||
+                                Convert.ToInt32(reader["odeme_vadesi"]) != odeme_vadesi ||
+                                Convert.ToInt32(reader["teklif_suresi"]) != teklif_suresi ||
+                                reader["doviz_kuru"].ToString() != doviz_kuru ||
+                                Convert.ToChar(reader["doviz_birimi"]) != doviz_birimi ||
+                                reader["vade"].ToString() != vade ||
+                                Convert.ToInt32(reader["lme"]) != lme ||
+                                reader["iskonto_orani"].ToString() != iskonto_orani ||
+                                reader["kdv_orani"].ToString() != kdv_orani ||
+                                Convert.ToBoolean(reader["tevkifat"]) != tevkifat ||
+                                reader["tevkifat_orani"].ToString() != tevkifat_orani ||
+                                reader["durum"].ToString() != durum;
+
+                            if (!isDifferent)
+                            {
+                                MessageHelper.ShowInfo("Hiçbir değişiklik yapılmadı.");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            MessageHelper.ShowError("Teklif bulunamadı.");
+                            return;
+                        }
+
+                        string updateQuery = @"
+                        UPDATE teklifler SET 
+                            firma_id = @FirmaId,
+                            yetkili_id = @YetkiliId,
+                            teklif_tarih = @TeklifTarih,
+                            teslim_sekli = @TeslimSekli,
+                            odeme_sekli = @OdemeSekli,
+                            odeme_vadesi = @OdemeVadesi,
+                            teklif_suresi = @TeklifSuresi,
+                            doviz_kuru = @DovizKuru,
+                            doviz_birimi = @DovizBirimi,
+                            vade = @Vade,
+                            lme = @Lme,
+                            iskonto_orani = @IskontoOrani,
+                            kdv_orani = @KdvOrani,
+                            tevkifat = @Tevkifat,
+                            tevkifat_orani = @TevkifatOrani,
+                            durum = @Durum
+                        WHERE teklif_id = @TeklifId";
+
+                        using (OleDbCommand updateCmd = new OleDbCommand(updateQuery, conn))
+                        {
+                            updateCmd.Parameters.Add(new OleDbParameter("@FirmaId", OleDbType.Integer) { Value = firma_id });
+                            updateCmd.Parameters.Add(new OleDbParameter("@YetkiliId", OleDbType.Integer) { Value = yetkili_id });
+                            updateCmd.Parameters.Add(new OleDbParameter("@TeklifTarih", OleDbType.Date) { Value = teklif_tarih });
+                            updateCmd.Parameters.Add(new OleDbParameter("@TeslimSekli", OleDbType.VarChar) { Value = teslim_sekli });
+                            updateCmd.Parameters.Add(new OleDbParameter("@OdemeSekli", OleDbType.VarChar) { Value = odeme_sekli });
+                            updateCmd.Parameters.Add(new OleDbParameter("@OdemeVadesi", OleDbType.Integer) { Value = odeme_vadesi });
+                            updateCmd.Parameters.Add(new OleDbParameter("@TeklifSuresi", OleDbType.Integer) { Value = teklif_suresi });
+                            updateCmd.Parameters.Add(new OleDbParameter("@DovizKuru", OleDbType.VarChar) { Value = doviz_kuru });
+                            updateCmd.Parameters.Add(new OleDbParameter("@DovizBirimi", OleDbType.VarChar) { Value = doviz_birimi.ToString() });
+                            updateCmd.Parameters.Add(new OleDbParameter("@Vade", OleDbType.VarChar) { Value = vade });
+                            updateCmd.Parameters.Add(new OleDbParameter("@Lme", OleDbType.Integer) { Value = lme });
+                            updateCmd.Parameters.Add(new OleDbParameter("@IskontoOrani", OleDbType.Decimal) { Value = iskontoDecimal });
+                            updateCmd.Parameters.Add(new OleDbParameter("@KdvOrani", OleDbType.Decimal) { Value = kdvDecimal });
+                            updateCmd.Parameters.Add(new OleDbParameter("@Tevkifat", OleDbType.Boolean) { Value = tevkifat });
+                            updateCmd.Parameters.Add(new OleDbParameter("@TevkifatOrani", OleDbType.Decimal) { Value = tevkifatDecimal });
+                            updateCmd.Parameters.Add(new OleDbParameter("@Durum", OleDbType.VarChar) { Value = durum });
+                            updateCmd.Parameters.Add(new OleDbParameter("@TeklifId", OleDbType.Integer) { Value = teklif_id });
+
+
+                            int result = updateCmd.ExecuteNonQuery();
+                            if (result > 0)
+                            {
+                                MessageHelper.ShowSuccess("Teklif başarıyla güncellendi.");
+                            }
+                            else
+                            {
+                                MessageHelper.ShowError("Teklif güncellenirken bir hata oluştu.");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }
