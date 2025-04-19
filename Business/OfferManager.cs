@@ -213,16 +213,29 @@ namespace Teklif_Hazırlayıcı.Business
         #endregion
 
         #region Teklif Güncelleme
-        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, int lme, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
+        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
         {
-            iskonto_orani = iskonto_orani.Replace(",", ".");
+            // İskonto
             decimal iskontoDecimal = decimal.Parse(iskonto_orani, CultureInfo.InvariantCulture);
+            string iskontoStr = iskontoDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
-            kdv_orani = kdv_orani.Replace(',', '.');
+            // KDV
             decimal kdvDecimal = decimal.Parse(kdv_orani, CultureInfo.InvariantCulture);
+            string kdvStr = kdvDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
-            tevkifat_orani = tevkifat_orani.Replace(",", ".");
+
+            // Tevkifat
             decimal tevkifatDecimal = decimal.Parse(tevkifat_orani, CultureInfo.InvariantCulture);
+            string tevkifatStr = tevkifatDecimal.ToString("0.##", new CultureInfo("tr-TR"));
+
+            // LME
+            decimal lmeDecimal = decimal.Parse(lme, CultureInfo.InvariantCulture);
+            string lmeStr = lmeDecimal.ToString("0.##", new CultureInfo("tr-TR"));
+
+
+
+
+
 
             using (OleDbConnection conn = _connection.GetConnection())
             {
@@ -250,7 +263,7 @@ namespace Teklif_Hazırlayıcı.Business
                                 reader["doviz_kuru"].ToString() != doviz_kuru ||
                                 Convert.ToChar(reader["doviz_birimi"]) != doviz_birimi ||
                                 reader["vade"].ToString() != vade ||
-                                Convert.ToInt32(reader["lme"]) != lme ||
+                                reader["lme"].ToString() != lme ||
                                 reader["iskonto_orani"].ToString() != iskonto_orani ||
                                 reader["kdv_orani"].ToString() != kdv_orani ||
                                 Convert.ToBoolean(reader["tevkifat"]) != tevkifat ||
@@ -301,11 +314,11 @@ namespace Teklif_Hazırlayıcı.Business
                             updateCmd.Parameters.Add(new OleDbParameter("@DovizKuru", OleDbType.VarChar) { Value = doviz_kuru });
                             updateCmd.Parameters.Add(new OleDbParameter("@DovizBirimi", OleDbType.VarChar) { Value = doviz_birimi.ToString() });
                             updateCmd.Parameters.Add(new OleDbParameter("@Vade", OleDbType.VarChar) { Value = vade });
-                            updateCmd.Parameters.Add(new OleDbParameter("@Lme", OleDbType.Integer) { Value = lme });
-                            updateCmd.Parameters.Add(new OleDbParameter("@IskontoOrani", OleDbType.Decimal) { Value = iskontoDecimal });
-                            updateCmd.Parameters.Add(new OleDbParameter("@KdvOrani", OleDbType.Decimal) { Value = kdvDecimal });
+                            updateCmd.Parameters.AddWithValue("@Lme", lmeStr);
+                            updateCmd.Parameters.AddWithValue("@IskontoOrani", iskontoStr);
+                            updateCmd.Parameters.AddWithValue("@KdvOrani", kdvStr);
                             updateCmd.Parameters.Add(new OleDbParameter("@Tevkifat", OleDbType.Boolean) { Value = tevkifat });
-                            updateCmd.Parameters.Add(new OleDbParameter("@TevkifatOrani", OleDbType.Decimal) { Value = tevkifatDecimal });
+                            updateCmd.Parameters.AddWithValue("@TevkifatOrani", tevkifatStr);
                             updateCmd.Parameters.Add(new OleDbParameter("@Durum", OleDbType.VarChar) { Value = durum });
                             updateCmd.Parameters.Add(new OleDbParameter("@TeklifId", OleDbType.Integer) { Value = teklif_id });
 

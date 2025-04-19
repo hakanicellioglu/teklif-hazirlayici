@@ -19,6 +19,8 @@ namespace Teklif_Hazırlayıcı
             AppDomain.CurrentDomain.SetData("DataDirectory", projectPath);
 
 
+            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

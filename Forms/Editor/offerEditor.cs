@@ -86,9 +86,22 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
                     // Tevkifat alanı
                     txtTevkifat.Text = offer["tevkifat_orani"].ToString();
+
                     decimal oran = 0;
-                    decimal.TryParse(offer["tevkifat_orani"].ToString(), out oran);
+                    decimal.TryParse(txtTevkifat.Text, out oran);
+
+                    // Checkbox işaretleniyor mu?
                     chkTevkifat.Checked = oran > 0;
+
+                    // TextBox aktif/pasif ayarlanıyor
+                    txtTevkifat.Enabled = chkTevkifat.Checked;
+
+                    // Eğer sıfırsa görünür olarak da "0" yazabiliriz, garantiye almak için
+                    if (!chkTevkifat.Checked)
+                    {
+                        txtTevkifat.Text = "0";
+                    }
+
 
                     // Diğer alanlar
                     chkDurum.SelectedItem = offer["durum"].ToString();
@@ -154,17 +167,48 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             //if (!IsValidInt(txtOdemeVadesi, "Ödeme vadesi")) return false;
             //if (!IsValidInt(txtKDV, "KDV")) return false;
 
+
+
+
+            string iskontoStr = txtIskonto.Text.Trim().Replace(",", ".");
+            if (!decimal.TryParse(iskontoStr, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal iskontoDecimal))
+            {
+                MessageHelper.ShowError("İskonto oranı geçerli bir sayı değil.");
+                return false;
+            }
+
+            if (iskontoDecimal < 0 || iskontoDecimal > 100)
+            {
+                MessageHelper.ShowError("İskonto oranı 0 ile 100 arasında olmalıdır.");
+                return false;
+            }
+
+
+
             // CheckBox kontrolü
             if (chkTevkifat.Checked)
             {
                 if (!IsValidInt(txtTevkifat, "Tevkifat"))
-                return false;
+                    return false;
+
+                if (!decimal.TryParse(txtTevkifat.Text.Trim(), out decimal oran))
+                {
+                    MessageHelper.ShowError("Tevkifat oranı geçerli bir sayı olmalıdır.");
+                    return false;
+                }
+
+                if (oran <= 0 || oran > 100)
+                {
+                    MessageHelper.ShowError("Tevkifat oranı 0'dan büyük ve 100'e eşit veya daha küçük olmalıdır.");
+                    return false;
+                }
             }
             else
             {
                 if (MessageHelper.ShowQuestion("Tevkifat seçilmedi. Devam etmek istiyor musunuz?") != DialogResult.Yes)
                     return false;
             }
+
 
             return true;
         }
@@ -391,14 +435,31 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
 
-                offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, Convert.ToInt32(txtLME.Text), txtIskonto.Text, txtKDV.Text, chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
+                offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtIskonto.Text, txtKDV.Text, chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
                 Close();
             }
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            string input = txtIskonto.Text;
+            MessageBox.Show($"Orijinal: {input}");
 
+            string replaced = input.Replace(",", ".");
+            MessageBox.Show($"Replace sonrası: {replaced}");
+
+            bool success = decimal.TryParse(replaced, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result);
+            MessageBox.Show(success ? $"Parse Başarılı: {result}" : "Parse Başarısız");
+
+        }
+
+        private void txtIskonto_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ',')
+            {
+                e.Handled = true;
+                txtIskonto.SelectedText = ".";
+            }
         }
     }
 }

@@ -227,9 +227,9 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(50, 278);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(29, 13);
+            this.label11.Size = new System.Drawing.Size(58, 13);
             this.label11.TabIndex = 21;
-            this.label11.Text = "LME";
+            this.label11.Text = "LME(0.##)";
             // 
             // txtLME
             // 
@@ -243,9 +243,9 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(177, 278);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(42, 13);
+            this.label12.Size = new System.Drawing.Size(71, 13);
             this.label12.TabIndex = 23;
-            this.label12.Text = "İskonto";
+            this.label12.Text = "İskonto(0.##)";
             // 
             // txtIskonto
             // 
@@ -253,6 +253,7 @@
             this.txtIskonto.Name = "txtIskonto";
             this.txtIskonto.Size = new System.Drawing.Size(121, 20);
             this.txtIskonto.TabIndex = 24;
+            this.txtIskonto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtIskonto_KeyPress);
             // 
             // txtTevkifat
             // 
@@ -266,9 +267,9 @@
             this.chkTevkifat.AutoSize = true;
             this.chkTevkifat.Location = new System.Drawing.Point(413, 277);
             this.chkTevkifat.Name = "chkTevkifat";
-            this.chkTevkifat.Size = new System.Drawing.Size(65, 17);
+            this.chkTevkifat.Size = new System.Drawing.Size(94, 17);
             this.chkTevkifat.TabIndex = 27;
-            this.chkTevkifat.Text = "Tevkifat";
+            this.chkTevkifat.Text = "Tevkifat(0.##)";
             this.chkTevkifat.UseVisualStyleBackColor = true;
             this.chkTevkifat.CheckedChanged += new System.EventHandler(this.chkTevkifat_CheckedChanged);
             // 
@@ -343,9 +344,9 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(304, 278);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(29, 13);
+            this.label15.Size = new System.Drawing.Size(58, 13);
             this.label15.TabIndex = 25;
-            this.label15.Text = "KDV";
+            this.label15.Text = "KDV(0.##)";
             // 
             // txtKDV
             // 
