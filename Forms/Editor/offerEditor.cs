@@ -283,7 +283,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             return true;
         }
 
-
         private bool LoadCompany()
         {
             var dt = CompanyManager.GetCompany(); // DataTable
@@ -365,7 +364,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     OfferManager offerManager = new OfferManager();
                     int tevkifat = string.IsNullOrWhiteSpace(txtTevkifat.Text) ? 0 : Convert.ToInt32(txtTevkifat.Text);
                     bool tevkifatVarMi = !string.IsNullOrWhiteSpace(txtTevkifat.Text) && Convert.ToDecimal(txtTevkifat.Text) > 0;
-                    decimal tevkifatOrani = tevkifatVarMi ? Convert.ToDecimal(txtTevkifat.Text.Trim()) : 0;
                     int yetkiliId;
 
                     if (chkYetkililer.SelectedItem is KeyValuePair<string, string> selectedAuth)
@@ -390,11 +388,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         txtDovizKuru.Text.Trim(),
                         Convert.ToChar(chkDovizBirimi.Text.Trim().Substring(0, 1)),
                         chkVade.Text,
-                        Convert.ToInt32(txtLME.Text.Trim()),
-                        Convert.ToDecimal(txtIskonto.Text.Trim()),
-                        Convert.ToDecimal(txtKDV.Text.Trim()),
+                        txtLME.Text,
+                        txtIskonto.Text,
+                        txtKDV.Text,
                         tevkifatVarMi,
-                        tevkifatOrani,
+                        txtTevkifat.Text,
                         chkDurum.Text
                     );
 
@@ -406,7 +404,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                             itemEditor itemEditor = new itemEditor(teklifId);
                             if (itemEditor.ShowDialog() == DialogResult.OK)
                             {
-                                //offerManager.UpdateOfferByOfferId(teklifId);
+                                offerManager.UpdateOfferById(teklifId);
                             }
                         }
                         else Close();
@@ -442,15 +440,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            string input = txtIskonto.Text;
-            MessageBox.Show($"Orijinal: {input}");
-
-            string replaced = input.Replace(",", ".");
-            MessageBox.Show($"Replace sonrası: {replaced}");
-
-            bool success = decimal.TryParse(replaced, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result);
-            MessageBox.Show(success ? $"Parse Başarılı: {result}" : "Parse Başarısız");
-
+            
         }
 
         private void txtIskonto_KeyPress(object sender, KeyPressEventArgs e)
