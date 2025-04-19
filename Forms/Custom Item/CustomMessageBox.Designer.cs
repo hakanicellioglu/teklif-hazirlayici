@@ -85,7 +85,9 @@
             this.Controls.Add(this.btnDuzenle);
             this.Controls.Add(this.lblMessage);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(400, 150);
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(400, 150);
             this.Name = "CustomMessageBox";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
