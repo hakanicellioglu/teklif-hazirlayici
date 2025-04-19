@@ -107,36 +107,30 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                int offer_id = 0;
-                var cellVal = dataGridView1.Rows[e.RowIndex].Cells["teklif_id"].Value;
-
-                if (cellVal != null && int.TryParse(cellVal.ToString(), out int parsedId))
-                {
-                    offer_id = parsedId;
-                }
-                else
-                {
-                    MessageBox.Show("Geçersiz teklif ID'si.");
-                    return;
-                }
-
-
-                var result = CustomMessageBox.Show("Bu şirketi düzenlemek veya silmek istiyor musunuz?");
+                int teklifId = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["teklif_id"].Value);
+                var result = CustomMessageBox.Show("Bu teklifi düzenlemek veya silmek istiyor musunuz?");
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    offerEditor editor = new offerEditor(offer_id, "Edit");
+                    offerEditor editor = new offerEditor(teklifId, "Edit");
                     editor.ShowDialog();
                     LoadOffer();
-
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)
                 {
-                    var confirm = MessageBox.Show("Bu şirketi silmek istediğinize emin misiniz?", "Onay", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    var confirm = MessageHelper.ShowQuestion("Bu teklifi ve ilişkili tüm ürünleri silmek istediğinize emin misiniz?");
                     if (confirm == DialogResult.Yes)
                     {
-                        //offerEditor.DeleteCompany(value.Value);
-                        LoadOffer();
+                        OfferManager manager = new OfferManager();
+                        if (manager.DeleteOffer(teklifId))
+                        {
+                            MessageHelper.ShowInfo("Teklif başarıyla silindi.");
+                            LoadOffer();
+                        }
+                        else
+                        {
+                            MessageHelper.ShowError("Silme işlemi başarısız oldu.");
+                        }
                     }
                 }
             }
