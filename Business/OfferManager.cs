@@ -75,6 +75,7 @@ namespace Teklif_Hazırlayıcı.Business
         t.doviz_birimi,
         t.vade,
         t.lme,
+        t.iscilik,
         t.toplam_adet,
         t.toplam_kg,
         t.mal_hizmet_tutari,
@@ -156,7 +157,7 @@ namespace Teklif_Hazırlayıcı.Business
         #endregion
 
         #region Teklif Ekleme
-        public int AddOffer(int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
+        public int AddOffer(int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
         {
             /*
              *
@@ -184,10 +185,14 @@ namespace Teklif_Hazırlayıcı.Business
             decimal lmeDecimal = decimal.Parse(lme, CultureInfo.InvariantCulture);
             string lmeStr = lmeDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
+            // İşçilik
+            decimal iscilikDecimal = decimal.Parse(iscilik, CultureInfo.InvariantCulture);
+            string iscilikStr = iscilikDecimal.ToString("0.##", new CultureInfo("tr-TR"));
+
             int teklifId = -1;
 
-            string query = "INSERT INTO teklifler (firma_id, yetkili_id, teklif_tarih, teslim_sekli, odeme_sekli, odeme_vadesi, teklif_suresi, doviz_kuru, doviz_birimi, vade, lme, iskonto_orani, kdv_orani, tevkifat, tevkifat_orani, durum) " +
-                           "VALUES (@CompanyId, @AuthorizedPersonId, @OfferDate, @DeliveryMethod, @PaymentMethod, @PaymentDue, @OfferValidity, @ExchangeRate, @CurrencyUnit, @Term, @Lme, @DiscountRate, @VatRate, @Withholding, @WithholdingRate, @Status);";
+            string query = "INSERT INTO teklifler (firma_id, yetkili_id, teklif_tarih, teslim_sekli, odeme_sekli, odeme_vadesi, teklif_suresi, doviz_kuru, doviz_birimi, vade, lme, iscilik, iskonto_orani, kdv_orani, tevkifat, tevkifat_orani, durum) " +
+                           "VALUES (@CompanyId, @AuthorizedPersonId, @OfferDate, @DeliveryMethod, @PaymentMethod, @PaymentDue, @OfferValidity, @ExchangeRate, @CurrencyUnit, @Term, @Lme, @Workmanship, @DiscountRate, @VatRate, @Withholding, @WithholdingRate, @Status);";
 
             string getIdQuery = "SELECT @@IDENTITY;";
 
@@ -207,6 +212,7 @@ namespace Teklif_Hazırlayıcı.Business
                     cmd.Parameters.Add("@CurrencyUnit", OleDbType.VarChar).Value = doviz_birimi.ToString(); // char -> string
                     cmd.Parameters.Add("@Term", OleDbType.VarChar).Value = vade;
                     cmd.Parameters.AddWithValue("@Lme", lmeStr);
+                    cmd.Parameters.AddWithValue("@Workmanship", iscilikStr);
                     cmd.Parameters.AddWithValue("@IskontoOrani", iskontoStr);
                     cmd.Parameters.AddWithValue("@KdvOrani", kdvStr);
                     cmd.Parameters.Add("@Withholding", OleDbType.Boolean).Value = tevkifat;
@@ -231,7 +237,7 @@ namespace Teklif_Hazırlayıcı.Business
         #endregion
 
         #region Teklif Güncelleme
-        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
+        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
         {
             // İskonto
             decimal iskontoDecimal = decimal.Parse(iskonto_orani, CultureInfo.InvariantCulture);
@@ -250,7 +256,9 @@ namespace Teklif_Hazırlayıcı.Business
             decimal lmeDecimal = decimal.Parse(lme, CultureInfo.InvariantCulture);
             string lmeStr = lmeDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
-
+            // İşçilik
+            decimal iscilikDecimal = decimal.Parse(iscilik, CultureInfo.InvariantCulture);
+            string iscilikStr = iscilikDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
 
 
@@ -282,6 +290,7 @@ namespace Teklif_Hazırlayıcı.Business
                                 Convert.ToChar(reader["doviz_birimi"]) != doviz_birimi ||
                                 reader["vade"].ToString() != vade ||
                                 reader["lme"].ToString() != lme ||
+                                reader["iscilik"].ToString() != iscilik ||
                                 reader["iskonto_orani"].ToString() != iskonto_orani ||
                                 reader["kdv_orani"].ToString() != kdv_orani ||
                                 Convert.ToBoolean(reader["tevkifat"]) != tevkifat ||
@@ -313,6 +322,7 @@ namespace Teklif_Hazırlayıcı.Business
                             doviz_birimi = @DovizBirimi,
                             vade = @Vade,
                             lme = @Lme,
+                            iscilik = @Workmanship,
                             iskonto_orani = @IskontoOrani,
                             kdv_orani = @KdvOrani,
                             tevkifat = @Tevkifat,
@@ -333,6 +343,7 @@ namespace Teklif_Hazırlayıcı.Business
                             updateCmd.Parameters.Add(new OleDbParameter("@DovizBirimi", OleDbType.VarChar) { Value = doviz_birimi.ToString() });
                             updateCmd.Parameters.Add(new OleDbParameter("@Vade", OleDbType.VarChar) { Value = vade });
                             updateCmd.Parameters.AddWithValue("@Lme", lmeStr);
+                            updateCmd.Parameters.AddWithValue("@Workmanship", iscilikStr);
                             updateCmd.Parameters.AddWithValue("@IskontoOrani", iskontoStr);
                             updateCmd.Parameters.AddWithValue("@KdvOrani", kdvStr);
                             updateCmd.Parameters.Add(new OleDbParameter("@Tevkifat", OleDbType.Boolean) { Value = tevkifat });
