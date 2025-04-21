@@ -38,6 +38,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             {
                 button1.Text = "Ekle";
                 btnCancel.Visible = false;
+                txtIskonto.Text = "0";
             }
             else if (editor_mode == "Edit")
             {
@@ -92,8 +93,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     else
 
                     {
-                        chkİskonto.Checked = false;
                         txtIskonto.Text = "0";
+                        chkİskonto.Checked = false;
                     }
 
                     // Tevkifat alanı
@@ -381,19 +382,19 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
         }
 
-        string exValue;
+        string exTevkifatValue;
         private void chkTevkifat_CheckedChanged(object sender, EventArgs e)
         {
             if (chkTevkifat.Checked)
             {
                 txtTevkifat.Enabled = true;
 
-                if (!string.IsNullOrEmpty(exValue))
-                    txtTevkifat.Text = exValue; // saklanan değeri geri getir
+                if (!string.IsNullOrEmpty(exTevkifatValue))
+                    txtTevkifat.Text = exTevkifatValue; // saklanan değeri geri getir
             }
             else
             {
-                exValue = txtTevkifat.Text;
+                exTevkifatValue = txtTevkifat.Text;
 
                 txtTevkifat.Enabled = false;
 
@@ -423,6 +424,10 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         return;
                     }
 
+                    decimal kdvDecimal = 20m;
+                    string kdvStr = kdvDecimal.ToString("0.##", new CultureInfo("tr-TR"));
+
+
 
                     int teklifId = offerManager.AddOffer(
                         Convert.ToInt32(chkFirmalar.SelectedValue),
@@ -432,13 +437,13 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         chkOdemeSekli.Text,
                         Convert.ToInt32(txtOdemeVadesi.Text.Trim()),
                         Convert.ToInt32(txtTeklifSuresi.Text.Trim()),
-                        txtDovizKuru.Text.Trim(),
+                        txtDovizKuru.Text,
                         Convert.ToChar(chkDovizBirimi.Text.Trim().Substring(0, 1)),
                         chkVade.Text,
                         txtLME.Text,
                         txtİscilik.Text,
                         txtIskonto.Text,
-                        "20",
+                        kdvStr,
                         chkTevkifat.Checked,
                         tevkifat,
                         chkDurum.Text
@@ -557,10 +562,23 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         }
 
 
+        string exİskontoValue;
         private void chkİskonto_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkİskonto.Checked) { txtIskonto.Enabled = true; }
-            else txtIskonto.Enabled = false;
+            if (chkİskonto.Checked)
+            {
+                txtIskonto.Enabled = true;
+
+                if (!string.IsNullOrEmpty(exİskontoValue))
+                    txtIskonto.Text = exİskontoValue;
+            }
+            else
+            {
+                exİskontoValue = txtIskonto.Text;
+                txtIskonto.Enabled = false;
+                if (string.IsNullOrEmpty(txtIskonto.Text) || txtIskonto.Text != "0")
+                    txtIskonto.Text = "0";
+            }
         }
     }
 }
