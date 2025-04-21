@@ -39,6 +39,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 button1.Text = "Ekle";
                 btnCancel.Visible = false;
                 txtIskonto.Text = "0";
+                txtTevkifat.Text = "0";
             }
             else if (editor_mode == "Edit")
             {
@@ -415,6 +416,18 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     decimal kdvDecimal = 20m;
                     string kdvStr = kdvDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
+                    int odemeVadesi = 0;
+                    if (!int.TryParse(txtOdemeVadesi.Text.Trim(), out odemeVadesi))
+                        odemeVadesi = 0;
+
+                    decimal dovizKuruDecimal = 1.00m;
+                    string dovizKuruStr = "1.00"; // varsayılan
+
+                    if (decimal.TryParse(txtDovizKuru.Text.Trim().Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out dovizKuruDecimal))
+                    {
+                        dovizKuruStr = dovizKuruDecimal.ToString("0.##", new CultureInfo("tr-TR"));
+                    }
+
 
 
                     int teklifId = offerManager.AddOffer(
@@ -423,9 +436,9 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         dateTimePicker1.Value,
                         chkTeslimSekli.Text,
                         chkOdemeSekli.Text,
-                        Convert.ToInt32(txtOdemeVadesi.Text.Trim()),
+                        odemeVadesi,
                         Convert.ToInt32(txtTeklifSuresi.Text.Trim()),
-                        txtDovizKuru.Text,
+                        dovizKuruStr,
                         Convert.ToChar(chkDovizBirimi.Text.Trim().Substring(0, 1)),
                         chkVade.Text,
                         txtLME.Text,

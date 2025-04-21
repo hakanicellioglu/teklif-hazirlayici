@@ -175,9 +175,9 @@ namespace Teklif_Hazırlayıcı.Business
             string iskontoStr = iskontoDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
             // KDV
-            decimal kdvDecimal = 0;
+            decimal kdvDecimal = 20;
             if (!decimal.TryParse(kdv_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out kdvDecimal))
-                kdvDecimal = 0;
+                kdvDecimal = 20;
             string kdvStr = kdvDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
             // Tevkifat
