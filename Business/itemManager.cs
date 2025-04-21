@@ -215,6 +215,41 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
 
+        public DataTable GetProductById(int? kalem_id)
+        {
+            string query =
+            "SELECT u.urun_id, u.kalip_no, u.urun, u.gramaj, u.kategori, k.adet, k.boy, k.yuzey, k.yuzey_kodu " +
+            "FROM urunler u " +
+            "INNER JOIN kalemler k ON u.urun_id = k.urun_id " +
+            "WHERE k.kalem_id = @KalemId";
 
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@KalemId", kalem_id);
+                    OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    return dt;
+                }
+            }
+        }
+
+        public bool DeleteProductByKalemId(int? kalem_id)
+        {
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+
+                var deleteItemsCmd = new OleDbCommand("DELETE FROM kalemler WHERE kalem_id = @KalemId", conn);
+                deleteItemsCmd.Parameters.AddWithValue("@KalemId", kalem_id);
+
+                int result = deleteItemsCmd.ExecuteNonQuery();
+                return result > 0;
+            }
+        }
     }
 }
