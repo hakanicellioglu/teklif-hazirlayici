@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
+using Teklif_Hazırlayıcı.Forms.Custom_Item;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -105,38 +106,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     // Diğer alanlar
                     chkDurum.SelectedItem = offer["durum"].ToString();
                     chkVade.SelectedItem = offer["vade"].ToString();
-
-
-                    itemManager itemMgr = new itemManager();
-                    DataTable dtKalemler = itemMgr.GetItemsByTeklifId(offer_id);
-
-                    if (dtKalemler != null && dtKalemler.Rows.Count > 0)
-                    {
-
-                        dataGridView1.DataSource = dtKalemler;
-                        dataGridView1.Visible = true;
-                        dataGridView1.Columns["kalem_id"].Visible = false;
-                        dataGridView1.Columns["teklif_id"].Visible = false;
-                        dataGridView1.Columns["urun_id"].Visible = false;
-
-
-                        // İsteğe bağlı: kolon başlıklarını özelleştirebilirsin
-                        dataGridView1.Columns["urun"].HeaderText = "Ürün";
-                        dataGridView1.Columns["kalip_no"].HeaderText = "Kalıp No";
-                        dataGridView1.Columns["yuzey"].HeaderText = "Yüzey";
-                        dataGridView1.Columns["yuzey_kodu"].HeaderText = "Yüzey Kodu";
-                        dataGridView1.Columns["gramaj"].HeaderText = "Gramaj";
-                        dataGridView1.Columns["kategori"].HeaderText = "Kategori";
-                        dataGridView1.Columns["adet"].HeaderText = "Adet";
-                        dataGridView1.Columns["boy"].HeaderText = "Boy";
-                        dataGridView1.Columns["kg"].HeaderText = "KG";
-                        dataGridView1.Columns["birim_fiyat"].HeaderText = "Birim Fiyat";
-                        dataGridView1.Columns["toplam_tutar"].HeaderText = "Toplam Tutar";
-                    }
-                    else
-                    {
-                        dataGridView1.DataSource = null;
-                    }
+                    LoadProducts();
 
                 }
                 else
@@ -145,6 +115,41 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
             }
         }
+
+        private void LoadProducts()
+        {
+            itemManager itemMgr = new itemManager();
+            DataTable dtKalemler = itemMgr.GetItemsByTeklifId(offer_id);
+
+            if (dtKalemler != null && dtKalemler.Rows.Count > 0)
+            {
+
+                dataGridView1.DataSource = dtKalemler;
+                dataGridView1.Visible = true;
+                dataGridView1.Columns["kalem_id"].Visible = false;
+                dataGridView1.Columns["teklif_id"].Visible = false;
+                dataGridView1.Columns["urun_id"].Visible = false;
+
+
+                // İsteğe bağlı: kolon başlıklarını özelleştirebilirsin
+                dataGridView1.Columns["urun"].HeaderText = "Ürün";
+                dataGridView1.Columns["kalip_no"].HeaderText = "Kalıp No";
+                dataGridView1.Columns["yuzey"].HeaderText = "Yüzey";
+                dataGridView1.Columns["yuzey_kodu"].HeaderText = "Yüzey Kodu";
+                dataGridView1.Columns["gramaj"].HeaderText = "Gramaj";
+                dataGridView1.Columns["kategori"].HeaderText = "Kategori";
+                dataGridView1.Columns["adet"].HeaderText = "Adet";
+                dataGridView1.Columns["boy"].HeaderText = "Boy";
+                dataGridView1.Columns["kg"].HeaderText = "KG";
+                dataGridView1.Columns["birim_fiyat"].HeaderText = "Birim Fiyat";
+                dataGridView1.Columns["toplam_tutar"].HeaderText = "Toplam Tutar";
+            }
+            else
+            {
+                dataGridView1.DataSource = null;
+            }
+        }
+
         private bool ValidateForm()
         {
             // ComboBox kontrolleri
@@ -433,7 +438,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         if (MessageHelper.ShowQuestion("Teklif başarıyla oluşturuldu. Ürün eklemek ister misiniz?") == DialogResult.Yes)
                         {
                             Hide();
-                            itemEditor itemEditor = new itemEditor(teklifId);
+                            itemEditor itemEditor = new itemEditor(teklifId, null, "Add");
                             if (itemEditor.ShowDialog() == DialogResult.OK)
                             {
                                 offerManager.UpdateOfferById(teklifId);
@@ -476,6 +481,43 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             {
                 e.Handled = true;
                 txtIskonto.SelectedText = ".";
+            }
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                int kalemId = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["kalem_id"].Value);
+                var result = CustomMessageBox.Show("Bu kalemi düzenlemek veya silmek istiyor musunuz?");
+
+                if (result == CustomMessageBox.CustomResult.Duzenle)
+                {
+                    Hide();
+                    itemEditor editor = new itemEditor(null, kalemId, "Edit");
+                    editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
+                    editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
+                    editor.ShowDialog();
+                    LoadProducts();
+                    Show();
+                }
+                else if (result == CustomMessageBox.CustomResult.Sil)
+                {
+                    var confirm = MessageHelper.ShowQuestion("Bu kalemi silmek istediğinize emin misiniz?");
+                    if (confirm == DialogResult.Yes)
+                    {
+                        itemManager manager = new itemManager();
+                        if (manager.DeleteProductByKalemId(kalemId))
+                        {
+                            MessageHelper.ShowInfo("Kalem başarıyla silindi.");
+                            LoadProducts();
+                        }
+                        else
+                        {
+                            MessageHelper.ShowError("Silme işlemi başarısız oldu.");
+                        }
+                    }
+                }
             }
         }
     }
