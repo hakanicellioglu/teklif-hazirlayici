@@ -209,20 +209,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             string yuzey = chkYuzey.Text;
             string yuzey_kodu = txtYuzeyKodu.Text;
 
-            // ✅ Bilgilendirme (opsiyonel)
-            MessageBox.Show($"Debug Bilgisi:\n" +
-            $"Adet: {adet}\n" +
-            $"Boy (mm): {boy_mm}\n" +
-            $"Boy (m): {boy_m}\n" +
-            $"Gramaj: {gramaj}\n" +
-            $"LME (ton): {lmeTon}\n" +
-            $"Birim Fiyat (kg): {birimFiyat}\n" +
-            $"Toplam KG: {toplamKg}\n" +
-            $"Toplam Tutar: {toplamTutar}",
-            "DEBUG",
-            MessageBoxButtons.OK,
-            MessageBoxIcon.Information);
-
 
             // ✅ Veritabanına kayıt
             itemManager.AddProduct(teklif_id, urun_id, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar);

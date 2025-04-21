@@ -148,8 +148,7 @@ namespace Teklif_Hazırlayıcı.Forms
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)
                 {
-                    var confirm = MessageBox.Show("Bu yetkiliyi silmek istediğinize emin misiniz?", "Onay", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    if (confirm == DialogResult.Yes)
+                    if (MessageHelper.ShowQuestion("Bu yetkiliyi silmek istediğinize emin misiniz?") == DialogResult.Yes)
                     {
                         authManager.DeleteAuth(value.Value);
                         LoadAuth();

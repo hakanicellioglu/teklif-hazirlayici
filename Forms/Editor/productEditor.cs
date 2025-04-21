@@ -59,7 +59,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
                 else
                 {
-                    MessageBox.Show("Ürün bulunamadı.");
+                    MessageHelper.ShowError("Ürün bulunamadı.");
                 }
             }
         }
@@ -112,7 +112,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
             if (!isValid || gramaj <= 0)
             {
-                MessageBox.Show("Lütfen geçerli ve pozitif bir gramaj değeri giriniz. Örnek: 1,1 veya 1.1", "Hatalı Giriş", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageHelper.ShowError("Lütfen geçerli ve pozitif bir gramaj değeri giriniz. Örnek: 1,1 veya 1.1");
                 return;
             }
         }

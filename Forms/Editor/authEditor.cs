@@ -36,7 +36,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
             if (dt == null || dt.Rows.Count == 0)
             {
-                MessageBox.Show("Şirket verileri yüklenemedi.");
+                MessageHelper.ShowError("Şirket verileri yüklenemedi.");
                 return;
             }
 
@@ -91,7 +91,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
                 else
                 {
-                    MessageBox.Show("Firma bulunamadı.");
+                    MessageHelper.ShowError("Firma bulunamadı.");
                 }
 
             }
@@ -119,7 +119,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 {
                     if (comboBox1.SelectedValue == null)
                     {
-                        MessageBox.Show("Lütfen bir firma seçin.");
+                        MessageHelper.ShowError("Lütfen bir firma seçin.");
                         return;
                     }
 

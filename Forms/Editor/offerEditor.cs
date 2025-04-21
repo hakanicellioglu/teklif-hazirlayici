@@ -124,7 +124,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
                 else
                 {
-                    MessageBox.Show("Teklif bulunamadı.");
+                    MessageHelper.ShowError("Teklif bulunamadı.");
                 }
             }
         }
@@ -207,18 +207,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 MessageHelper.ShowError("Lütfen vade seçiniz.");
                 return false;
             }
-
-            // TextBox kontrolleri
-            //if (!IsValidInt(txtTeklifSuresi, "Teklif süresi")) return false;
-            //if (!IsValidInt(txtLME, "LME")) return false;
-            //if (!IsValidInt(txtIskonto, "İskonto")) return false;
-            ////if (!IsValidInt(txtTevkifat, "Tevkifat")) return false;
-            //if (!IsValidInt(txtDovizKuru, "Döviz kuru")) return false;
-            //if (!IsValidInt(txtOdemeVadesi, "Ödeme vadesi")) return false;
-            //if (!IsValidInt(txtKDV, "KDV")) return false;
-
-
-
 
             string iskontoStr = txtIskonto.Text.Trim().Replace(",", ".");
             if (!decimal.TryParse(iskontoStr, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal iskontoDecimal))
@@ -321,7 +309,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
                 else
                 {
-                    MessageBox.Show("Eksik veri: " + string.Join(", ", auth.Keys));
+                    MessageHelper.ShowError("Eksik veri: " + string.Join(", ", auth.Keys));
                 }
             }
 
@@ -371,13 +359,13 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
                 else
                 {
-                    MessageBox.Show("Firma ID'si alınamadı.");
+                    MessageHelper.ShowError("Firma ID'si alınamadı.");
                     chkYetkililer.Enabled = false;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Hata: " + ex.Message);
+                MessageHelper.ShowError("Hata: " + ex.Message);
                 chkYetkililer.Enabled = false;
             }
         }
@@ -420,7 +408,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     }
                     else
                     {
-                        MessageBox.Show("Lütfen bir yetkili seçiniz.");
+                        MessageHelper.ShowError("Lütfen bir yetkili seçiniz.");
                         return;
                     }
 
@@ -481,7 +469,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
                 else
                 {
-                    MessageBox.Show("Lütfen bir yetkili seçiniz.");
+                    MessageHelper.ShowError("Lütfen bir yetkili seçiniz.");
                     return;
                 }
 

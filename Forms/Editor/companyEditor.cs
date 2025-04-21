@@ -50,7 +50,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
                 else
                 {
-                    MessageBox.Show("Firma bulunamadı.");
+                    MessageHelper.ShowError("Firma bulunamadı.");
                 }
 
             }
