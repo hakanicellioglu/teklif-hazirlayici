@@ -84,6 +84,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btnDuzenle);
             this.Controls.Add(this.lblMessage);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(400, 150);
             this.MinimizeBox = false;
