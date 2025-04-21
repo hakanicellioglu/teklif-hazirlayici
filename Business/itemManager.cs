@@ -193,5 +193,28 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
 
+        public DataTable GetItemsByTeklifId(int? teklif_id)
+        {
+            string query = @"SELECT k.kalem_id, k.teklif_id, k.urun_id, u.urun, u.kalip_no, u.gramaj, u.kategori, 
+                            k.yuzey, k.yuzey_kodu, k.adet, k.boy, k.kg, k.birim_fiyat, k.toplam_tutar
+                     FROM kalemler k
+                     INNER JOIN urunler u ON k.urun_id = u.urun_id
+                     WHERE k.teklif_id = @TeklifId";
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
+                    OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    return dt;
+                }
+            }
+        }
+
+
     }
 }

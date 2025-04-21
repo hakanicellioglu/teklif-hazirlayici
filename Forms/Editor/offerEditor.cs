@@ -37,14 +37,12 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             {
                 button1.Text = "Ekle";
                 btnCancel.Visible = false;
-                btnEdit.Visible = false;
             }
             else if (editor_mode == "Edit")
             {
+                CenterToScreen();
                 button1.Text = "Kaydet";
                 btnCancel.Visible = true;
-                btnEdit.Visible = true;
-
 
                 OfferManager manager = new OfferManager();
                 var data = manager.GetOfferById(offer_id);
@@ -81,6 +79,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     txtDovizKuru.Text = offer["doviz_kuru"].ToString();
                     txtTeklifSuresi.Text = offer["teklif_suresi"].ToString();
                     txtLME.Text = offer["lme"].ToString();
+                    txtİscilik.Text = offer["iscilik"].ToString();
                     txtIskonto.Text = offer["iskonto_orani"].ToString();
                     txtKDV.Text = offer["kdv_orani"].ToString();
 
@@ -106,6 +105,39 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     // Diğer alanlar
                     chkDurum.SelectedItem = offer["durum"].ToString();
                     chkVade.SelectedItem = offer["vade"].ToString();
+
+
+                    itemManager itemMgr = new itemManager();
+                    DataTable dtKalemler = itemMgr.GetItemsByTeklifId(offer_id);
+
+                    if (dtKalemler != null && dtKalemler.Rows.Count > 0)
+                    {
+
+                        dataGridView1.DataSource = dtKalemler;
+                        dataGridView1.Visible = true;
+                        dataGridView1.Columns["kalem_id"].Visible = false;
+                        dataGridView1.Columns["teklif_id"].Visible = false;
+                        dataGridView1.Columns["urun_id"].Visible = false;
+
+
+                        // İsteğe bağlı: kolon başlıklarını özelleştirebilirsin
+                        dataGridView1.Columns["urun"].HeaderText = "Ürün";
+                        dataGridView1.Columns["kalip_no"].HeaderText = "Kalıp No";
+                        dataGridView1.Columns["yuzey"].HeaderText = "Yüzey";
+                        dataGridView1.Columns["yuzey_kodu"].HeaderText = "Yüzey Kodu";
+                        dataGridView1.Columns["gramaj"].HeaderText = "Gramaj";
+                        dataGridView1.Columns["kategori"].HeaderText = "Kategori";
+                        dataGridView1.Columns["adet"].HeaderText = "Adet";
+                        dataGridView1.Columns["boy"].HeaderText = "Boy";
+                        dataGridView1.Columns["kg"].HeaderText = "KG";
+                        dataGridView1.Columns["birim_fiyat"].HeaderText = "Birim Fiyat";
+                        dataGridView1.Columns["toplam_tutar"].HeaderText = "Toplam Tutar";
+                    }
+                    else
+                    {
+                        dataGridView1.DataSource = null;
+                    }
+
                 }
                 else
                 {
@@ -362,8 +394,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 {
 
                     OfferManager offerManager = new OfferManager();
-                    int tevkifat = string.IsNullOrWhiteSpace(txtTevkifat.Text) ? 0 : Convert.ToInt32(txtTevkifat.Text);
-                    bool tevkifatVarMi = !string.IsNullOrWhiteSpace(txtTevkifat.Text) && Convert.ToDecimal(txtTevkifat.Text) > 0;
+                    string tevkifat = string.IsNullOrWhiteSpace(txtTevkifat.Text) ? "0" : txtTevkifat.Text;
                     int yetkiliId;
 
                     if (chkYetkililer.SelectedItem is KeyValuePair<string, string> selectedAuth)
@@ -389,10 +420,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         Convert.ToChar(chkDovizBirimi.Text.Trim().Substring(0, 1)),
                         chkVade.Text,
                         txtLME.Text,
+                        txtİscilik.Text,
                         txtIskonto.Text,
                         txtKDV.Text,
-                        tevkifatVarMi,
-                        txtTevkifat.Text,
+                        chkTevkifat.Checked,
+                        tevkifat,
                         chkDurum.Text
                     );
 
@@ -433,14 +465,9 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
 
-                offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtIskonto.Text, txtKDV.Text, chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
+                offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtİscilik.Text, txtIskonto.Text, txtKDV.Text, chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
                 Close();
             }
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            
         }
 
         private void txtIskonto_KeyPress(object sender, KeyPressEventArgs e)
