@@ -14,15 +14,86 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 {
     public partial class itemEditor : Form
     {
-        int? teklif_id;
-        string kategori;
+        int? teklif_id, kalem_id;
+        string kategori, editor_mode;
         itemManager itemManager = new itemManager();
 
-        public itemEditor(int? teklifId)
+        public itemEditor(int? teklifId, int? kalemId, string editMode)
         {
             InitializeComponent();
             teklif_id = teklifId;
+            kalem_id = kalemId;
+            editor_mode = editMode;
             LoadProduct();
+            SelectionMode();
+        }
+
+        private void SelectionMode()
+        {
+            if (editor_mode == "Add")
+            {
+                button1.Text = "Ekle";
+                btnCancel.Visible = false;
+            }
+            else if (editor_mode == "Edit")
+            {
+                /*
+                 * 
+                 * Alüminyum mu Aksesuar mı?
+                 * 
+                 * Alüminyum ise boy, yuzey, yuzey_kodu görünüsn.
+                 * 
+                 */
+
+
+                button1.Text = "Kaydet";
+                btnCancel.Visible = true;
+
+                var data = itemManager.GetProductById(kalem_id);
+
+                if (data != null && data.Rows.Count > 0)
+                {
+                    var offer = data.Rows[0];
+
+
+                    string hedefUrun = offer["urun"].ToString().Trim();
+
+                    for (int i = 0; i < chkUrunler.Items.Count; i++)
+                    {
+                        var item = (DataRowView)chkUrunler.Items[i];
+                        string urun = item["urun"].ToString().Trim();
+
+                        if (urun.Equals(hedefUrun, StringComparison.OrdinalIgnoreCase))
+                        {
+                            chkUrunler.SelectedIndex = i;
+                            break;
+                        }
+                    }
+
+
+                    txtAdet.Text = offer["adet"].ToString();
+
+                    if (offer["kategori"].ToString() == "Alüminyum")
+                    {
+                        txtBoy.Visible = true;
+                        chkYuzey.Visible = true;
+                        txtYuzeyKodu.Visible = true;
+                        txtBoy.Text = offer["boy"].ToString();
+                        chkYuzey.SelectedItem = offer["yuzey"].ToString();
+                        txtYuzeyKodu.Text = offer["yuzey_kodu"].ToString();
+                    }
+                    else
+                    {
+                        txtBoy.Visible = false;
+                        chkYuzey.Visible = false;
+                        txtYuzeyKodu.Visible = false;
+                    }
+                }
+                else
+                {
+                    MessageHelper.ShowError("Kalem bilgisi bulunamadı.");
+                }
+            }
         }
 
 
@@ -161,7 +232,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void chkYuzey_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(chkYuzey.Text == "Press")
+            if (chkYuzey.Text == "Press")
             {
                 lblYuzeyKodu.Visible = false;
                 txtYuzeyKodu.Visible = false;
