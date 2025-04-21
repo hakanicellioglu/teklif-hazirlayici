@@ -81,8 +81,20 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     txtTeklifSuresi.Text = offer["teklif_suresi"].ToString();
                     txtLME.Text = offer["lme"].ToString();
                     txtİscilik.Text = offer["iscilik"].ToString();
-                    txtIskonto.Text = offer["iskonto_orani"].ToString();
-                    txtKDV.Text = offer["kdv_orani"].ToString();
+
+                    int iskonto_orani = Convert.ToInt32(offer["iskonto_orani"]);
+
+                    if (iskonto_orani > 0)
+                    {
+                        chkİskonto.Checked = true;
+                        txtIskonto.Text = offer["iskonto_orani"].ToString();
+                    }
+                    else
+
+                    {
+                        chkİskonto.Checked = false;
+                        txtIskonto.Text = "0";
+                    }
 
                     // Tevkifat alanı
                     txtTevkifat.Text = offer["tevkifat_orani"].ToString();
@@ -273,11 +285,10 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 chkYetkililer.Enabled = true;
                 if (LoadAuth(SelectedCompany))
                 {
-
                 }
                 else
                 {
-                    MessageHelper.ShowError("Yetkili bulunamadı.");
+                    chkYetkililer.Items.Add("Sayın Yetkili");
                     return;
                 }
             }
@@ -427,7 +438,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         txtLME.Text,
                         txtİscilik.Text,
                         txtIskonto.Text,
-                        txtKDV.Text,
+                        "20",
                         chkTevkifat.Checked,
                         tevkifat,
                         chkDurum.Text
@@ -470,7 +481,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
 
-                offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtİscilik.Text, txtIskonto.Text, txtKDV.Text, chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
+                offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtİscilik.Text, txtIskonto.Text, "20", chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
                 Close();
             }
         }
@@ -519,6 +530,37 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     }
                 }
             }
+        }
+
+        private void chkOdemeSekli_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (chkOdemeSekli.SelectedIndex == 0) { chkVade.Items.Clear(); chkVade.Items.Add("Peşin"); chkVade.Items.Add("Vadeli"); }
+            else if (chkOdemeSekli.SelectedIndex == 1) { chkVade.Items.Clear(); chkVade.Items.Add("Vade"); }
+            else { chkVade.Items.Clear(); chkVade.Items.Add("Peşin"); chkVade.Items.Add("Taksit"); }
+        }
+
+        private void chkVade_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (chkOdemeSekli.Text == "Nakit" && chkVade.Text == "Peşin")
+            {
+                txtOdemeVadesi.Enabled = false;
+            }
+            else
+                txtOdemeVadesi.Enabled = true;
+
+        }
+
+        private void chkDovizBirimi_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (chkDovizBirimi.Text == "₺") txtDovizKuru.Enabled = false;
+            else txtDovizKuru.Enabled = true;
+        }
+
+
+        private void chkİskonto_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkİskonto.Checked) { txtIskonto.Enabled = true; }
+            else txtIskonto.Enabled = false;
         }
     }
 }
