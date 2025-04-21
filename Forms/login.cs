@@ -65,5 +65,10 @@ namespace Teklif_Hazırlayıcı
             register.ShowDialog();
             Show();
         }
+
+        private void txtPassword_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter) btnLogin_Click(sender, e);
+        }
     }
 }
