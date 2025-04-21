@@ -118,11 +118,14 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
+                    Parent.Parent.Hide();
                     offerEditor editor = new offerEditor(teklifId, "Edit");
                     editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
                     editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
                     editor.ShowDialog();
+                    Parent.Parent.Show();
                     LoadOffer();
+                    
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)
                 {
