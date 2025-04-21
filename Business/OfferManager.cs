@@ -169,25 +169,35 @@ namespace Teklif_Hazırlayıcı.Business
              */
 
             // İskonto
-            decimal iskontoDecimal = decimal.Parse(iskonto_orani, CultureInfo.InvariantCulture);
+            decimal iskontoDecimal = 0;
+            if (!decimal.TryParse(iskonto_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out iskontoDecimal))
+                iskontoDecimal = 0; // Hatalıysa 0 olarak ayarla
             string iskontoStr = iskontoDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
             // KDV
-            decimal kdvDecimal = decimal.Parse(kdv_orani, CultureInfo.InvariantCulture);
+            decimal kdvDecimal = 0;
+            if (!decimal.TryParse(kdv_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out kdvDecimal))
+                kdvDecimal = 0;
             string kdvStr = kdvDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
-
             // Tevkifat
-            decimal tevkifatDecimal = decimal.Parse(tevkifat_orani, CultureInfo.InvariantCulture);
+            decimal tevkifatDecimal = 0;
+            if (!decimal.TryParse(tevkifat_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out tevkifatDecimal))
+                tevkifatDecimal = 0;
             string tevkifatStr = tevkifatDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
             // LME
-            decimal lmeDecimal = decimal.Parse(lme, CultureInfo.InvariantCulture);
+            decimal lmeDecimal = 0;
+            if (!decimal.TryParse(lme, NumberStyles.Any, CultureInfo.InvariantCulture, out lmeDecimal))
+                lmeDecimal = 0;
             string lmeStr = lmeDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
             // İşçilik
-            decimal iscilikDecimal = decimal.Parse(iscilik, CultureInfo.InvariantCulture);
+            decimal iscilikDecimal = 0;
+            if (!decimal.TryParse(iscilik, NumberStyles.Any, CultureInfo.InvariantCulture, out iscilikDecimal))
+                iscilikDecimal = 0;
             string iscilikStr = iscilikDecimal.ToString("0.##", new CultureInfo("tr-TR"));
+
 
             int teklifId = -1;
 
@@ -240,25 +250,35 @@ namespace Teklif_Hazırlayıcı.Business
         public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
         {
             // İskonto
-            decimal iskontoDecimal = decimal.Parse(iskonto_orani, CultureInfo.InvariantCulture);
+            decimal iskontoDecimal = 0;
+            if (!decimal.TryParse(iskonto_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out iskontoDecimal))
+                iskontoDecimal = 0; // Hatalıysa 0 olarak ayarla
             string iskontoStr = iskontoDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
             // KDV
-            decimal kdvDecimal = decimal.Parse(kdv_orani, CultureInfo.InvariantCulture);
+            decimal kdvDecimal = 0;
+            if (!decimal.TryParse(kdv_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out kdvDecimal))
+                kdvDecimal = 0;
             string kdvStr = kdvDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
-
             // Tevkifat
-            decimal tevkifatDecimal = decimal.Parse(tevkifat_orani, CultureInfo.InvariantCulture);
+            decimal tevkifatDecimal = 0;
+            if (!decimal.TryParse(tevkifat_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out tevkifatDecimal))
+                tevkifatDecimal = 0;
             string tevkifatStr = tevkifatDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
             // LME
-            decimal lmeDecimal = decimal.Parse(lme, CultureInfo.InvariantCulture);
+            decimal lmeDecimal = 0;
+            if (!decimal.TryParse(lme, NumberStyles.Any, CultureInfo.InvariantCulture, out lmeDecimal))
+                lmeDecimal = 0;
             string lmeStr = lmeDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
             // İşçilik
-            decimal iscilikDecimal = decimal.Parse(iscilik, CultureInfo.InvariantCulture);
+            decimal iscilikDecimal = 0;
+            if (!decimal.TryParse(iscilik, NumberStyles.Any, CultureInfo.InvariantCulture, out iscilikDecimal))
+                iscilikDecimal = 0;
             string iscilikStr = iscilikDecimal.ToString("0.##", new CultureInfo("tr-TR"));
+
 
 
 
