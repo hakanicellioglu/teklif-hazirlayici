@@ -48,6 +48,12 @@ namespace Teklif_Hazırlayıcı.Forms
                 dataGridView1.Columns["teklif_id"].Visible = false;
             }
 
+            if (dataGridView1.Columns["yetkili_id"] != null)
+            {
+                dataGridView1.Columns["yetkili_id"].HeaderText = "Yetkili No";
+                dataGridView1.Columns["yetkili_id"].Visible = false;
+            }
+
             if (dataGridView1.Columns["adi"] != null)
                 dataGridView1.Columns["adi"].HeaderText = "Firma";
 
@@ -113,6 +119,8 @@ namespace Teklif_Hazırlayıcı.Forms
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
                     offerEditor editor = new offerEditor(teklifId, "Edit");
+                    editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
+                    editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
                     editor.ShowDialog();
                     LoadOffer();
                 }
