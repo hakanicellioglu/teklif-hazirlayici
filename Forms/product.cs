@@ -55,13 +55,13 @@ namespace Teklif_Hazırlayıcı.Forms
 
             if (dataGridView1.Columns["urun"] != null)
             {
-                dataGridView1.Columns["urun"].DisplayIndex = 1;
+                dataGridView1.Columns["urun"].DisplayIndex = 2;
                 dataGridView1.Columns["urun"].HeaderText = "Ürün";
             }
 
             if (dataGridView1.Columns["kalip_no"] != null)
             {
-                dataGridView1.Columns["kalip_no"].DisplayIndex = 2;
+                dataGridView1.Columns["kalip_no"].DisplayIndex = 1;
                 dataGridView1.Columns["kalip_no"].HeaderText = "Kalıp No";
             }
 
