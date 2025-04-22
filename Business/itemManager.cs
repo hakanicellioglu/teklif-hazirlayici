@@ -171,6 +171,26 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
 
+        public decimal Getİscilik(int teklif_id)
+        {
+            string query = "SELECT iscilik FROM teklifler WHERE teklif_id = @TeklifId";
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null && decimal.TryParse(result.ToString(), out decimal lme))
+                        return lme;
+
+                    return 0m;
+                }
+            }
+        }
+
         public decimal GetGramaj(int urun_id)
         {
             /*

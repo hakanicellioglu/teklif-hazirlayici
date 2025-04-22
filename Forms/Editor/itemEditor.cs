@@ -197,7 +197,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 return;
             }
 
-            decimal birimFiyat = lmeTon / 1000m;
+            decimal iscilikTon = itemManager.Getİscilik(teklif_id.Value);
+            if (iscilikTon <= 0)
+            {
+                MessageHelper.ShowError("Teklif için geçerli bir işçilik değeri bulunamadı.");
+                return;
+            }
+
+            decimal birimFiyat = (lmeTon / 1000m) + (iscilikTon / 1000m);
 
             // ✅ Hesaplamalar
             decimal gramaj = itemManager.GetGramaj(urun_id); // ürünün gramajı
