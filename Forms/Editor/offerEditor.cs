@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Forms.Custom_Item;
 using Teklif_Hazırlayıcı.Helpers;
@@ -37,17 +42,22 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             if (editor_mode == "Add")
             {
                 button1.Text = "Ekle";
-                btnCancel.Visible = false;
+
                 txtIskonto.Text = "0";
                 txtTevkifat.Text = "0";
+
+                btnCancel.Visible = false;
                 btnEdit.Visible = false;
+                button2.Visible = false;
             }
             else if (editor_mode == "Edit")
             {
                 CenterToScreen();
                 button1.Text = "Kaydet";
+
                 btnCancel.Visible = true;
                 btnEdit.Visible = true;
+                button2.Visible = true;
 
                 OfferManager manager = new OfferManager();
                 var data = manager.GetOfferById(offer_id);
@@ -590,5 +600,271 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             itemEditor.ShowDialog();
             LoadProducts();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OfferManager offerManager = new OfferManager();
+
+            if (offerManager.UpdateOfferById(offer_id))
+            {
+                ExportOfferToPdf();
+            }
+            else
+            {
+                MessageBox.Show("Teklif güncellenemedi.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public decimal ParseDecimalTr(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return 0;
+
+            return decimal.TryParse(value.Replace(".", ","), NumberStyles.Any, new CultureInfo("tr-TR"), out var result)
+                ? result
+                : 0;
+        }
+
+        public string FormatDecimalTr(decimal value, int precision = 5)
+        {
+            if (value == Math.Truncate(value))
+                return value.ToString("N0", new CultureInfo("tr-TR"));
+
+            return value.ToString($"N{precision}", new CultureInfo("tr-TR"));
+        }
+
+        private PdfPCell CreateCell(string text, iTextSharp.text.Font font, int alignment = Element.ALIGN_LEFT)
+        {
+            var cell = new PdfPCell(new Phrase(text, font));
+            cell.Border = iTextSharp.text.Rectangle.NO_BORDER;
+            cell.HorizontalAlignment = alignment;
+            return cell;
+        }
+
+        private void ExportOfferToPdf()
+        {
+            try
+            {
+                OfferManager offerManager = new OfferManager();
+                DataTable teklifDetay = offerManager.GetOfferDetailById(offer_id);
+
+                if (teklifDetay == null || teklifDetay.Rows.Count == 0)
+                {
+                    MessageBox.Show("Teklif verisi bulunamadı.");
+                    return;
+                }
+
+                var row = teklifDetay.Rows[0];
+
+                string firmaAdi = row["adi"].ToString();
+                string yetkiliAdi = row["isim"].ToString();
+                string teklifTarih = Convert.ToDateTime(row["teklif_tarih"]).ToString("dd.MM.yyyy");
+
+                int.TryParse(row["toplam_adet"].ToString(), out int toplamAdet);
+
+                decimal toplamKg = Convert.ToDecimal(row["toplam_kg"]);
+                decimal toplamTutar = Convert.ToDecimal(row["mal_hizmet_tutari"]);
+                decimal iskontoOrani = Convert.ToDecimal(row["iskonto_orani"]);
+                decimal iskontoTutari = Convert.ToDecimal(row["iskonto_tutari"]);
+
+                // Hesaplamalar
+                decimal iskontoSonrasiTutar = toplamTutar - iskontoTutari;
+                decimal kdv = iskontoSonrasiTutar * 0.20m;
+                decimal toplamAluminyumTutari = offerManager.GetToplamAluminyumTutari(offer_id);
+                decimal tevkifat = toplamAluminyumTutari * 0.20m * 0.70m;
+                decimal vergiliToplam = iskontoSonrasiTutar + kdv;
+                decimal odenecekTutar = vergiliToplam - tevkifat;
+
+                char doviz_birimi = row["doviz_birimi"] != DBNull.Value ? Convert.ToChar(row["doviz_birimi"]) : '₺';
+                SaveFileDialog saveFile = new SaveFileDialog();
+                saveFile.Filter = "PDF dosyası (*.pdf)|*.pdf";
+                saveFile.FileName = $"Teklif_{offer_id}.pdf";
+
+                if (saveFile.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                BaseFont baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                var normalFont = new iTextSharp.text.Font(baseFont, 10);
+                var boldFont = new iTextSharp.text.Font(baseFont, 10, iTextSharp.text.Font.BOLD);
+                var titleFont = new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD);
+                var smallFont = new iTextSharp.text.Font(baseFont, 7);
+
+                Document doc = new Document(PageSize.A4, 40, 40, 40, 40);
+                PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(saveFile.FileName, FileMode.Create));
+                doc.Open();
+
+                // Başlık
+                Paragraph title = new Paragraph("TEKLİF FORMU", titleFont)
+                {
+                    Alignment = Element.ALIGN_CENTER,
+                    SpacingAfter = 15
+                };
+
+                doc.Add(title);
+                doc.Add(new Paragraph($"Firma Adı : {firmaAdi}", normalFont));
+                doc.Add(new Paragraph($"Yetkili    : {yetkiliAdi}", normalFont));
+                doc.Add(new Paragraph($"Tarih      : {teklifTarih}", normalFont));
+                doc.Add(new Paragraph("\n"));
+                PdfPTable toplamTable = new PdfPTable(2);
+                toplamTable.WidthPercentage = 40;
+                toplamTable.HorizontalAlignment = Element.ALIGN_RIGHT;
+                toplamTable.SetWidths(new float[] { 60, 40 });
+
+
+                var kalemler = offerManager.GetTeklifKalemleri(offer_id);
+
+                PdfPTable table = new PdfPTable(10);
+                table.WidthPercentage = 100;
+                table.SetWidths(new float[] { 4, 9, 25, 10, 11, 8, 8, 8, 12, 12 });
+                table.DefaultCell.FixedHeight = 12f;
+
+                string[] headers = { "NO", "KOD", "ÜRÜN", "YÜZEY", "YÜZEY KODU", "BOY (mm)", "ADET", "KG", "BİRİM FİYAT", "TOPLAM TUTAR" };
+                foreach (var h in headers)
+                {
+                    PdfPCell cell = new PdfPCell(new Phrase(h, smallFont));
+                    cell.BackgroundColor = BaseColor.LIGHT_GRAY;
+                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    table.AddCell(cell);
+                }
+
+                if (kalemler != null)
+                {
+                    int sira = 1;
+                    foreach (DataRow kalemRow in kalemler.Rows)
+                    {
+                        table.AddCell(CreateCell(sira.ToString(), smallFont, Element.ALIGN_RIGHT));
+                        table.AddCell(CreateCell(kalemRow["kalip_no"].ToString(), smallFont, Element.ALIGN_RIGHT));
+                        table.AddCell(CreateCell(kalemRow["urun"].ToString(), smallFont, Element.ALIGN_RIGHT));
+                        table.AddCell(CreateCell(kalemRow["yuzey"].ToString(), smallFont, Element.ALIGN_RIGHT));
+                        table.AddCell(CreateCell(kalemRow["yuzey_kodu"].ToString(), smallFont, Element.ALIGN_RIGHT));
+                        table.AddCell(CreateCell(kalemRow["boy"].ToString(), smallFont, Element.ALIGN_RIGHT));
+                        table.AddCell(CreateCell(kalemRow["adet"].ToString(), smallFont, Element.ALIGN_RIGHT));
+
+                        // KG, BİRİM FİYAT, TOPLAM TUTAR decimal → string olarak göster
+                        table.AddCell(CreateCell(FormatDecimalTr(ParseDecimalTr(kalemRow["kg"].ToString())), smallFont, Element.ALIGN_RIGHT));
+                        table.AddCell(CreateCell(FormatDecimalTr(ParseDecimalTr(kalemRow["birim_fiyat"].ToString())) + " " + doviz_birimi, smallFont, Element.ALIGN_RIGHT));
+                        table.AddCell(CreateCell(FormatDecimalTr(ParseDecimalTr(kalemRow["toplam_tutar"].ToString())) + " " + doviz_birimi, smallFont, Element.ALIGN_RIGHT));
+
+                        sira++;
+                    }
+
+                    doc.Add(table);
+                    doc.Add(new Paragraph("\n"));
+
+                    string[,] toplamlar = {
+            { "TOPLAM ADET", toplamAdet.ToString() },
+            { "TOPLAM KG", toplamKg.ToString() },
+            { "MAL ve HİZMET TUTARI",toplamTutar.ToString() + " " + doviz_birimi },
+            { $"İSKONTO - %{iskontoOrani.ToString()}", FormatDecimalTr(iskontoTutari) + " " + doviz_birimi },
+            { "İSKONTOLU TUTAR", iskontoSonrasiTutar.ToString() + " " + doviz_birimi },
+            { "KDV", kdv.ToString() + " " + doviz_birimi },
+            { "TEVKİFAT", tevkifat.ToString() + " " + doviz_birimi },
+            { "GENEL TOPLAM (Vergiler Dahil)", vergiliToplam.ToString() + " " + doviz_birimi },
+            { "ÖDENECEK TUTAR", odenecekTutar.ToString() + " " + doviz_birimi }};
+
+                for (int i = 0; i < toplamlar.GetLength(0); i++)
+                {
+                    PdfPCell label = new PdfPCell(new Phrase(toplamlar[i, 0], smallFont))
+                    {
+                        HorizontalAlignment = Element.ALIGN_LEFT,
+                        Border = iTextSharp.text.Rectangle.BOX
+                    };
+                    PdfPCell value = new PdfPCell(new Phrase(toplamlar[i, 1], smallFont))
+                    {
+                        HorizontalAlignment = Element.ALIGN_RIGHT,
+                        Border = iTextSharp.text.Rectangle.BOX
+                    };
+                    toplamTable.AddCell(label);
+                    toplamTable.AddCell(value);
+                }
+
+                doc.Add(toplamTable);
+
+
+                PdfPTable aciklamaTable = new PdfPTable(1);
+                aciklamaTable.WidthPercentage = 100;
+
+                PdfPCell aciklamaBaslik = new PdfPCell(new Phrase("AÇIKLAMALAR", smallFont))
+                {
+                    BackgroundColor = BaseColor.LIGHT_GRAY,
+                    HorizontalAlignment = Element.ALIGN_CENTER,
+                    Border = iTextSharp.text.Rectangle.NO_BORDER
+                };
+                aciklamaTable.AddCell(aciklamaBaslik);
+
+                string[] aciklamalar = {
+            "* ÖDEMESİ YAPILMAMIŞ SİPARİŞLER, SEVK TARİHİNDEKİ FİYATTAN FATURA EDİLİR.",
+            "* VADELİ ÖDEMELERDE %5 FİYAT FARKI EKLENECEKTİR.",
+            "* SİPARİŞLERDE FATURA KANTARDAKİ KG ÜZERİNDEN DÜZENLENİR.",
+            "* ÖZEL BOY TÜM ÜRÜNLERDE ±%10 ÜRETİLEBİLİR.",
+            "* SİPARİŞLER MÜŞTERİ ONAYINDAN SONRA PLANLAMAYA ALINIR.",
+            "* SİPARİŞLERDE NAKLİYE ÜCRETİ MÜŞTERİYE AİTTİR."
+        };
+
+                foreach (var satir in aciklamalar)
+                {
+                    aciklamaTable.AddCell(CreateCell(satir, smallFont));
+                }
+
+                doc.Add(aciklamaTable);
+                doc.Add(new Paragraph("\n"));
+
+                PdfPTable bankaTable = new PdfPTable(3);
+                bankaTable.WidthPercentage = 100;
+                bankaTable.SetWidths(new float[] { 30, 40, 30 });
+
+                PdfPCell bankaBaslik = new PdfPCell(new Phrase("BANKA HESAP BİLGİLERİ", smallFont))
+                {
+                    BackgroundColor = BaseColor.LIGHT_GRAY,
+                    HorizontalAlignment = Element.ALIGN_CENTER,
+                    Border = iTextSharp.text.Rectangle.NO_BORDER,
+                    Colspan = 3
+                };
+                bankaTable.AddCell(bankaBaslik);
+
+                bankaTable.AddCell(CreateCell("VAKIFBANK", smallFont));
+                bankaTable.AddCell(CreateCell("TR44 0001 5001 5800 7321 3983 24", smallFont));
+                bankaTable.AddCell(CreateCell("Alumann Alüminyum San. ve Tic. A.Ş", smallFont));
+
+                bankaTable.AddCell(CreateCell("ALBARAKA", smallFont));
+                bankaTable.AddCell(CreateCell("TR33 0020 3000 0956 2368 0000 01", smallFont));
+                bankaTable.AddCell(CreateCell("Alumann Alüminyum San. ve Tic. A.Ş", smallFont));
+
+                doc.Add(bankaTable);
+                doc.Add(new Paragraph("\n\n"));
+
+                PdfPTable onayTable = new PdfPTable(2);
+                onayTable.WidthPercentage = 100;
+                onayTable.SetWidths(new float[] { 50, 50 });
+
+                PdfPCell tedarikciBaslik = new PdfPCell(new Phrase("TEDARİKÇİ ONAYI", smallFont))
+                {
+                    HorizontalAlignment = Element.ALIGN_CENTER,
+                    Border = iTextSharp.text.Rectangle.NO_BORDER
+                };
+                PdfPCell musteriBaslik = new PdfPCell(new Phrase("MÜŞTERİ ONAYI", smallFont))
+                {
+                    HorizontalAlignment = Element.ALIGN_CENTER,
+                    Border = iTextSharp.text.Rectangle.NO_BORDER
+                };
+
+                PdfPCell tedarikciCell = new PdfPCell(new Phrase("", smallFont)) { FixedHeight = 40 };
+                PdfPCell musteriCell = new PdfPCell(new Phrase("", smallFont)) { FixedHeight = 40 };
+
+                onayTable.AddCell(tedarikciBaslik);
+                onayTable.AddCell(musteriBaslik);
+                onayTable.AddCell(tedarikciCell);
+                onayTable.AddCell(musteriCell);
+
+                doc.Add(onayTable);
+                doc.Close();
+                MessageBox.Show("PDF başarıyla oluşturuldu.", "PDF Çıktısı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("PDF oluşturulurken hata: " + ex.Message);
+            }
+}
     }
 }

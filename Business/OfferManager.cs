@@ -386,22 +386,20 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
-        #endregion
 
-        #region Teklif Güncelleme
-        public bool UpdateOfferById(int teklifId)
+        public bool UpdateOfferById(int? teklifId)
         {
             int toplamAdet = 0;
             decimal toplamKg = 0;
 
             string selectQuery = @"
-        SELECT 
-            IIF(ISNULL(SUM(k.adet)), 0, SUM(k.adet)) AS ToplamAdet,
-            IIF(ISNULL(SUM(k.kg)), 0, SUM(k.kg)) AS ToplamKg,
-            IIF(ISNULL(SUM(k.toplam_tutar)), 0, SUM(k.toplam_tutar)) AS ToplamTutar
-        FROM kalemler k
-        INNER JOIN urunler u ON k.urun_id = u.urun_id
-        WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar')";
+SELECT 
+    IIF(ISNULL(SUM(k.adet)), 0, SUM(k.adet)) AS ToplamAdet,
+    IIF(ISNULL(SUM(k.kg)), 0, SUM(k.kg)) AS ToplamKg,
+    IIF(ISNULL(SUM(k.toplam_tutar)), 0, SUM(k.toplam_tutar)) AS ToplamTutar
+FROM kalemler k
+INNER JOIN urunler u ON k.urun_id = u.urun_id
+WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar')";
 
             using (OleDbConnection conn = _connection.GetConnection())
             {
@@ -436,6 +434,10 @@ namespace Teklif_Hazırlayıcı.Business
 
             }
         }
+
+
+
+
         #endregion
 
         #region Teklif Silme
@@ -460,5 +462,94 @@ namespace Teklif_Hazırlayıcı.Business
         }
 
         #endregion
+
+        public DataTable GetOfferDetailById(int? teklif_id)
+        {
+            string query = @"
+        SELECT f.adi, y.isim, t.teklif_tarih, t.toplam_adet, t.toplam_kg, 
+               t.mal_hizmet_tutari, t.iskonto_orani, t.iskonto_tutari, t.kdv_tutari, 
+               t.tevkifat_tutari, t.genel_toplam, t.odenecek_tutar, t.doviz_birimi
+        FROM ((teklifler t
+        LEFT JOIN firmalar f ON f.firma_id = t.firma_id)
+        LEFT JOIN yetkililer y ON y.yetkili_id = t.yetkili_id)
+        WHERE t.teklif_id = ?";
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("?", teklif_id);
+
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        return dt.Rows.Count > 0 ? dt : null;
+                    }
+                }
+            }
+        }
+        public decimal GetToplamAluminyumTutari(int? teklif_id)
+        {
+            decimal toplamAluminyumTutari = 0;
+
+            string query = @"
+        SELECT u.kategori, k.toplam_tutar
+        FROM kalemler k
+        INNER JOIN urunler u ON k.urun_id = u.urun_id
+        WHERE k.teklif_id = ?";
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand command = new OleDbCommand(query, conn))
+                {
+                    command.Parameters.AddWithValue("?", teklif_id);
+
+                    using (OleDbDataReader rdr = command.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            string kategori = rdr["kategori"].ToString().Trim().ToLower();
+                            if (kategori == "alüminyum")
+                            {
+                                decimal.TryParse(rdr["toplam_tutar"].ToString(), out decimal tutar);
+                                toplamAluminyumTutari += tutar;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return toplamAluminyumTutari;
+        }
+
+        public DataTable GetTeklifKalemleri(int? teklif_id)
+        {
+            string query = @"
+        SELECT u.kalip_no, u.urun, k.yuzey, k.yuzey_kodu, k.boy, k.adet, k.kg, k.birim_fiyat, k.toplam_tutar
+        FROM kalemler k
+        INNER JOIN urunler u ON k.urun_id = u.urun_id
+        WHERE k.teklif_id = ?";
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand command = new OleDbCommand(query, conn))
+                {
+                    command.Parameters.AddWithValue("?", teklif_id);
+
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        return dt.Rows.Count > 0 ? dt : null;
+                    }
+                }
+            }
+        }
+
+
     }
 }
