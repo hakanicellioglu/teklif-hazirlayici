@@ -42,7 +42,7 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = @"
-            SELECT t.teklif_id, t.yetkili_id, y.isim, y.hitap, f.adi, t.teklif_tarih, t.durum
+            SELECT t.teklif_id, t.yetkili_id, y.isim, y.soyisim, y.hitap, f.adi, t.teklif_tarih, t.durum
             FROM (teklifler AS t
             LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id;";
