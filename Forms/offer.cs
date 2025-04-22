@@ -60,6 +60,9 @@ namespace Teklif_Hazırlayıcı.Forms
             if (dataGridView1.Columns["isim"] != null)
                 dataGridView1.Columns["isim"].HeaderText = "Yetkili İsmi";
 
+            if (dataGridView1.Columns["soyisim"] != null)
+                dataGridView1.Columns["soyisim"].HeaderText = "Yetkili Soyismi";
+
             if (dataGridView1.Columns["hitap"] != null)
                 dataGridView1.Columns["hitap"].HeaderText = "Hitap";
 
@@ -153,6 +156,16 @@ namespace Teklif_Hazırlayıcı.Forms
             offerEditor.ShowDialog();
             LoadOffer();
 
+        }
+
+        private void txtSearch_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void txtSearch_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) btnSearch_Click(sender, e);
         }
     }
 }

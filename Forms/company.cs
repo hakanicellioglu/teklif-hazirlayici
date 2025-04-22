@@ -127,5 +127,11 @@ namespace Teklif_Hazırlayıcı.Forms
                 }
             }
         }
+
+        private void txtSearch_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) btnSearch_Click(sender, e);
+
+        }
     }
 }
