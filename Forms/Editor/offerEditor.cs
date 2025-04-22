@@ -40,12 +40,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 btnCancel.Visible = false;
                 txtIskonto.Text = "0";
                 txtTevkifat.Text = "0";
+                btnEdit.Visible = false;
             }
             else if (editor_mode == "Edit")
             {
                 CenterToScreen();
                 button1.Text = "Kaydet";
                 btnCancel.Visible = true;
+                btnEdit.Visible = true;
 
                 OfferManager manager = new OfferManager();
                 var data = manager.GetOfferById(offer_id);
