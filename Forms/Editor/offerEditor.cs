@@ -583,5 +583,12 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     txtIskonto.Text = "0";
             }
         }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            itemEditor itemEditor = new itemEditor(offer_id, null, "Add");
+            itemEditor.ShowDialog();
+            LoadProducts();
+        }
     }
 }
