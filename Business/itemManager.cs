@@ -118,17 +118,16 @@ namespace Teklif_Hazırlayıcı.Business
                     tutarParam.Value = toplam_tutar;
 
 
-                    cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
-                    cmd.Parameters.AddWithValue("@UrunId", urun_id);
-                    cmd.Parameters.AddWithValue("@Yuzey", string.IsNullOrEmpty(yuzey) ? DBNull.Value : (object)yuzey);
-                    cmd.Parameters.AddWithValue("@YuzeyKodu", string.IsNullOrEmpty(yuzey_kodu) ? DBNull.Value : (object)yuzey_kodu);
-                    cmd.Parameters.AddWithValue("@Adet", adet);
-                    cmd.Parameters.AddWithValue("@Boy", boy);
+                    cmd.Parameters.Add(new OleDbParameter("@TeklifId", OleDbType.Integer) { Value = teklif_id });
+                    cmd.Parameters.Add(new OleDbParameter("@UrunId", OleDbType.Integer) { Value = urun_id });
+                    cmd.Parameters.Add(new OleDbParameter("@Yuzey", OleDbType.VarWChar) { Value = string.IsNullOrEmpty(yuzey) ? DBNull.Value : (object)yuzey });
+                    cmd.Parameters.Add(new OleDbParameter("@YuzeyKodu", OleDbType.VarWChar) { Value = string.IsNullOrEmpty(yuzey_kodu) ? DBNull.Value : (object)yuzey_kodu });
+                    cmd.Parameters.Add(new OleDbParameter("@Adet", OleDbType.Integer) { Value = adet });
+                    cmd.Parameters.Add(new OleDbParameter("@Boy", OleDbType.Integer) { Value = boy });
+                    cmd.Parameters.Add(new OleDbParameter("@Kg", OleDbType.Double) { Value = kg });
+                    cmd.Parameters.Add(new OleDbParameter("@BirimFiyat", OleDbType.Double) { Value = birim_fiyat });
+                    cmd.Parameters.Add(new OleDbParameter("@ToplamTutar", OleDbType.Double) { Value = toplam_tutar });
 
-                    // ❗ Hedef nokta: Bu üçü manuel ekleniyor
-                    cmd.Parameters.Add(kgParam);
-                    cmd.Parameters.Add(fiyatParam);
-                    cmd.Parameters.Add(tutarParam);
 
                     int result = cmd.ExecuteNonQuery();
 

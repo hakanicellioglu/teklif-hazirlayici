@@ -209,8 +209,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             // ✅ Hesaplamalar
             decimal gramaj = itemManager.GetGramaj(urun_id); // ürünün gramajı
             decimal boy_m = boy_mm / 1000m; // milimetreden metreye
-            decimal toplamKg = gramaj * boy_m * adet * 1.1m; // %10 fazla
-            decimal toplamTutar = toplamKg * birimFiyat;
+            decimal toplamKg = Math.Round(gramaj * boy_m * adet * 1.1m, 3); // %10 fazla
+            decimal toplamTutar = Math.Round(toplamKg * birimFiyat, 2);
+
+            MessageBox.Show(toplamKg.ToString() + " * " + birimFiyat.ToString());
+
 
             // ✅ Diğer veriler
             string yuzey = chkYuzey.Text;
@@ -219,6 +222,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
             // ✅ Veritabanına kayıt
             itemManager.AddProduct(teklif_id, urun_id, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar);
+
+            // 🛠 Kalem eklendikten sonra teklifin güncellenmesi gerekiyor!
+            OfferManager offerManager = new OfferManager();
+            offerManager.UpdateOfferById(teklif_id.Value);
+
 
             DialogResult = DialogResult.OK;
         }

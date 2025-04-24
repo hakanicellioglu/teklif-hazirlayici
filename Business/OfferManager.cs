@@ -391,53 +391,98 @@ namespace Teklif_Hazırlayıcı.Business
         {
             int toplamAdet = 0;
             decimal toplamKg = 0;
+            decimal toplamTutar = 0;
+            decimal iskontoOrani = 0;
 
-            string selectQuery = @"
-SELECT 
-    IIF(ISNULL(SUM(k.adet)), 0, SUM(k.adet)) AS ToplamAdet,
-    IIF(ISNULL(SUM(k.kg)), 0, SUM(k.kg)) AS ToplamKg,
-    IIF(ISNULL(SUM(k.toplam_tutar)), 0, SUM(k.toplam_tutar)) AS ToplamTutar
-FROM kalemler k
-INNER JOIN urunler u ON k.urun_id = u.urun_id
-WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar')";
+            string offerQuery = "SELECT iskonto_orani FROM teklifler WHERE teklif_id = @teklifId";
 
             using (OleDbConnection conn = _connection.GetConnection())
             {
                 conn.Open();
 
-                // 1. Seçim (Toplamlar)
+                // 1. Tekliften iskonto oranını string olarak çek ve decimal'e çevir
+                using (OleDbCommand cmd = new OleDbCommand(offerQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@teklifId", teklifId);
+                    var result = cmd.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        string oranStr = result.ToString(); // değeri string olarak al
+                        decimal.TryParse(oranStr, NumberStyles.Any, new CultureInfo("tr-TR"), out iskontoOrani);
+                    }
+                }
+
+
+
+                // 2. Toplamları hesapla
+                string selectQuery = @"
+            SELECT 
+                IIF(ISNULL(SUM(k.adet)), 0, SUM(k.adet)) AS ToplamAdet,
+                IIF(ISNULL(SUM(k.kg)), 0, SUM(k.kg)) AS ToplamKg,
+                IIF(ISNULL(SUM(k.toplam_tutar)), 0, SUM(k.toplam_tutar)) AS ToplamTutar
+            FROM kalemler k
+            INNER JOIN urunler u ON k.urun_id = u.urun_id
+            WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar')";
                 using (OleDbCommand cmd = new OleDbCommand(selectQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@teklifId", teklifId);
-
                     using (OleDbDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             toplamAdet = reader["ToplamAdet"] != DBNull.Value ? Convert.ToInt32(reader["ToplamAdet"]) : 0;
-                            toplamKg = reader["ToplamKg"] != DBNull.Value ? Convert.ToDecimal(reader["ToplamKg"]) : 0;
+
+                            toplamKg = Convert.ToDecimal(reader["ToplamKg"].ToString());
+
+                            toplamTutar =  Convert.ToDecimal(reader["ToplamTutar"].ToString());
+                            //decimal.TryParse(tutarStr, NumberStyles.Any, CultureInfo.InvariantCulture, out toplamTutar);                            
                         }
                     }
                 }
 
-                // 2. Güncelleme
-                string updateQuery = "UPDATE teklifler SET toplam_adet = @toplamAdet, toplam_kg = @toplamKg WHERE teklif_id = @teklifId";
+                // 3. Finansal hesaplamalar
+                decimal iskontoTutar = ((toplamTutar * (iskontoOrani/100)));
+                decimal iskontoSonrasi = toplamTutar - iskontoTutar;
+                decimal kdv = iskontoSonrasi * 0.20m;
+                decimal aluminyumTutar = GetToplamAluminyumTutari(teklifId.Value);
+                decimal tevkifat = ((((aluminyumTutar * 20) / 100) * 70) / 100);
+                decimal genelToplam = iskontoSonrasi + kdv;
+                decimal odenecek = genelToplam - tevkifat;
+
+
+
+
+
+                // 4. Güncelleme - türler decimal kalıyor
+                string updateQuery = @"
+                UPDATE teklifler SET 
+                    toplam_adet = @toplamAdet,
+                    toplam_kg = @toplamKg,
+                    mal_hizmet_tutari = @toplamTutar,
+                    iskonto_tutari = @iskontoTutar,
+                    kdv_tutari = @kdv,
+                    tevkifat_tutari = @tevkifat,
+                    genel_toplam = @genelToplam,
+                    odenecek_tutar = @odenecek
+                WHERE teklif_id = @teklifId";
+
                 using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
                 {
                     cmd.Parameters.Add("@toplamAdet", OleDbType.Integer).Value = toplamAdet;
-                    cmd.Parameters.Add("@toplamKg", OleDbType.Double).Value = toplamKg;
+                    cmd.Parameters.Add("@toplamKg", OleDbType.Decimal).Value = toplamKg;
+                    cmd.Parameters.Add("@toplamTutar", OleDbType.Decimal).Value = toplamTutar;
+                    cmd.Parameters.Add("@iskontoTutar", OleDbType.Decimal).Value = iskontoTutar;
+                    cmd.Parameters.Add("@kdv", OleDbType.Decimal).Value = kdv;
+                    cmd.Parameters.Add("@tevkifat", OleDbType.Decimal).Value = tevkifat;
+                    cmd.Parameters.Add("@genelToplam", OleDbType.Decimal).Value = genelToplam;
+                    cmd.Parameters.Add("@odenecek", OleDbType.Decimal).Value = odenecek;
                     cmd.Parameters.Add("@teklifId", OleDbType.Integer).Value = teklifId;
 
-                    int result = cmd.ExecuteNonQuery();
-                    return result > 0;
+                    return cmd.ExecuteNonQuery() > 0;
                 }
-
             }
         }
-
-
-
-
         #endregion
 
         #region Teklif Silme
@@ -549,6 +594,91 @@ WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar
                 }
             }
         }
+
+
+
+        /*
+         * 
+         * PDF Çıktısı
+         * 
+         */
+        #region Teklif Detay Getirme
+        public DataTable GetOfferDetailById(int teklif_id)
+        {
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                var cmd = new OleDbCommand(@"
+            SELECT f.adi, y.isim, t.teklif_tarih, t.toplam_adet, t.toplam_kg, 
+                   t.mal_hizmet_tutari, t.iskonto_orani, t.iskonto_tutari, 
+                   t.kdv_tutari, t.tevkifat_tutari, t.genel_toplam, 
+                   t.odenecek_tutar, t.doviz_birimi
+            FROM ((teklifler t
+            LEFT JOIN firmalar f ON f.firma_id = t.firma_id)
+            LEFT JOIN yetkililer y ON y.yetkili_id = t.yetkili_id)
+            WHERE t.teklif_id = @TeklifId", conn);
+
+                cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
+
+                DataTable dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                return dt;
+            }
+        }
+        #endregion
+        #region Alüminyum Tutarı Getirme
+        public decimal GetToplamAluminyumTutari(int teklif_id)
+        {
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                var cmd = new OleDbCommand(@"
+            SELECT u.kategori, k.toplam_tutar
+            FROM kalemler k
+            INNER JOIN urunler u ON k.urun_id = u.urun_id
+            WHERE k.teklif_id = @TeklifId", conn);
+
+                cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
+
+                decimal toplamAluminyum = 0;
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        string kategori = rdr["kategori"].ToString().Trim().ToLower();
+                        if (kategori == "alüminyum")
+                        {
+                            decimal.TryParse(rdr["toplam_tutar"].ToString(), out decimal tutar);
+                            toplamAluminyum += tutar;
+                        }
+                    }
+                }
+                return toplamAluminyum;
+            }
+        }
+        #endregion
+        #region Teklif Kalemleri Getirme
+        public DataTable GetTeklifKalemleri(int teklif_id)
+        {
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                var cmd = new OleDbCommand(@"
+            SELECT u.kalip_no, u.urun, k.yuzey, k.yuzey_kodu, k.boy, k.adet, k.kg, k.birim_fiyat, k.toplam_tutar
+            FROM kalemler k
+            INNER JOIN urunler u ON k.urun_id = u.urun_id
+            WHERE k.teklif_id = @TeklifId", conn);
+
+                cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
+
+                DataTable dt = new DataTable();
+                dt.Load(cmd.ExecuteReader());
+                return dt;
+            }
+        }
+        #endregion
+
+
 
 
     }
