@@ -143,57 +143,64 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OfferManager offerManager = new OfferManager();
+            InitializeOfferManager(out offerManager);
+            offerManager.UpdateOfferById(teklif_id.Value);
+            DialogResult = DialogResult.OK;
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*
-             * 
-             * Toplam Kg Hesaplama
-             * Ürün kimlik numarasından gramaj değerini al.
-             * Boy değerini milimetre değerini metre değerine dönüştür.
-             * Gramaj değerini, yeni boy değeri ile çarpıp %10 daha fazlasını al.
-             * 
-             */
+            OfferManager offerManager;
+            InitializeOfferManager(out offerManager);
+            if (offerManager.UpdateOfferById(teklif_id.Value) == true)
+            {
+                chkUrunler.SelectedItem = -1;
+                chkYuzey.SelectedIndex = -1;
+                txtAdet.Text = "";
+                txtBoy.Text = "";
+                txtYuzeyKodu.Text = "";
+            }
+        }
 
-            /*
-             * 
-             * Toplam Tutar Hesaplama
-             * LME(kg) değeri ile birim fiyat değerini çarp.
-             * 
-             */
-            // ✅ Ürün seçimi kontrolü
+        private void InitializeOfferManager(out OfferManager offerManager)
+        {
             if (chkUrunler.SelectedValue == null || chkUrunler.SelectedValue is DataRowView)
             {
                 MessageHelper.ShowError("Lütfen bir ürün seçiniz.");
+                offerManager = null;
                 return;
             }
 
             if (!int.TryParse(chkUrunler.SelectedValue.ToString(), out int urun_id))
             {
                 MessageHelper.ShowError("Ürün ID geçersiz.");
+                offerManager = null;
                 return;
             }
 
-            // ✅ Adet kontrolü
             if (!int.TryParse(txtAdet.Text, out int adet))
             {
                 MessageHelper.ShowError("Adet değeri geçersiz.");
+                offerManager = null;
                 return;
             }
 
-            // ✅ Boy kontrolü (virgül yerine nokta çevir)
             string boyText = txtBoy.Text.Replace(",", ".");
             if (!decimal.TryParse(boyText, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal boy_mm))
             {
                 MessageHelper.ShowError("Boy değeri geçersiz.");
+                offerManager = null;
                 return;
             }
 
-            // ✅ LME çek → birim fiyat hesapla
             decimal lmeTon = itemManager.GetLMEFromTeklif(teklif_id.Value);
             if (lmeTon <= 0)
             {
                 MessageHelper.ShowError("Teklif için geçerli bir LME değeri bulunamadı.");
+                offerManager = null;
                 return;
             }
 
@@ -201,34 +208,22 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             if (iscilikTon <= 0)
             {
                 MessageHelper.ShowError("Teklif için geçerli bir işçilik değeri bulunamadı.");
+                offerManager = null;
                 return;
             }
 
             decimal birimFiyat = (lmeTon / 1000m) + (iscilikTon / 1000m);
 
-            // ✅ Hesaplamalar
-            decimal gramaj = itemManager.GetGramaj(urun_id); // ürünün gramajı
-            decimal boy_m = boy_mm / 1000m; // milimetreden metreye
-            decimal toplamKg = Math.Round(gramaj * boy_m * adet * 1.1m, 3); // %10 fazla
+            decimal gramaj = itemManager.GetGramaj(urun_id);
+            decimal boy_m = boy_mm / 1000m;
+            decimal toplamKg = Math.Round(gramaj * boy_m * adet * 1.1m, 3);
             decimal toplamTutar = Math.Round(toplamKg * birimFiyat, 2);
 
-            MessageBox.Show(toplamKg.ToString() + " * " + birimFiyat.ToString());
-
-
-            // ✅ Diğer veriler
             string yuzey = chkYuzey.Text;
             string yuzey_kodu = txtYuzeyKodu.Text;
 
-
-            // ✅ Veritabanına kayıt
             itemManager.AddProduct(teklif_id, urun_id, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar);
-
-            // 🛠 Kalem eklendikten sonra teklifin güncellenmesi gerekiyor!
-            OfferManager offerManager = new OfferManager();
-            offerManager.UpdateOfferById(teklif_id.Value);
-
-
-            DialogResult = DialogResult.OK;
+            offerManager = new OfferManager();
         }
 
         private void chkYuzey_SelectedIndexChanged(object sender, EventArgs e)

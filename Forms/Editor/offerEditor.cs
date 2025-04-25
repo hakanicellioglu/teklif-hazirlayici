@@ -691,13 +691,15 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     return;
                 string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
                 BaseFont baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                var normalFont = new iTextSharp.text.Font(baseFont, 10);
-                var titleFont = new iTextSharp.text.Font(baseFont, 16, iTextSharp.text.Font.BOLD);
-                var smallFont = new iTextSharp.text.Font(baseFont, 7);
+                var normalFont = new iTextSharp.text.Font(baseFont, 5);
+                var titleFont = new iTextSharp.text.Font(baseFont, 9, iTextSharp.text.Font.BOLD);
+                var smallFont = new iTextSharp.text.Font(baseFont, 5);
 
                 Document doc = new Document(PageSize.A4, 40, 40, 40, 40);
                 PdfWriter.GetInstance(doc, new FileStream(saveFile.FileName, FileMode.Create));
                 doc.Open();
+
+
 
                 // LOGO EKLEME
                 string logoPath = Path.Combine(Application.StartupPath, "Forms", "Resources", "logo.jpeg");
@@ -764,7 +766,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 PdfPTable toplamTable = new PdfPTable(2)
                 {
                     WidthPercentage = 40,
-                    HorizontalAlignment = Element.ALIGN_RIGHT
+                    HorizontalAlignment = Element.ALIGN_RIGHT,
                 };
                 toplamTable.SetWidths(new float[] { 60, 40 });
 
@@ -772,7 +774,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 PdfPCell emptyCell = new PdfPCell(new Phrase(""))
                 {
                     Border = iTextSharp.text.Rectangle.NO_BORDER,
-                    FixedHeight = 100f
+                    FixedHeight = 200f
                 };
                 spaceTable.AddCell(emptyCell);
                 doc.Add(spaceTable);
@@ -798,7 +800,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 teslimBilgiTable.AddCell(CreateCell("VADE", smallFont));
                 teslimBilgiTable.AddCell(CreateCell(vade, smallFont));
                 teslimBilgiTable.HorizontalAlignment = Element.ALIGN_LEFT;
-                doc.Add(teslimBilgiTable);
+                //doc.Add(teslimBilgiTable);
 
 
 
@@ -817,19 +819,59 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
                 for (int i = 0; i < toplamlar.GetLength(0); i++)
                 {
-                    toplamTable.AddCell(CreateCell(toplamlar[i, 0], smallFont));
-                    toplamTable.AddCell(CreateCell(toplamlar[i, 1], smallFont, Element.ALIGN_RIGHT));
+                    PdfPCell solCell = new PdfPCell(new Phrase(toplamlar[i, 0], smallFont))
+                    {
+                        Border = iTextSharp.text.Rectangle.BOX,
+                        HorizontalAlignment = Element.ALIGN_LEFT,
+                        VerticalAlignment = Element.ALIGN_MIDDLE
+                    };
+                    toplamTable.AddCell(solCell);
+
+                    PdfPCell sagCell = new PdfPCell(new Phrase(toplamlar[i, 1], smallFont))
+                    {
+                        Border = iTextSharp.text.Rectangle.BOX,
+                        HorizontalAlignment = Element.ALIGN_RIGHT,
+                        VerticalAlignment = Element.ALIGN_MIDDLE,
+                    };
+                    toplamTable.AddCell(sagCell);
                 }
-                toplamTable.HorizontalAlignment = Element.ALIGN_RIGHT;
-                doc.Add(toplamTable);
+                //doc.Add(toplamTable);
+
+                // 1. Ana tablo: 2 sütunlu (sol: teslim, sağ: toplam)
+                PdfPTable yanYanaTable = new PdfPTable(2);
+                yanYanaTable.WidthPercentage = 100;
+                yanYanaTable.SetWidths(new float[] { 50, 50 }); // sol %50, sağ %50 alan kaplasın
+
+                // 2. Teslim tablosunu hücreye sar
+                PdfPCell teslimCell = new PdfPCell(teslimBilgiTable)
+                {
+                    Border = iTextSharp.text.Rectangle.NO_BORDER,
+                    PaddingRight = 10f,
+                    HorizontalAlignment = Element.ALIGN_LEFT
+                };
+
+                // 3. Toplam tablosunu hücreye sar
+                PdfPCell toplamCell = new PdfPCell(toplamTable)
+                {
+                    Border = iTextSharp.text.Rectangle.NO_BORDER,
+                    PaddingLeft = 10f,
+                    HorizontalAlignment = Element.ALIGN_RIGHT
+                };
+
+                // 4. Hücreleri yan yana tabloya ekle
+                yanYanaTable.AddCell(teslimCell);
+                yanYanaTable.AddCell(toplamCell);
+
+                // 5. PDF'e ekle
+                doc.Add(yanYanaTable);
 
 
-                
 
 
                 PdfPTable aciklamaTable = new PdfPTable(1);
                 aciklamaTable.WidthPercentage = 100;
                 aciklamaTable.KeepTogether = true;
+
                 PdfPCell aciklamaBaslik = new PdfPCell(new Phrase("AÇIKLAMALAR", smallFont));
                 aciklamaBaslik.BackgroundColor = BaseColor.LIGHT_GRAY;
                 aciklamaBaslik.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -913,14 +955,15 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
         }
 
-        private PdfPCell CreateCell(string text, iTextSharp.text.Font font, int alignment = Element.ALIGN_LEFT)
+        private PdfPCell CreateCell(string text, iTextSharp.text.Font font, int alignment = Element.ALIGN_LEFT, int border = iTextSharp.text.Rectangle.NO_BORDER)
         {
             return new PdfPCell(new Phrase(text, font))
             {
-                Border = iTextSharp.text.Rectangle.BOX,
+                Border = border,
                 HorizontalAlignment = alignment
             };
         }
+
 
         private decimal ParseDecimalTr(string value)
         {
