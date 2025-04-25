@@ -633,18 +633,51 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 string yetkiliAdi = row["isim"].ToString();
                 string teklifTarih = Convert.ToDateTime(row["teklif_tarih"]).ToString("dd.MM.yyyy");
 
+
+                string teslimSekli = row["teslim_sekli"]?.ToString() ?? "-";
+                string odemeSekli = row["odeme_sekli"]?.ToString() ?? "-";
+                string odemeVadesi = row["odeme_vadesi"]?.ToString() ?? "-";
+                string teklifSuresi = row["teklif_suresi"]?.ToString() ?? "-";
+                string dovizKuru = Convert.ToDecimal(row["doviz_kuru"], CultureInfo.InvariantCulture).ToString("N2", new CultureInfo("tr-TR"));
+                string vade = row["vade"]?.ToString() ?? "-";
+
+
                 int toplamAdet = Convert.ToInt32(row["toplam_adet"].ToString());
-                decimal toplamKg = Convert.ToDecimal(row["toplam_kg"].ToString());
-                decimal malHizmetTutari = Convert.ToDecimal(row["mal_hizmet_tutari"].ToString());
-                decimal iskontoOrani = Convert.ToDecimal(row["iskonto_orani"].ToString());
+
+                decimal toplamKg = Convert.ToDecimal(row["toplam_kg"], CultureInfo.InvariantCulture);
+                string toplamKgStr = toplamKg.ToString("N3", new CultureInfo("tr-TR"));
+
+
+
+                decimal malHizmetTutari = Convert.ToDecimal(row["mal_hizmet_tutari"], CultureInfo.InvariantCulture);
+                string malHizmetTutariStr = malHizmetTutari.ToString("N2", new CultureInfo("tr-TR"));
+
+                decimal iskontoOrani = Convert.ToDecimal(row["iskonto_orani"], CultureInfo.InvariantCulture);
+                string iskontoOraniStr = iskontoOrani.ToString("N2", new CultureInfo("tr-TR"));
+
+
                 decimal iskontoTutari = malHizmetTutari * iskontoOrani / 100;
+                string iskontoTutariStr = iskontoTutari.ToString("N2", new CultureInfo("tr-TR"));
+
                 decimal iskontoSonrasiTutar = malHizmetTutari - iskontoTutari;
-                decimal kdv = iskontoTutari * 0.20m;
+                string iskontoSonrasiTutarStr = iskontoSonrasiTutar.ToString("N2", new CultureInfo("tr-TR"));
+
+                decimal kdv = iskontoSonrasiTutar * 0.20m;
+                string kdvStr = kdv.ToString("N2", new CultureInfo("tr-TR"));
+
                 decimal toplamAluminyumTutari = offerManager.GetToplamAluminyumTutari(offer_id.Value);
                 decimal kdvaluminyum = toplamAluminyumTutari * 0.20m;
+                string kdvaluminyumStr = kdvaluminyum.ToString("N2", new CultureInfo("tr-TR"));
+
                 decimal tevkifat = kdv * 0.70m;
-                decimal vergiliToplam = iskontoSonrasiTutar + tevkifat;
-                decimal odenecekTutar = vergiliToplam - tevkifat;
+                string tevkifatStr = tevkifat.ToString("N2", new CultureInfo("tr-TR"));
+
+                decimal vergiliToplam = iskontoSonrasiTutar + kdv;
+                string vergiliToplamStr = vergiliToplam.ToString("N2", new CultureInfo("tr-TR"));
+
+                decimal odenecekTutar = iskontoSonrasiTutar + tevkifat;
+                string odenecekTutarStr = odenecekTutar.ToString("N2", new CultureInfo("tr-TR"));
+
                 char doviz_birimi = row["doviz_birimi"] != DBNull.Value ? Convert.ToChar(row["doviz_birimi"]) : '₺';
 
 
@@ -670,7 +703,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 doc.Add(new Paragraph($"Firma Adı : {firmaAdi}", normalFont));
                 doc.Add(new Paragraph($"Yetkili    : {yetkiliAdi}", normalFont));
                 doc.Add(new Paragraph($"Tarih      : {teklifTarih}", normalFont));
-                doc.Add(new Paragraph("\n"));
 
                 var kalemler = offerManager.GetTeklifKalemleri(offer_id.Value);
 
@@ -679,6 +711,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     WidthPercentage = 100
                 };
                 table.SetWidths(new float[] { 4, 9, 25, 10, 11, 8, 8, 8, 12, 12 });
+                table.KeepTogether = true;
 
                 string[] headers = { "NO", "KOD", "ÜRÜN", "YÜZEY", "YÜZEY KODU", "BOY", "ADET", "KG", "BİRİM FİYAT", "TOPLAM TUTAR" };
                 foreach (var h in headers)
@@ -708,6 +741,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     sira++;
                 }
                 doc.Add(table);
+
                 PdfPTable toplamTable = new PdfPTable(2)
                 {
                     WidthPercentage = 40,
@@ -715,18 +749,51 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 };
                 toplamTable.SetWidths(new float[] { 60, 40 });
 
+                PdfPTable spaceTable = new PdfPTable(1);
+                PdfPCell emptyCell = new PdfPCell(new Phrase(""))
+                {
+                    Border = iTextSharp.text.Rectangle.NO_BORDER,
+                    FixedHeight = 100f
+                };
+                spaceTable.AddCell(emptyCell);
+                doc.Add(spaceTable);
+
+                PdfPTable teslimBilgiTable = new PdfPTable(2);
+                teslimBilgiTable.KeepTogether = true;
+                teslimBilgiTable.WidthPercentage = 40;
+                teslimBilgiTable.SetWidths(new float[] { 50, 50 });
+
+
+                teslimBilgiTable.AddCell(CreateCell("TESLİM ŞEKLİ", smallFont));
+                teslimBilgiTable.AddCell(CreateCell(teslimSekli, smallFont));
+
+                teslimBilgiTable.AddCell(CreateCell("ÖDEME ŞEKLİ ve VADESİ", smallFont));
+                teslimBilgiTable.AddCell(CreateCell($"{odemeSekli} / {odemeVadesi} gün", smallFont));
+
+                teslimBilgiTable.AddCell(CreateCell("TEKLİF GEÇERLİLİK SÜRESİ", smallFont));
+                teslimBilgiTable.AddCell(CreateCell(teklifSuresi + " gün", smallFont));
+
+                teslimBilgiTable.AddCell(CreateCell("DÖVİZ KURU (Merkez Bankası)", smallFont));
+                teslimBilgiTable.AddCell(CreateCell(dovizKuru, smallFont));
+
+                teslimBilgiTable.AddCell(CreateCell("VADE", smallFont));
+                teslimBilgiTable.AddCell(CreateCell(vade, smallFont));
+                teslimBilgiTable.HorizontalAlignment = Element.ALIGN_LEFT;
+                doc.Add(teslimBilgiTable);
+
+
 
 
                 string[,] toplamlar = {
                     { "TOPLAM ADET", toplamAdet.ToString() },
-                    { "TOPLAM KG", toplamKg.ToString() },
-                    { "MAL ve HİZMET TUTARI", malHizmetTutari.ToString() + " " + doviz_birimi },
-                    { $"İSKONTO - %{iskontoOrani}", (iskontoTutari*iskontoOrani/100).ToString() + " " + doviz_birimi },
-                    { "İSKONTOLU TUTAR", iskontoSonrasiTutar.ToString() + " " + doviz_birimi },
-                    { "KDV", kdv.ToString() + " " + doviz_birimi },
-                    { "TEVKİFAT", tevkifat.ToString() + " " + doviz_birimi },
-                    { "GENEL TOPLAM", vergiliToplam.ToString() + " " + doviz_birimi },
-                    { "ÖDENECEK TUTAR", odenecekTutar.ToString() + " " + doviz_birimi }
+                    { "TOPLAM KG", toplamKgStr },
+                    { "MAL ve HİZMET TUTARI", malHizmetTutariStr + " " + doviz_birimi },
+                    { $"HESAPLANAN İSKONTO - %{iskontoOrani}", iskontoTutariStr + " " + doviz_birimi },
+                    { "İSKONTOLU TUTAR", iskontoSonrasiTutarStr + " " + doviz_birimi },
+                    { "HESAPLANAN KDV", kdvStr + " " + doviz_birimi },
+                    { "TEVKİFAT (bakır, çinko ve alüminyum ürünlerinin teslimi %70)", tevkifatStr + " " + doviz_birimi },
+                    { "VERGİLER DAHİL GENEL TOPLAM", vergiliToplamStr + " " + doviz_birimi },
+                    { "ÖDENECEK TUTAR", odenecekTutarStr + " " + doviz_birimi }
                 };
 
                 for (int i = 0; i < toplamlar.GetLength(0); i++)
@@ -734,10 +801,16 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     toplamTable.AddCell(CreateCell(toplamlar[i, 0], smallFont));
                     toplamTable.AddCell(CreateCell(toplamlar[i, 1], smallFont, Element.ALIGN_RIGHT));
                 }
-
+                toplamTable.HorizontalAlignment = Element.ALIGN_RIGHT;
                 doc.Add(toplamTable);
+
+
+                
+
+
                 PdfPTable aciklamaTable = new PdfPTable(1);
                 aciklamaTable.WidthPercentage = 100;
+                aciklamaTable.KeepTogether = true;
                 PdfPCell aciklamaBaslik = new PdfPCell(new Phrase("AÇIKLAMALAR", smallFont));
                 aciklamaBaslik.BackgroundColor = BaseColor.LIGHT_GRAY;
                 aciklamaBaslik.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -754,7 +827,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
 
                 doc.Add(aciklamaTable);
-                doc.Add(new Paragraph("\n"));
 
                 PdfPTable bankaTable = new PdfPTable(3);
                 bankaTable.WidthPercentage = 100;
@@ -779,10 +851,12 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 bankaTable.AddCell(CreateCell("Alumann Alüminyum Sanayi ve Ticaret A.Ş", smallFont));
 
                 doc.Add(bankaTable);
-                doc.Add(new Paragraph("\n\n"));
+                doc.Add(new Paragraph(" ") { SpacingBefore = 5f, SpacingAfter = 5f });
+
 
                 PdfPTable onayTable = new PdfPTable(2);
                 onayTable.WidthPercentage = 100;
+                onayTable.KeepTogether = true;
                 onayTable.SetWidths(new float[] { 50, 50 });
                 PdfPCell tedarikciCell = new PdfPCell(new Phrase("", normalFont));
                 tedarikciCell.Border = iTextSharp.text.Rectangle.BOX;
@@ -809,7 +883,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 onayTable.AddCell(tedarikciCell);
                 onayTable.AddCell(musteriCell);
                 doc.Add(onayTable);
-
                 doc.Close();
                 MessageBox.Show("PDF başarıyla oluşturuldu.", "PDF Çıktısı", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

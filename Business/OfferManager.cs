@@ -389,9 +389,15 @@ namespace Teklif_Hazırlayıcı.Business
 
         public bool UpdateOfferById(int? teklifId)
         {
-            int toplamAdet = 0;
-            decimal toplamKg = 0;
-            decimal toplamTutar = 0;
+
+            /*
+             * 
+             * İskonto oranını al.
+             * Toplamları hesapla.
+             * Finansal hesaplamaları yap.
+             * Güncelleme işlemini yap.
+             * 
+             */
             decimal iskontoOrani = 0;
 
             string offerQuery = "SELECT iskonto_orani FROM teklifler WHERE teklif_id = @teklifId";
@@ -399,21 +405,19 @@ namespace Teklif_Hazırlayıcı.Business
             using (OleDbConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-
-                // 1. Tekliften iskonto oranını string olarak çek ve decimal'e çevir
                 using (OleDbCommand cmd = new OleDbCommand(offerQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@teklifId", teklifId);
                     var result = cmd.ExecuteScalar();
-
                     if (result != null)
                     {
-                        string oranStr = result.ToString(); // değeri string olarak al
-                        decimal.TryParse(oranStr, NumberStyles.Any, new CultureInfo("tr-TR"), out iskontoOrani);
+                        string oranStr = result.ToString();
+                        iskontoOrani = Convert.ToDecimal(oranStr);
                     }
                 }
 
-
+                decimal toplamAdet = 0, toplamKg = 0, toplamTutar = 0;
+                string toplamAdetStr = "0", toplamKgStr = "0", toplamTutarStr = "0";
 
                 // 2. Toplamları hesapla
                 string selectQuery = @"
@@ -431,12 +435,19 @@ namespace Teklif_Hazırlayıcı.Business
                     {
                         if (reader.Read())
                         {
-                            toplamAdet = reader["ToplamAdet"] != DBNull.Value ? Convert.ToInt32(reader["ToplamAdet"]) : 0;
 
+                            toplamAdetStr = reader["ToplamAdet"] != DBNull.Value ? reader["ToplamAdet"].ToString().Replace(".",",") : "0";
+                            toplamAdet = Convert.ToDecimal(reader["ToplamAdet"].ToString());
+
+                            toplamKgStr = reader["ToplamKg"].ToString().Replace(".",",");
                             toplamKg = Convert.ToDecimal(reader["ToplamKg"].ToString());
 
-                            toplamTutar =  Convert.ToDecimal(reader["ToplamTutar"].ToString());
-                            //decimal.TryParse(tutarStr, NumberStyles.Any, CultureInfo.InvariantCulture, out toplamTutar);                            
+                            toplamTutarStr = reader["ToplamTutar"].ToString().Replace(".", ",");
+                            toplamTutar = Convert.ToDecimal(reader["ToplamTutar"].ToString());
+
+                            //MessageBox.Show($"Toplam Adet: {ToplamAdet} | Toplam KG: {ToplamKg} | Toplam Tutar: {ToplamTutar}");
+                            //MessageBox.Show($"Toplam Adet(v2): {toplamAdet} | Toplam KG(v2): {toplamKg} | Toplam Tutar(v2): {toplamTutar}");
+
                         }
                     }
                 }
@@ -450,7 +461,11 @@ namespace Teklif_Hazırlayıcı.Business
                 decimal genelToplam = iskontoSonrasi + kdv;
                 decimal odenecek = genelToplam - tevkifat;
 
-
+                string iskontoTutarStr = iskontoTutar.ToString().Replace(".", ",");
+                string kdvStr = kdv.ToString().Replace(".", ",");
+                string tevkifatStr = tevkifat.ToString().Replace(".", ",");
+                string genelToplamStr = genelToplam.ToString().Replace(".", ",");
+                string odenecekStr = odenecek.ToString().Replace(".", ",");
 
 
 
@@ -469,15 +484,15 @@ namespace Teklif_Hazırlayıcı.Business
 
                 using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
                 {
-                    cmd.Parameters.Add("@toplamAdet", OleDbType.Integer).Value = toplamAdet;
-                    cmd.Parameters.Add("@toplamKg", OleDbType.Decimal).Value = toplamKg;
-                    cmd.Parameters.Add("@toplamTutar", OleDbType.Decimal).Value = toplamTutar;
-                    cmd.Parameters.Add("@iskontoTutar", OleDbType.Decimal).Value = iskontoTutar;
-                    cmd.Parameters.Add("@kdv", OleDbType.Decimal).Value = kdv;
-                    cmd.Parameters.Add("@tevkifat", OleDbType.Decimal).Value = tevkifat;
-                    cmd.Parameters.Add("@genelToplam", OleDbType.Decimal).Value = genelToplam;
-                    cmd.Parameters.Add("@odenecek", OleDbType.Decimal).Value = odenecek;
-                    cmd.Parameters.Add("@teklifId", OleDbType.Integer).Value = teklifId;
+                    cmd.Parameters.AddWithValue("@toplamAdet", toplamAdetStr);
+                    cmd.Parameters.AddWithValue("@toplamKg", toplamKgStr);
+                    cmd.Parameters.AddWithValue("@toplamTutar", toplamTutarStr);
+                    cmd.Parameters.AddWithValue("@iskontoTutar", iskontoTutarStr);
+                    cmd.Parameters.AddWithValue("@kdv", kdvStr);
+                    cmd.Parameters.AddWithValue("@tevkifat", tevkifatStr);
+                    cmd.Parameters.AddWithValue("@genelToplam", genelToplamStr);
+                    cmd.Parameters.AddWithValue("@odenecek", odenecekStr);
+                    cmd.Parameters.AddWithValue("@teklifId", teklifId);
 
                     return cmd.ExecuteNonQuery() > 0;
                 }
@@ -609,14 +624,30 @@ namespace Teklif_Hazırlayıcı.Business
             {
                 conn.Open();
                 var cmd = new OleDbCommand(@"
-            SELECT f.adi, y.isim, t.teklif_tarih, t.toplam_adet, t.toplam_kg, 
-                   t.mal_hizmet_tutari, t.iskonto_orani, t.iskonto_tutari, 
-                   t.kdv_tutari, t.tevkifat_tutari, t.genel_toplam, 
-                   t.odenecek_tutar, t.doviz_birimi
-            FROM ((teklifler t
-            LEFT JOIN firmalar f ON f.firma_id = t.firma_id)
-            LEFT JOIN yetkililer y ON y.yetkili_id = t.yetkili_id)
-            WHERE t.teklif_id = @TeklifId", conn);
+                SELECT 
+                    f.adi, 
+                    y.isim, 
+                    t.teklif_tarih, 
+                    t.toplam_adet, 
+                    t.toplam_kg, 
+                    t.mal_hizmet_tutari, 
+                    t.iskonto_orani, 
+                    t.iskonto_tutari, 
+                    t.kdv_tutari, 
+                    t.tevkifat_tutari, 
+                    t.genel_toplam, 
+                    t.odenecek_tutar, 
+                    t.doviz_birimi,
+                    t.teslim_sekli,
+                    t.odeme_sekli,
+                    t.odeme_vadesi,
+                    t.teklif_suresi,
+                    t.doviz_kuru,
+                    t.vade
+                FROM ((teklifler t
+                LEFT JOIN firmalar f ON f.firma_id = t.firma_id)
+                LEFT JOIN yetkililer y ON y.yetkili_id = t.yetkili_id)
+                WHERE t.teklif_id = @TeklifId", conn);
 
                 cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
 
