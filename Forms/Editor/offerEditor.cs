@@ -699,10 +699,29 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 PdfWriter.GetInstance(doc, new FileStream(saveFile.FileName, FileMode.Create));
                 doc.Open();
 
+                // LOGO EKLEME
+                string logoPath = Path.Combine(Application.StartupPath, "Forms", "Resources", "logo.jpeg");
+                if (File.Exists(logoPath))
+                {
+                    iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(logoPath);
+                    logo.ScaleToFit(150f, 150f); // Gerekirse 80x80 yap
+                    logo.Alignment = Element.ALIGN_LEFT;
+                    logo.SpacingAfter = 10f;
+                    doc.Add(logo);
+                }
+                if (!File.Exists(logoPath))
+                {
+                    MessageBox.Show("Logo bulunamadı: " + logoPath);
+                }
+
+
+
                 doc.Add(new Paragraph("TEKLİF FORMU", titleFont) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 15 });
                 doc.Add(new Paragraph($"Firma Adı : {firmaAdi}", normalFont));
                 doc.Add(new Paragraph($"Yetkili    : {yetkiliAdi}", normalFont));
                 doc.Add(new Paragraph($"Tarih      : {teklifTarih}", normalFont));
+                doc.Add(new Paragraph(" ") { SpacingAfter = 2f });
+
 
                 var kalemler = offerManager.GetTeklifKalemleri(offer_id.Value);
 
