@@ -53,4 +53,4 @@ Katkılarınızı memnuniyetle karşılıyoruz! Lütfen aşağıdaki adımları 
 
 ## Lisans
 
-Bu proje MIT Lisansı ile lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakınız.
+Bu proje Apache-2.0 Lisansı ile lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına bakınız.
