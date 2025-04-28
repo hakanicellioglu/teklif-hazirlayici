@@ -74,9 +74,10 @@ namespace Teklif_Hazırlayıcı.Forms
             dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();
 
-            if (TextboxValidator.IsNullOrWhiteSpace(txtSearch))
+            if (TextboxValidator.IsNullOrWhiteSpace(txtSearch) || txtSearch.Text == "Firma arayın...")
             {
                 MessageHelper.ShowError("Arama alanı boş bırakılamaz.");
+                LoadCompany();
             }
             else
             {
@@ -96,9 +97,12 @@ namespace Teklif_Hazırlayıcı.Forms
 
         }
 
+        PlaceHolder placeHolder = new PlaceHolder("Firma arayın...");
+
         private void btnClear_Click(object sender, EventArgs e)
         {
             txtSearch.Clear();
+            placeHolder.LeavePlaceHolder(txtSearch);
             dataGridView1.DataSource = null;
             LoadCompany();
         }
@@ -132,6 +136,17 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             if (e.KeyCode == Keys.Enter) btnSearch_Click(sender, e);
 
+        }
+
+        private void txtSearch_Enter(object sender, EventArgs e)
+        {
+            placeHolder.EnterPlaceHolder(txtSearch);
+
+        }
+
+        private void txtSearch_Leave(object sender, EventArgs e)
+        {
+            placeHolder.LeavePlaceHolder(txtSearch);
         }
     }
 }

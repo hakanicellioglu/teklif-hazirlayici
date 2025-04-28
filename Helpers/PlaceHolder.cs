@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,14 +22,16 @@ namespace Teklif_Hazırlayıcı.Helpers
             if (textBox.Text == _text)
             {
                 textBox.Text = "";
+                textBox.ForeColor = Color.Black; // Kullanıcı yazacak: Siyah yap
             }
         }
 
         public void LeavePlaceHolder(TextBox textBox)
         {
-            if (textBox.Text == "")
+            if (string.IsNullOrWhiteSpace(textBox.Text))
             {
                 textBox.Text = _text;
+                textBox.ForeColor = Color.Gray; // Placeholder gösteriliyor: Gri yap
             }
         }
     }

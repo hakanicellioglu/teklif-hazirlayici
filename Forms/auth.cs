@@ -15,7 +15,7 @@ using Teklif_Hazırlayıcı.Validation;
 
 namespace Teklif_Hazırlayıcı.Forms
 {
-    public partial class auth: Form
+    public partial class auth : Form
     {
         AuthManager authManager = new AuthManager();
 
@@ -25,9 +25,14 @@ namespace Teklif_Hazırlayıcı.Forms
             LoadAuth();
         }
 
+
+        PlaceHolder placeHolder = new PlaceHolder("Yetkili arayın...");
+
         private void button1_Click(object sender, EventArgs e)
         {
+
             txtSearch.Clear();
+            placeHolder.LeavePlaceHolder(txtSearch);
             dataGridView1.DataSource = null;
             LoadAuth();
         }
@@ -106,9 +111,10 @@ namespace Teklif_Hazırlayıcı.Forms
             dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();
 
-            if (TextboxValidator.IsNullOrWhiteSpace(txtSearch))
+            if (TextboxValidator.IsNullOrWhiteSpace(txtSearch) || txtSearch.Text == "Yetkili arayın...")
             {
                 MessageHelper.ShowError("Arama alanı boş bırakılamaz.");
+                LoadAuth();
             }
             else
             {
@@ -161,6 +167,16 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             if (e.KeyCode == Keys.Enter) btnSearch_Click(sender, e);
 
+        }
+
+        private void txtSearch_Enter(object sender, EventArgs e)
+        {
+            placeHolder.EnterPlaceHolder(txtSearch);
+        }
+
+        private void txtSearch_Leave(object sender, EventArgs e)
+        {
+            placeHolder.LeavePlaceHolder(txtSearch);
         }
     }
 }

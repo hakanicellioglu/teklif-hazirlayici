@@ -24,9 +24,11 @@ namespace Teklif_Hazırlayıcı.Forms
             LoadProduct();
         }
 
+        PlaceHolder placeHolder = new PlaceHolder("Ürün arayın...");
         private void btnClear_Click(object sender, EventArgs e)
         {
             txtSearch.Clear();
+            placeHolder.LeavePlaceHolder(txtSearch);
             dataGridView1.DataSource = null;
             LoadProduct();
         }
@@ -140,6 +142,16 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             if (e.KeyCode == Keys.Enter) btnSearch_Click(sender, e);
 
+        }
+
+        private void txtSearch_Enter(object sender, EventArgs e)
+        {
+            placeHolder.EnterPlaceHolder(txtSearch);
+        }
+
+        private void txtSearch_Leave(object sender, EventArgs e)
+        {
+            placeHolder.LeavePlaceHolder(txtSearch);
         }
     }
 }
