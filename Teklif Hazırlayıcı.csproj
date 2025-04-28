@@ -238,12 +238,15 @@
     <Content Include="Forms\Resources\icons\home-48.png" />
     <Content Include="Forms\Resources\icons\left-48.png" />
     <Content Include="Forms\Resources\icons\logout-48.png" />
+    <Content Include="Forms\Resources\icons\pdf-48.png" />
     <Content Include="Forms\Resources\icons\product-48.png" />
     <Content Include="Forms\Resources\icons\search-48.png" />
     <Content Include="Forms\Resources\icons\settings-48.png" />
     <Content Include="Forms\Resources\icons\show-48.png" />
     <Content Include="Forms\Resources\icons\users-48.png" />
-    <Content Include="Forms\Resources\logo.jpeg" />
+    <Content Include="Forms\Resources\logo.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
