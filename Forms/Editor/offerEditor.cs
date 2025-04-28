@@ -701,12 +701,12 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
 
 
-                // LOGO EKLEME
+                // Logo ekleniyor
                 string logoPath = Path.Combine(Application.StartupPath, "Forms", "Resources", "logo.jpeg");
                 if (File.Exists(logoPath))
                 {
                     iTextSharp.text.Image logo = iTextSharp.text.Image.GetInstance(logoPath);
-                    logo.ScaleToFit(150f, 150f); // Gerekirse 80x80 yap
+                    logo.ScaleToFit(150f, 150f);
                     logo.Alignment = Element.ALIGN_LEFT;
                     logo.SpacingAfter = 10f;
                     doc.Add(logo);
@@ -716,13 +716,86 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     MessageBox.Show("Logo bulunamadı: " + logoPath);
                 }
 
+                // TEKLİF FORMU BAŞLIĞI
+                doc.Add(new Paragraph("TEKLİF FORMU", titleFont)
+                {
+                    Alignment = Element.ALIGN_CENTER,
+                    SpacingAfter = 15
+                });
 
+                UserManager userManager = new UserManager();
+                string hazirlayanAdSoyad = userManager.GetUserFullName(Properties.Settings.Default.kullanici_id);
 
-                doc.Add(new Paragraph("TEKLİF FORMU", titleFont) { Alignment = Element.ALIGN_CENTER, SpacingAfter = 15 });
-                doc.Add(new Paragraph($"Firma Adı : {firmaAdi}", normalFont));
-                doc.Add(new Paragraph($"Yetkili    : {yetkiliAdi}", normalFont));
-                doc.Add(new Paragraph($"Tarih      : {teklifTarih}", normalFont));
+                // Ana üst tablo: 2 ana sütun
+                PdfPTable ustBilgiTable = new PdfPTable(2);
+                ustBilgiTable.WidthPercentage = 100;
+                ustBilgiTable.SetWidths(new float[] { 70f, 30f }); // %50 sol - %50 sağ
+
+                // SOL içerik: Firma Bilgileri
+                Paragraph solParagraf = new Paragraph();
+                solParagraf.Add(new Chunk($"Firma Adı  : {firmaAdi}\n", normalFont));
+                solParagraf.Add(new Chunk($"Yetkili    : {yetkiliAdi}\n", normalFont));
+                solParagraf.Add(new Chunk($"Tarih      : {teklifTarih}\n", normalFont));
+
+                PdfPCell solCell2 = new PdfPCell(solParagraf)
+                {
+                    Border = iTextSharp.text.Rectangle.NO_BORDER,
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    VerticalAlignment = Element.ALIGN_TOP
+                };
+                ustBilgiTable.AddCell(solCell2);
+
+                // SAĞ içerik: Hazırlayan Bilgileri - 2 sütunluk küçük tablo
+                PdfPTable sagIciTable = new PdfPTable(2);
+                sagIciTable.WidthPercentage = 100;
+                sagIciTable.SetWidths(new float[] { 10f, 20f });
+
+                // Sağ iç tabloya her satırı ekleyelim
+                sagIciTable.AddCell(CreateLeftCell("Teklif No:", smallFont));
+                sagIciTable.AddCell(CreateRightCell(Convert.ToInt32(offer_id).ToString("D6"), smallFont));
+
+                sagIciTable.AddCell(CreateLeftCell("Hazırlayan:", smallFont));
+                sagIciTable.AddCell(CreateRightCell(hazirlayanAdSoyad, smallFont));
+
+                sagIciTable.AddCell(CreateLeftCell("E-Mail:", smallFont));
+                sagIciTable.AddCell(CreateRightCell("siparis@alumannaluminyum.com.tr", smallFont));
+
+                sagIciTable.AddCell(CreateLeftCell("Tarih:", smallFont));
+                sagIciTable.AddCell(CreateRightCell(DateTime.Now.ToString("dd.MM.yyyy"), smallFont));
+
+                // Sağ ana hücre
+                PdfPCell sagCell2 = new PdfPCell(sagIciTable)
+                {
+                    Border = iTextSharp.text.Rectangle.NO_BORDER,
+                    HorizontalAlignment = Element.ALIGN_RIGHT,
+                    VerticalAlignment = Element.ALIGN_TOP
+                };
+                ustBilgiTable.AddCell(sagCell2);
+
+                // ANA üst tabloyu PDF'e ekle
+                doc.Add(ustBilgiTable);
+
+                // Sonra boşluk bırakalım
                 doc.Add(new Paragraph(" ") { SpacingAfter = 2f });
+
+                // Yardımcı fonksiyonlar: hücre üreticiler
+                PdfPCell CreateLeftCell(string text, iTextSharp.text.Font font)
+                {
+                    return new PdfPCell(new Phrase(text, font))
+                    {
+                        Border = iTextSharp.text.Rectangle.NO_BORDER,
+                        HorizontalAlignment = Element.ALIGN_LEFT
+                    };
+                }
+
+                PdfPCell CreateRightCell(string text, iTextSharp.text.Font font)
+                {
+                    return new PdfPCell(new Phrase(text, font))
+                    {
+                        Border = iTextSharp.text.Rectangle.NO_BORDER,
+                        HorizontalAlignment = Element.ALIGN_RIGHT
+                    };
+                }
 
 
                 var kalemler = offerManager.GetTeklifKalemleri(offer_id.Value);

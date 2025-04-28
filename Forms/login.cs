@@ -42,6 +42,7 @@ namespace Teklif_Hazırlayıcı
             if (UserManager.UserExists(txtUsername.Text, txtPassword.Text))
             {
                 Hide();
+                UserManager.SelectUserId(txtUsername.Text);
                 dashboard dashboard = new dashboard();
                 dashboard.ShowDialog();
                 Close();

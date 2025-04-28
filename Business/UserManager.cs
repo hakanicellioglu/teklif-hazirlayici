@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Teklif_Hazırlayıcı.DataAccess;
 using Teklif_Hazırlayıcı.Helpers;
 
@@ -127,16 +129,74 @@ namespace Teklif_Hazırlayıcı.Business
             {
 
                 conn.Open();
-                string query = "SELECT COUNT(*) FROM kullanicilar WHERE kullanici_adi = @Username AND parola = @Password";
+                string query = "SELECT COUNT(*) AS KayıtSayisi FROM kullanicilar WHERE kullanici_adi = @Username AND parola = @Password";
                 using (OleDbCommand command = new OleDbCommand(query, conn))
                 {
                     command.Parameters.AddWithValue("@Username", username);
                     command.Parameters.AddWithValue("@Password", password);
 
+
+
                     int count = (int)command.ExecuteScalar();
                     return count > 0;
                 }
             }
+        }
+
+        public void SelectUserId(string username)
+        {
+            int kullanici_id = -1;
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                string queryId = "SELECT kullanici_id FROM kullanicilar WHERE kullanici_adi = @Username";
+                using (OleDbCommand command2 = new OleDbCommand(queryId, conn))
+                {
+                    command2.Parameters.AddWithValue("@Username", username);
+                    using (OleDbDataReader reader = command2.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            kullanici_id = Convert.ToInt32(reader["kullanici_id"].ToString());
+                            Properties.Settings.Default.kullanici_id = kullanici_id;
+                        }
+                        else
+                        {
+                            Properties.Settings.Default.kullanici_id = kullanici_id;
+                        }
+                        Properties.Settings.Default.Save();
+                    }
+                }
+            }
+        }
+
+        public string GetUserFullName(int kullaniciId)
+        {
+            string isimSoyisim = "Sayın Yetkili";
+
+            string query = "SELECT isim, soyisim FROM Kullanicilar WHERE kullanici_id = @kullaniciId";
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand command = new OleDbCommand(query, conn))
+                {
+                    command.Parameters.AddWithValue("@kullaniciId", kullaniciId);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string isim = reader["isim"].ToString();
+                            string soyisim = reader["soyisim"].ToString();
+
+                            isimSoyisim = $"{isim} {soyisim}".Trim();
+                        }
+                    }
+                }
+            }
+
+            return isimSoyisim;
         }
     }
 }

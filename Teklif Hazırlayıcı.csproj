@@ -65,7 +65,6 @@
     <Compile Include="Business\ProductManager.cs" />
     <Compile Include="Business\UserManager.cs" />
     <Compile Include="DataAccess\DbConnection.cs" />
-    <Compile Include="Entity\User.cs" />
     <Compile Include="Forms\auth.cs">
       <SubType>Form</SubType>
     </Compile>
