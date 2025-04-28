@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dashboard));
             this.pnlMenu = new System.Windows.Forms.Panel();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnLogout = new System.Windows.Forms.Button();
@@ -39,29 +40,32 @@
             this.btnHome = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pnlForm = new System.Windows.Forms.Panel();
+            this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.pnlMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMenu
             // 
-            this.pnlMenu.Controls.Add(this.btnSettings);
             this.pnlMenu.Controls.Add(this.btnLogout);
+            this.pnlMenu.Controls.Add(this.btnSettings);
             this.pnlMenu.Controls.Add(this.btnOffer);
             this.pnlMenu.Controls.Add(this.btnProduct);
             this.pnlMenu.Controls.Add(this.btnAuth);
             this.pnlMenu.Controls.Add(this.btnCompany);
             this.pnlMenu.Controls.Add(this.btnHome);
-            this.pnlMenu.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlMenu.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlMenu.Location = new System.Drawing.Point(0, 0);
             this.pnlMenu.Name = "pnlMenu";
             this.pnlMenu.Padding = new System.Windows.Forms.Padding(25);
-            this.pnlMenu.Size = new System.Drawing.Size(100, 681);
+            this.pnlMenu.Size = new System.Drawing.Size(1264, 100);
             this.pnlMenu.TabIndex = 0;
             // 
             // btnSettings
             // 
-            this.btnSettings.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnSettings.Location = new System.Drawing.Point(25, 556);
+            this.btnSettings.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnSettings.ImageIndex = 5;
+            this.btnSettings.ImageList = this.imgButton;
+            this.btnSettings.Location = new System.Drawing.Point(275, 25);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(50, 50);
             this.btnSettings.TabIndex = 5;
@@ -70,8 +74,10 @@
             // 
             // btnLogout
             // 
-            this.btnLogout.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnLogout.Location = new System.Drawing.Point(25, 606);
+            this.btnLogout.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnLogout.ImageIndex = 6;
+            this.btnLogout.ImageList = this.imgButton;
+            this.btnLogout.Location = new System.Drawing.Point(325, 25);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Size = new System.Drawing.Size(50, 50);
             this.btnLogout.TabIndex = 6;
@@ -81,8 +87,10 @@
             // 
             // btnOffer
             // 
-            this.btnOffer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnOffer.Location = new System.Drawing.Point(25, 225);
+            this.btnOffer.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnOffer.ImageIndex = 4;
+            this.btnOffer.ImageList = this.imgButton;
+            this.btnOffer.Location = new System.Drawing.Point(225, 25);
             this.btnOffer.Name = "btnOffer";
             this.btnOffer.Size = new System.Drawing.Size(50, 50);
             this.btnOffer.TabIndex = 4;
@@ -92,8 +100,10 @@
             // 
             // btnProduct
             // 
-            this.btnProduct.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnProduct.Location = new System.Drawing.Point(25, 175);
+            this.btnProduct.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnProduct.ImageIndex = 3;
+            this.btnProduct.ImageList = this.imgButton;
+            this.btnProduct.Location = new System.Drawing.Point(175, 25);
             this.btnProduct.Name = "btnProduct";
             this.btnProduct.Size = new System.Drawing.Size(50, 50);
             this.btnProduct.TabIndex = 3;
@@ -103,8 +113,10 @@
             // 
             // btnAuth
             // 
-            this.btnAuth.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnAuth.Location = new System.Drawing.Point(25, 125);
+            this.btnAuth.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnAuth.ImageIndex = 2;
+            this.btnAuth.ImageList = this.imgButton;
+            this.btnAuth.Location = new System.Drawing.Point(125, 25);
             this.btnAuth.Name = "btnAuth";
             this.btnAuth.Size = new System.Drawing.Size(50, 50);
             this.btnAuth.TabIndex = 2;
@@ -114,9 +126,11 @@
             // 
             // btnCompany
             // 
-            this.btnCompany.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnCompany.Dock = System.Windows.Forms.DockStyle.Left;
             this.btnCompany.FlatAppearance.BorderSize = 0;
-            this.btnCompany.Location = new System.Drawing.Point(25, 75);
+            this.btnCompany.ImageIndex = 1;
+            this.btnCompany.ImageList = this.imgButton;
+            this.btnCompany.Location = new System.Drawing.Point(75, 25);
             this.btnCompany.Name = "btnCompany";
             this.btnCompany.Size = new System.Drawing.Size(50, 50);
             this.btnCompany.TabIndex = 1;
@@ -126,8 +140,10 @@
             // 
             // btnHome
             // 
-            this.btnHome.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnHome.Dock = System.Windows.Forms.DockStyle.Left;
             this.btnHome.FlatAppearance.BorderSize = 0;
+            this.btnHome.ImageIndex = 0;
+            this.btnHome.ImageList = this.imgButton;
             this.btnHome.Location = new System.Drawing.Point(25, 25);
             this.btnHome.Name = "btnHome";
             this.btnHome.Size = new System.Drawing.Size(50, 50);
@@ -143,10 +159,22 @@
             // pnlForm
             // 
             this.pnlForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlForm.Location = new System.Drawing.Point(100, 0);
+            this.pnlForm.Location = new System.Drawing.Point(0, 100);
             this.pnlForm.Name = "pnlForm";
-            this.pnlForm.Size = new System.Drawing.Size(1164, 681);
+            this.pnlForm.Size = new System.Drawing.Size(1264, 581);
             this.pnlForm.TabIndex = 1;
+            // 
+            // imgButton
+            // 
+            this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
+            this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgButton.Images.SetKeyName(0, "home-48.png");
+            this.imgButton.Images.SetKeyName(1, "factory-48.png");
+            this.imgButton.Images.SetKeyName(2, "users-48.png");
+            this.imgButton.Images.SetKeyName(3, "product-48.png");
+            this.imgButton.Images.SetKeyName(4, "document-48.png");
+            this.imgButton.Images.SetKeyName(5, "settings-48.png");
+            this.imgButton.Images.SetKeyName(6, "logout-48.png");
             // 
             // dashboard
             // 
@@ -177,5 +205,6 @@
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel pnlForm;
+        private System.Windows.Forms.ImageList imgButton;
     }
 }
