@@ -47,91 +47,104 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(101, 47);
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.label1.Location = new System.Drawing.Point(86, 44);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 13);
+            this.label1.Size = new System.Drawing.Size(92, 19);
             this.label1.TabIndex = 0;
             this.label1.Text = "Ürün Editörü";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(80, 69);
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.label2.Location = new System.Drawing.Point(67, 66);
             this.label2.Margin = new System.Windows.Forms.Padding(5);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(30, 13);
+            this.label2.Size = new System.Drawing.Size(40, 19);
             this.label2.TabIndex = 1;
             this.label2.Text = "Ürün";
             // 
             // chkUrunler
             // 
+            this.chkUrunler.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.chkUrunler.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.chkUrunler.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.chkUrunler.FormattingEnabled = true;
-            this.chkUrunler.Location = new System.Drawing.Point(83, 91);
+            this.chkUrunler.Location = new System.Drawing.Point(67, 88);
             this.chkUrunler.Margin = new System.Windows.Forms.Padding(5);
             this.chkUrunler.Name = "chkUrunler";
-            this.chkUrunler.Size = new System.Drawing.Size(121, 21);
+            this.chkUrunler.Size = new System.Drawing.Size(150, 25);
             this.chkUrunler.TabIndex = 2;
             this.chkUrunler.SelectedIndexChanged += new System.EventHandler(this.chkUrunler_SelectedIndexChanged);
             // 
             // lblBoy
             // 
             this.lblBoy.AutoSize = true;
-            this.lblBoy.Location = new System.Drawing.Point(80, 172);
+            this.lblBoy.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblBoy.Location = new System.Drawing.Point(67, 169);
             this.lblBoy.Margin = new System.Windows.Forms.Padding(5);
             this.lblBoy.Name = "lblBoy";
-            this.lblBoy.Size = new System.Drawing.Size(25, 13);
+            this.lblBoy.Size = new System.Drawing.Size(34, 19);
             this.lblBoy.TabIndex = 5;
             this.lblBoy.Text = "Boy";
             this.lblBoy.Visible = false;
             // 
             // txtBoy
             // 
-            this.txtBoy.Location = new System.Drawing.Point(83, 194);
+            this.txtBoy.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtBoy.Location = new System.Drawing.Point(67, 191);
             this.txtBoy.Margin = new System.Windows.Forms.Padding(5);
             this.txtBoy.Name = "txtBoy";
-            this.txtBoy.Size = new System.Drawing.Size(121, 20);
+            this.txtBoy.Size = new System.Drawing.Size(150, 24);
             this.txtBoy.TabIndex = 6;
             this.txtBoy.Visible = false;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(80, 121);
+            this.label4.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.label4.Location = new System.Drawing.Point(67, 118);
             this.label4.Margin = new System.Windows.Forms.Padding(5);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 13);
+            this.label4.Size = new System.Drawing.Size(42, 19);
             this.label4.TabIndex = 3;
             this.label4.Text = "Adet";
             // 
             // txtAdet
             // 
-            this.txtAdet.Location = new System.Drawing.Point(83, 143);
+            this.txtAdet.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtAdet.Location = new System.Drawing.Point(67, 140);
             this.txtAdet.Margin = new System.Windows.Forms.Padding(5);
             this.txtAdet.Name = "txtAdet";
-            this.txtAdet.Size = new System.Drawing.Size(121, 20);
+            this.txtAdet.Size = new System.Drawing.Size(150, 24);
             this.txtAdet.TabIndex = 4;
             // 
             // lblYuzey
             // 
             this.lblYuzey.AutoSize = true;
-            this.lblYuzey.Location = new System.Drawing.Point(80, 223);
+            this.lblYuzey.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblYuzey.Location = new System.Drawing.Point(67, 220);
             this.lblYuzey.Margin = new System.Windows.Forms.Padding(5);
             this.lblYuzey.Name = "lblYuzey";
-            this.lblYuzey.Size = new System.Drawing.Size(36, 13);
+            this.lblYuzey.Size = new System.Drawing.Size(48, 19);
             this.lblYuzey.TabIndex = 7;
             this.lblYuzey.Text = "Yüzey";
             this.lblYuzey.Visible = false;
             // 
             // chkYuzey
             // 
+            this.chkYuzey.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.chkYuzey.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.chkYuzey.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.chkYuzey.FormattingEnabled = true;
             this.chkYuzey.Items.AddRange(new object[] {
             "Press",
             "Boyalı"});
-            this.chkYuzey.Location = new System.Drawing.Point(83, 245);
+            this.chkYuzey.Location = new System.Drawing.Point(67, 242);
             this.chkYuzey.Margin = new System.Windows.Forms.Padding(5);
             this.chkYuzey.Name = "chkYuzey";
-            this.chkYuzey.Size = new System.Drawing.Size(121, 21);
+            this.chkYuzey.Size = new System.Drawing.Size(150, 25);
             this.chkYuzey.TabIndex = 8;
             this.chkYuzey.Visible = false;
             this.chkYuzey.SelectedIndexChanged += new System.EventHandler(this.chkYuzey_SelectedIndexChanged);
@@ -139,28 +152,31 @@
             // lblYuzeyKodu
             // 
             this.lblYuzeyKodu.AutoSize = true;
-            this.lblYuzeyKodu.Location = new System.Drawing.Point(80, 275);
+            this.lblYuzeyKodu.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lblYuzeyKodu.Location = new System.Drawing.Point(67, 272);
             this.lblYuzeyKodu.Margin = new System.Windows.Forms.Padding(5);
             this.lblYuzeyKodu.Name = "lblYuzeyKodu";
-            this.lblYuzeyKodu.Size = new System.Drawing.Size(64, 13);
+            this.lblYuzeyKodu.Size = new System.Drawing.Size(88, 19);
             this.lblYuzeyKodu.TabIndex = 9;
             this.lblYuzeyKodu.Text = "Yüzey Kodu";
             this.lblYuzeyKodu.Visible = false;
             // 
             // txtYuzeyKodu
             // 
-            this.txtYuzeyKodu.Location = new System.Drawing.Point(83, 297);
+            this.txtYuzeyKodu.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtYuzeyKodu.Location = new System.Drawing.Point(67, 294);
             this.txtYuzeyKodu.Margin = new System.Windows.Forms.Padding(5);
             this.txtYuzeyKodu.Name = "txtYuzeyKodu";
-            this.txtYuzeyKodu.Size = new System.Drawing.Size(121, 20);
+            this.txtYuzeyKodu.Size = new System.Drawing.Size(150, 24);
             this.txtYuzeyKodu.TabIndex = 10;
             this.txtYuzeyKodu.Visible = false;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(129, 326);
+            this.button1.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.button1.Location = new System.Drawing.Point(67, 323);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(150, 30);
             this.button1.TabIndex = 11;
             this.button1.Text = "Ekle";
             this.button1.UseVisualStyleBackColor = true;
@@ -168,9 +184,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(129, 358);
+            this.button2.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.button2.Location = new System.Drawing.Point(67, 355);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(150, 30);
             this.button2.TabIndex = 12;
             this.button2.Text = "Kaydet";
             this.button2.UseVisualStyleBackColor = true;
@@ -178,9 +195,10 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(129, 390);
+            this.btnCancel.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.btnCancel.Location = new System.Drawing.Point(67, 387);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(150, 30);
             this.btnCancel.TabIndex = 13;
             this.btnCancel.Text = "İptal";
             this.btnCancel.UseVisualStyleBackColor = true;
