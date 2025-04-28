@@ -31,17 +31,17 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dashboard));
             this.pnlMenu = new System.Windows.Forms.Panel();
-            this.btnLogout = new System.Windows.Forms.Button();
-            this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.btnSettings = new System.Windows.Forms.Button();
+            this.btnLogout = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.btnOffer = new System.Windows.Forms.Button();
             this.btnProduct = new System.Windows.Forms.Button();
             this.btnAuth = new System.Windows.Forms.Button();
             this.btnCompany = new System.Windows.Forms.Button();
             this.btnHome = new System.Windows.Forms.Button();
+            this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pnlForm = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.pnlMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -58,6 +58,22 @@
             this.pnlMenu.Padding = new System.Windows.Forms.Padding(25);
             this.pnlMenu.Size = new System.Drawing.Size(1264, 100);
             this.pnlMenu.TabIndex = 0;
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnSettings.FlatAppearance.BorderSize = 0;
+            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSettings.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.btnSettings.ImageIndex = 5;
+            this.btnSettings.Location = new System.Drawing.Point(1039, 25);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(100, 50);
+            this.btnSettings.TabIndex = 5;
+            this.btnSettings.Text = "Ayarlar";
+            this.btnSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolTip1.SetToolTip(this.btnSettings, "Ayarlar");
+            this.btnSettings.UseVisualStyleBackColor = true;
             // 
             // btnLogout
             // 
@@ -76,33 +92,17 @@
             this.btnLogout.UseVisualStyleBackColor = true;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
-            // imgButton
+            // panel1
             // 
-            this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
-            this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgButton.Images.SetKeyName(0, "home-48.png");
-            this.imgButton.Images.SetKeyName(1, "factory-48.png");
-            this.imgButton.Images.SetKeyName(2, "users-48.png");
-            this.imgButton.Images.SetKeyName(3, "product-48.png");
-            this.imgButton.Images.SetKeyName(4, "document-48.png");
-            this.imgButton.Images.SetKeyName(5, "settings-48.png");
-            this.imgButton.Images.SetKeyName(6, "logout-48.png");
-            // 
-            // btnSettings
-            // 
-            this.btnSettings.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnSettings.FlatAppearance.BorderSize = 0;
-            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettings.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.btnSettings.ImageIndex = 5;
-            this.btnSettings.Location = new System.Drawing.Point(1039, 25);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(100, 50);
-            this.btnSettings.TabIndex = 5;
-            this.btnSettings.Text = "Ayarlar";
-            this.btnSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.toolTip1.SetToolTip(this.btnSettings, "Ayarlar");
-            this.btnSettings.UseVisualStyleBackColor = true;
+            this.panel1.Controls.Add(this.btnOffer);
+            this.panel1.Controls.Add(this.btnProduct);
+            this.panel1.Controls.Add(this.btnAuth);
+            this.panel1.Controls.Add(this.btnCompany);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(75, 25);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(914, 50);
+            this.panel1.TabIndex = 7;
             // 
             // btnOffer
             // 
@@ -179,15 +179,21 @@
             this.btnHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHome.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnHome.ImageIndex = 0;
+            this.btnHome.ImageList = this.imgButton;
             this.btnHome.Location = new System.Drawing.Point(25, 25);
             this.btnHome.Name = "btnHome";
-            this.btnHome.Size = new System.Drawing.Size(100, 50);
+            this.btnHome.Size = new System.Drawing.Size(50, 50);
             this.btnHome.TabIndex = 0;
-            this.btnHome.Text = "Anasayfa";
             this.btnHome.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.toolTip1.SetToolTip(this.btnHome, "Anasayfa");
             this.btnHome.UseVisualStyleBackColor = true;
+            this.btnHome.Visible = false;
             this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
+            // 
+            // imgButton
+            // 
+            this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
+            this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgButton.Images.SetKeyName(0, "left-48.png");
             // 
             // toolTip1
             // 
@@ -200,18 +206,6 @@
             this.pnlForm.Name = "pnlForm";
             this.pnlForm.Size = new System.Drawing.Size(1264, 581);
             this.pnlForm.TabIndex = 1;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.btnOffer);
-            this.panel1.Controls.Add(this.btnProduct);
-            this.panel1.Controls.Add(this.btnAuth);
-            this.panel1.Controls.Add(this.btnCompany);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(125, 25);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(914, 50);
-            this.panel1.TabIndex = 7;
             // 
             // dashboard
             // 

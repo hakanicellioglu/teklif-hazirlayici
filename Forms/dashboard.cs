@@ -20,6 +20,7 @@ namespace Teklif_Hazırlayıcı.Forms
         private void LoadForm(Form formToLoad)
         {
             panel1.Visible = false;
+            btnHome.Visible = true;
             pnlForm.Controls.Clear();
             formToLoad.TopLevel = false;
             formToLoad.Dock = DockStyle.Fill;
@@ -30,6 +31,7 @@ namespace Teklif_Hazırlayıcı.Forms
         private void btnHome_Click(object sender, EventArgs e)
         {
             panel1.Visible = true;
+            btnHome.Visible = false;
             pnlForm.Controls.Clear();
         }
 

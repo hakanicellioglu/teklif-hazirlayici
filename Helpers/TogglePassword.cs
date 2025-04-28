@@ -14,12 +14,13 @@ namespace Teklif_Hazırlayıcı.Helpers
             if (textBox.UseSystemPasswordChar)
             {
                 textBox.UseSystemPasswordChar = false;
-                button.Text = "Gizle";
+                button.ImageIndex = 0;
             }
             else
             {
                 textBox.UseSystemPasswordChar = true;
-                button.Text = "Göster";
+                button.ImageIndex = 1;
+
             }
         }
     }

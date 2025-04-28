@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(register));
             this.label1 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -41,94 +43,106 @@
             this.btnRegister = new System.Windows.Forms.Button();
             this.lnkLogin = new System.Windows.Forms.LinkLabel();
             this.btnTogglePassword = new System.Windows.Forms.Button();
+            this.imgPassword = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(59, 40);
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.label1.Location = new System.Drawing.Point(67, 29);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(25, 13);
+            this.label1.Size = new System.Drawing.Size(33, 19);
             this.label1.TabIndex = 0;
             this.label1.Text = "İsim";
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(62, 56);
+            this.txtName.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtName.Location = new System.Drawing.Point(67, 49);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(100, 20);
+            this.txtName.Size = new System.Drawing.Size(150, 24);
             this.txtName.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(59, 79);
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.label2.Location = new System.Drawing.Point(67, 76);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 13);
+            this.label2.Size = new System.Drawing.Size(57, 19);
             this.label2.TabIndex = 2;
             this.label2.Text = "Soyisim";
             // 
             // txtSurname
             // 
-            this.txtSurname.Location = new System.Drawing.Point(59, 95);
+            this.txtSurname.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtSurname.Location = new System.Drawing.Point(67, 97);
             this.txtSurname.Name = "txtSurname";
-            this.txtSurname.Size = new System.Drawing.Size(100, 20);
+            this.txtSurname.Size = new System.Drawing.Size(150, 24);
             this.txtSurname.TabIndex = 3;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(59, 118);
+            this.label3.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.label3.Location = new System.Drawing.Point(67, 123);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(64, 13);
+            this.label3.Size = new System.Drawing.Size(92, 19);
             this.label3.TabIndex = 4;
             this.label3.Text = "Kullanıcı Adı";
             // 
             // txtUsername
             // 
-            this.txtUsername.Location = new System.Drawing.Point(59, 134);
+            this.txtUsername.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtUsername.Location = new System.Drawing.Point(67, 144);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(100, 20);
+            this.txtUsername.Size = new System.Drawing.Size(150, 24);
             this.txtUsername.TabIndex = 5;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(59, 157);
+            this.label4.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.label4.Location = new System.Drawing.Point(67, 170);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(43, 13);
+            this.label4.Size = new System.Drawing.Size(61, 19);
             this.label4.TabIndex = 6;
             this.label4.Text = "E-posta";
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(59, 173);
+            this.txtEmail.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtEmail.Location = new System.Drawing.Point(67, 191);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(100, 20);
+            this.txtEmail.Size = new System.Drawing.Size(150, 24);
             this.txtEmail.TabIndex = 7;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(59, 196);
+            this.label5.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.label5.Location = new System.Drawing.Point(67, 217);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(37, 13);
+            this.label5.Size = new System.Drawing.Size(53, 19);
             this.label5.TabIndex = 8;
             this.label5.Text = "Parola";
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(59, 212);
+            this.txtPassword.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.txtPassword.Location = new System.Drawing.Point(67, 239);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(100, 20);
+            this.txtPassword.Size = new System.Drawing.Size(150, 24);
             this.txtPassword.TabIndex = 9;
             this.txtPassword.UseSystemPasswordChar = true;
             // 
             // btnRegister
             // 
-            this.btnRegister.Location = new System.Drawing.Point(59, 274);
+            this.btnRegister.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.btnRegister.Location = new System.Drawing.Point(67, 269);
             this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(100, 30);
+            this.btnRegister.Size = new System.Drawing.Size(150, 30);
             this.btnRegister.TabIndex = 11;
             this.btnRegister.Text = "Kayıt ol";
             this.btnRegister.UseVisualStyleBackColor = true;
@@ -137,9 +151,10 @@
             // lnkLogin
             // 
             this.lnkLogin.AutoSize = true;
-            this.lnkLogin.Location = new System.Drawing.Point(59, 307);
+            this.lnkLogin.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.lnkLogin.Location = new System.Drawing.Point(20, 309);
             this.lnkLogin.Name = "lnkLogin";
-            this.lnkLogin.Size = new System.Drawing.Size(167, 13);
+            this.lnkLogin.Size = new System.Drawing.Size(245, 19);
             this.lnkLogin.TabIndex = 12;
             this.lnkLogin.TabStop = true;
             this.lnkLogin.Text = "Zaten hesabın var mı? Oturum aç.";
@@ -147,13 +162,23 @@
             // 
             // btnTogglePassword
             // 
-            this.btnTogglePassword.Location = new System.Drawing.Point(59, 238);
+            this.btnTogglePassword.FlatAppearance.BorderSize = 0;
+            this.btnTogglePassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTogglePassword.ImageIndex = 1;
+            this.btnTogglePassword.ImageList = this.imgPassword;
+            this.btnTogglePassword.Location = new System.Drawing.Point(223, 236);
             this.btnTogglePassword.Name = "btnTogglePassword";
-            this.btnTogglePassword.Size = new System.Drawing.Size(100, 30);
+            this.btnTogglePassword.Size = new System.Drawing.Size(30, 30);
             this.btnTogglePassword.TabIndex = 10;
-            this.btnTogglePassword.Text = "Göster";
             this.btnTogglePassword.UseVisualStyleBackColor = true;
             this.btnTogglePassword.Click += new System.EventHandler(this.btnTogglePassword_Click);
+            // 
+            // imgPassword
+            // 
+            this.imgPassword.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgPassword.ImageStream")));
+            this.imgPassword.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgPassword.Images.SetKeyName(0, "hide-48.png");
+            this.imgPassword.Images.SetKeyName(1, "show-48.png");
             // 
             // register
             // 
@@ -200,5 +225,6 @@
         private System.Windows.Forms.Button btnRegister;
         private System.Windows.Forms.LinkLabel lnkLogin;
         private System.Windows.Forms.Button btnTogglePassword;
+        private System.Windows.Forms.ImageList imgPassword;
     }
 }

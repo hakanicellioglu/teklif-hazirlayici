@@ -230,9 +230,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataAccess\teklif-hazirlayici.mdb" />
-    <Content Include="Forms\Resources\logo.jpeg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Forms\Resources\icons\add-48.png" />
+    <Content Include="Forms\Resources\icons\clear-48.png" />
+    <Content Include="Forms\Resources\icons\document-48.png" />
+    <Content Include="Forms\Resources\icons\factory-48.png" />
+    <Content Include="Forms\Resources\icons\hide-48.png" />
+    <Content Include="Forms\Resources\icons\home-48.png" />
+    <Content Include="Forms\Resources\icons\left-48.png" />
+    <Content Include="Forms\Resources\icons\logout-48.png" />
+    <Content Include="Forms\Resources\icons\product-48.png" />
+    <Content Include="Forms\Resources\icons\search-48.png" />
+    <Content Include="Forms\Resources\icons\settings-48.png" />
+    <Content Include="Forms\Resources\icons\show-48.png" />
+    <Content Include="Forms\Resources\icons\users-48.png" />
+    <Content Include="Forms\Resources\logo.jpeg" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
