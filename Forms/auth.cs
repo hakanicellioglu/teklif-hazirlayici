@@ -178,5 +178,10 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             placeHolder.LeavePlaceHolder(txtSearch);
         }
+
+        private void panel3_MouseClick(object sender, MouseEventArgs e)
+        {
+            txtSearch.Focus();
+        }
     }
 }
