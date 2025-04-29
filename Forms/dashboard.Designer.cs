@@ -31,13 +31,13 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dashboard));
             this.pnlMenu = new System.Windows.Forms.Panel();
-            this.btnSettings = new System.Windows.Forms.Button();
-            this.btnLogout = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnSettings = new System.Windows.Forms.Button();
             this.btnOffer = new System.Windows.Forms.Button();
             this.btnProduct = new System.Windows.Forms.Button();
             this.btnAuth = new System.Windows.Forms.Button();
             this.btnCompany = new System.Windows.Forms.Button();
+            this.btnLogout = new System.Windows.Forms.Button();
             this.btnHome = new System.Windows.Forms.Button();
             this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -48,9 +48,8 @@
             // 
             // pnlMenu
             // 
-            this.pnlMenu.Controls.Add(this.btnSettings);
-            this.pnlMenu.Controls.Add(this.btnLogout);
             this.pnlMenu.Controls.Add(this.panel1);
+            this.pnlMenu.Controls.Add(this.btnLogout);
             this.pnlMenu.Controls.Add(this.btnHome);
             this.pnlMenu.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlMenu.Location = new System.Drawing.Point(0, 0);
@@ -59,6 +58,19 @@
             this.pnlMenu.Size = new System.Drawing.Size(1264, 100);
             this.pnlMenu.TabIndex = 0;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnSettings);
+            this.panel1.Controls.Add(this.btnOffer);
+            this.panel1.Controls.Add(this.btnProduct);
+            this.panel1.Controls.Add(this.btnAuth);
+            this.panel1.Controls.Add(this.btnCompany);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(75, 25);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1064, 50);
+            this.panel1.TabIndex = 7;
+            // 
             // btnSettings
             // 
             this.btnSettings.Dock = System.Windows.Forms.DockStyle.Right;
@@ -66,7 +78,7 @@
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSettings.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnSettings.ImageIndex = 5;
-            this.btnSettings.Location = new System.Drawing.Point(1039, 25);
+            this.btnSettings.Location = new System.Drawing.Point(964, 0);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(100, 50);
             this.btnSettings.TabIndex = 5;
@@ -74,35 +86,6 @@
             this.btnSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolTip1.SetToolTip(this.btnSettings, "Ayarlar");
             this.btnSettings.UseVisualStyleBackColor = true;
-            // 
-            // btnLogout
-            // 
-            this.btnLogout.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnLogout.FlatAppearance.BorderSize = 0;
-            this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLogout.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.btnLogout.ImageIndex = 6;
-            this.btnLogout.Location = new System.Drawing.Point(1139, 25);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(100, 50);
-            this.btnLogout.TabIndex = 6;
-            this.btnLogout.Text = "Çıkış Yap";
-            this.btnLogout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.toolTip1.SetToolTip(this.btnLogout, "Çıkış Yap");
-            this.btnLogout.UseVisualStyleBackColor = true;
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.btnOffer);
-            this.panel1.Controls.Add(this.btnProduct);
-            this.panel1.Controls.Add(this.btnAuth);
-            this.panel1.Controls.Add(this.btnCompany);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(75, 25);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(914, 50);
-            this.panel1.TabIndex = 7;
             // 
             // btnOffer
             // 
@@ -143,7 +126,7 @@
             this.btnAuth.Dock = System.Windows.Forms.DockStyle.Left;
             this.btnAuth.FlatAppearance.BorderSize = 0;
             this.btnAuth.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAuth.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnAuth.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnAuth.ImageIndex = 2;
             this.btnAuth.Location = new System.Drawing.Point(100, 0);
             this.btnAuth.Name = "btnAuth";
@@ -171,6 +154,23 @@
             this.toolTip1.SetToolTip(this.btnCompany, "Firmalar");
             this.btnCompany.UseVisualStyleBackColor = true;
             this.btnCompany.Click += new System.EventHandler(this.btnCompany_Click);
+            // 
+            // btnLogout
+            // 
+            this.btnLogout.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnLogout.FlatAppearance.BorderSize = 0;
+            this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogout.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.btnLogout.ImageIndex = 6;
+            this.btnLogout.Location = new System.Drawing.Point(1139, 25);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(100, 50);
+            this.btnLogout.TabIndex = 6;
+            this.btnLogout.Text = "Çıkış Yap";
+            this.btnLogout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolTip1.SetToolTip(this.btnLogout, "Çıkış Yap");
+            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // btnHome
             // 
@@ -214,6 +214,7 @@
             this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.pnlForm);
             this.Controls.Add(this.pnlMenu);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "dashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

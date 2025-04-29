@@ -232,6 +232,7 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "product";
             this.Padding = new System.Windows.Forms.Padding(50, 0, 50, 50);
             this.Text = "Teklif Hazırlayıcı";

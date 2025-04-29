@@ -139,6 +139,7 @@
     </Compile>
     <Compile Include="Helpers\MessageHelper.cs" />
     <Compile Include="Helpers\PlaceHolder.cs" />
+    <Compile Include="Helpers\ThemeManager.cs" />
     <Compile Include="Helpers\TogglePassword.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

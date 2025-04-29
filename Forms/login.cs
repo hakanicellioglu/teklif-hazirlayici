@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace Teklif_Hazırlayıcı
         public login()
         {
             InitializeComponent();
+            //ThemeManager.ToggleTheme(this);
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -33,7 +35,7 @@ namespace Teklif_Hazırlayıcı
                 MessageHelper.ShowError("Kullanıcı adı geçersiz.");
                 return;
             }
-            else if(!Teklif_Hazırlayıcı.Validation.StringValidator.IsValid(txtPassword.Text))
+            else if (!Teklif_Hazırlayıcı.Validation.StringValidator.IsValid(txtPassword.Text))
             {
                 MessageHelper.ShowError("Şifre geçersiz.");
                 return;
@@ -69,7 +71,12 @@ namespace Teklif_Hazırlayıcı
 
         private void txtPassword_KeyUp(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter) btnLogin_Click(sender, e);
+            if (e.KeyCode == Keys.Enter) btnLogin_Click(sender, e);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //ThemeManager.ToggleTheme(this);
         }
     }
 }

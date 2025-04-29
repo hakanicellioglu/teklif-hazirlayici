@@ -35,11 +35,12 @@
             this.lblPassword = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.btnTogglePassword = new System.Windows.Forms.Button();
+            this.imgPassword = new System.Windows.Forms.ImageList(this.components);
             this.chkRememberMe = new System.Windows.Forms.CheckBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.lnkForgotPassword = new System.Windows.Forms.LinkLabel();
             this.lnkRegister = new System.Windows.Forms.LinkLabel();
-            this.imgPassword = new System.Windows.Forms.ImageList(this.components);
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblUsername
@@ -50,16 +51,20 @@
             this.lblUsername.Name = "lblUsername";
             this.lblUsername.Size = new System.Drawing.Size(92, 19);
             this.lblUsername.TabIndex = 0;
+            this.lblUsername.Tag = "label primary\t";
             this.lblUsername.Text = "Kullanıcı Adı";
             // 
             // txtUsername
             // 
+            this.txtUsername.BackColor = System.Drawing.SystemColors.Control;
+            this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtUsername.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
             this.txtUsername.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.txtUsername.Location = new System.Drawing.Point(75, 88);
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(150, 24);
             this.txtUsername.TabIndex = 1;
+            this.txtUsername.Tag = "input background\t";
             // 
             // lblPassword
             // 
@@ -69,15 +74,19 @@
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(53, 19);
             this.lblPassword.TabIndex = 2;
+            this.lblPassword.Tag = "label primary\t";
             this.lblPassword.Text = "Parola";
             // 
             // txtPassword
             // 
+            this.txtPassword.BackColor = System.Drawing.SystemColors.Control;
+            this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPassword.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.txtPassword.Location = new System.Drawing.Point(75, 143);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(150, 24);
             this.txtPassword.TabIndex = 3;
+            this.txtPassword.Tag = "input background\t";
             this.txtPassword.UseSystemPasswordChar = true;
             this.txtPassword.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtPassword_KeyUp);
             // 
@@ -92,8 +101,16 @@
             this.btnTogglePassword.Name = "btnTogglePassword";
             this.btnTogglePassword.Size = new System.Drawing.Size(30, 30);
             this.btnTogglePassword.TabIndex = 6;
+            this.btnTogglePassword.Tag = "icon secondary\t";
             this.btnTogglePassword.UseVisualStyleBackColor = true;
             this.btnTogglePassword.Click += new System.EventHandler(this.btnTogglePassword_Click);
+            // 
+            // imgPassword
+            // 
+            this.imgPassword.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgPassword.ImageStream")));
+            this.imgPassword.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgPassword.Images.SetKeyName(0, "hide-48.png");
+            this.imgPassword.Images.SetKeyName(1, "show-48.png");
             // 
             // chkRememberMe
             // 
@@ -103,6 +120,7 @@
             this.chkRememberMe.Name = "chkRememberMe";
             this.chkRememberMe.Size = new System.Drawing.Size(106, 23);
             this.chkRememberMe.TabIndex = 4;
+            this.chkRememberMe.Tag = "checkbox text\t";
             this.chkRememberMe.Text = "Beni Hatırla";
             this.chkRememberMe.UseVisualStyleBackColor = true;
             // 
@@ -113,6 +131,7 @@
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(150, 30);
             this.btnLogin.TabIndex = 5;
+            this.btnLogin.Tag = "button primary action\t";
             this.btnLogin.Text = "Giriş yap";
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
@@ -127,6 +146,7 @@
             this.lnkForgotPassword.Size = new System.Drawing.Size(135, 19);
             this.lnkForgotPassword.TabIndex = 7;
             this.lnkForgotPassword.TabStop = true;
+            this.lnkForgotPassword.Tag = "link secondary\t";
             this.lnkForgotPassword.Text = "Şifreni mi unuttun?";
             // 
             // lnkRegister
@@ -138,21 +158,27 @@
             this.lnkRegister.Size = new System.Drawing.Size(232, 19);
             this.lnkRegister.TabIndex = 8;
             this.lnkRegister.TabStop = true;
+            this.lnkRegister.Tag = "link secondary\t";
             this.lnkRegister.Text = "Hesabın mı yok? Hemen kayıt ol.";
             this.lnkRegister.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkRegister_LinkClicked);
             // 
-            // imgPassword
+            // button1
             // 
-            this.imgPassword.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgPassword.ImageStream")));
-            this.imgPassword.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgPassword.Images.SetKeyName(0, "hide-48.png");
-            this.imgPassword.Images.SetKeyName(1, "show-48.png");
+            this.button1.Location = new System.Drawing.Point(183, 19);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 9;
+            this.button1.Tag = "button secondary\t";
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 361);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.lnkRegister);
             this.Controls.Add(this.lnkForgotPassword);
             this.Controls.Add(this.btnLogin);
@@ -162,6 +188,7 @@
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.txtUsername);
             this.Controls.Add(this.lblUsername);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(300, 400);
             this.MinimumSize = new System.Drawing.Size(300, 400);
@@ -186,6 +213,7 @@
         private System.Windows.Forms.LinkLabel lnkForgotPassword;
         private System.Windows.Forms.LinkLabel lnkRegister;
         private System.Windows.Forms.ImageList imgPassword;
+        private System.Windows.Forms.Button button1;
     }
 }
 
