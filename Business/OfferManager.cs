@@ -439,10 +439,10 @@ namespace Teklif_Hazırlayıcı.Business
                             toplamAdetStr = reader["ToplamAdet"] != DBNull.Value ? reader["ToplamAdet"].ToString().Replace(".",",") : "0";
                             toplamAdet = Convert.ToDecimal(reader["ToplamAdet"].ToString());
 
-                            toplamKgStr = reader["ToplamKg"].ToString().Replace(".",",");
+                            toplamKgStr = reader["ToplamKg"] != DBNull.Value ? reader["ToplamKg"].ToString().Replace(".",",") : "0";
                             toplamKg = Convert.ToDecimal(reader["ToplamKg"].ToString());
 
-                            toplamTutarStr = reader["ToplamTutar"].ToString().Replace(".", ",");
+                            toplamTutarStr = reader["ToplamTutar"] != DBNull.Value ? reader["ToplamTutar"].ToString().Replace(".", ",") : "0";
                             toplamTutar = Convert.ToDecimal(reader["ToplamTutar"].ToString());
                         }
                     }

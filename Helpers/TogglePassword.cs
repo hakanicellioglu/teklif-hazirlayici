@@ -20,7 +20,6 @@ namespace Teklif_Hazırlayıcı.Helpers
             {
                 textBox.UseSystemPasswordChar = true;
                 button.ImageIndex = 1;
-
             }
         }
     }
