@@ -201,6 +201,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 string yuzey = chkYuzey.Text;
                 string yuzey_kodu = txtYuzeyKodu.Text;
 
+                if (kategori == "Aksesuar")
+                {
+                    boy_mm = 0;
+                    yuzey = null;
+                    yuzey_kodu = null;
+                }
+
+
                 if (itemManager.UpdateProductByKalemId(kalem_id.Value, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar))
                 {
                     offerManager.UpdateOfferById(teklif_id.Value);
