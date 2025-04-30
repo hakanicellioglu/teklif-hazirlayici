@@ -270,5 +270,38 @@ namespace Teklif_Hazırlayıcı.Business
                 return result > 0;
             }
         }
+
+        public bool UpdateProductByKalemId(int kalem_id, string yuzey, string yuzey_kodu, int adet, int boy, decimal kg, decimal birim_fiyat, decimal toplam_tutar)
+        {
+            string query = @"
+        UPDATE kalemler SET 
+            yuzey = @Yuzey,
+            yuzey_kodu = @YuzeyKodu,
+            adet = @Adet,
+            boy = @Boy,
+            kg = @Kg,
+            birim_fiyat = @BirimFiyat,
+            toplam_tutar = @ToplamTutar
+        WHERE kalem_id = @KalemId";
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Yuzey", string.IsNullOrEmpty(yuzey) ? DBNull.Value : (object)yuzey);
+                    cmd.Parameters.AddWithValue("@YuzeyKodu", string.IsNullOrEmpty(yuzey_kodu) ? DBNull.Value : (object)yuzey_kodu);
+                    cmd.Parameters.AddWithValue("@Adet", adet);
+                    cmd.Parameters.AddWithValue("@Boy", boy);
+                    cmd.Parameters.AddWithValue("@Kg", kg);
+                    cmd.Parameters.AddWithValue("@BirimFiyat", birim_fiyat);
+                    cmd.Parameters.AddWithValue("@ToplamTutar", toplam_tutar);
+                    cmd.Parameters.AddWithValue("@KalemId", kalem_id);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
     }
 }

@@ -444,10 +444,6 @@ namespace Teklif_Hazırlayıcı.Business
 
                             toplamTutarStr = reader["ToplamTutar"].ToString().Replace(".", ",");
                             toplamTutar = Convert.ToDecimal(reader["ToplamTutar"].ToString());
-
-                            //MessageBox.Show($"Toplam Adet: {ToplamAdet} | Toplam KG: {ToplamKg} | Toplam Tutar: {ToplamTutar}");
-                            //MessageBox.Show($"Toplam Adet(v2): {toplamAdet} | Toplam KG(v2): {toplamKg} | Toplam Tutar(v2): {toplamTutar}");
-
                         }
                     }
                 }

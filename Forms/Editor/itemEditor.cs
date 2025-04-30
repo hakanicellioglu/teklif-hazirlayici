@@ -155,13 +155,62 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         {
             OfferManager offerManager;
             InitializeOfferManager(out offerManager);
-            if (offerManager.UpdateOfferById(teklif_id.Value) == true)
+            if (offerManager == null) return;
+
+            if (editor_mode == "Add")
             {
-                chkUrunler.SelectedItem = -1;
-                chkYuzey.SelectedIndex = -1;
-                txtAdet.Text = "";
-                txtBoy.Text = "";
-                txtYuzeyKodu.Text = "";
+                if (offerManager.UpdateOfferById(teklif_id.Value) == true)
+                {
+                    chkUrunler.SelectedItem = -1;
+                    chkYuzey.SelectedIndex = -1;
+                    txtAdet.Text = "";
+                    txtBoy.Text = "";
+                    txtYuzeyKodu.Text = "";
+                }
+            }
+            else if (editor_mode == "Edit")
+            {
+                // ürün güncellemesi
+                if (kalem_id == null)
+                {
+                    MessageHelper.ShowError("Kalem ID eksik.");
+                    return;
+                }
+
+                if (!int.TryParse(txtAdet.Text, out int adet))
+                {
+                    MessageHelper.ShowError("Adet değeri geçersiz.");
+                    return;
+                }
+
+                string boyText = txtBoy.Text.Replace(",", ".");
+                if (!decimal.TryParse(boyText, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal boy_mm))
+                {
+                    boy_mm = 0;
+                }
+
+                decimal lmeTon = itemManager.GetLMEFromTeklif(teklif_id.Value);
+                decimal iscilikTon = itemManager.Getİscilik(teklif_id.Value);
+                decimal birimFiyat = (lmeTon / 1000m) + (iscilikTon / 1000m);
+
+                decimal gramaj = itemManager.GetGramaj((int)chkUrunler.SelectedValue);
+                decimal boy_m = boy_mm / 1000m;
+                decimal toplamKg = Math.Round(gramaj * boy_m * adet * 1.1m, 3);
+                decimal toplamTutar = Math.Round(toplamKg * birimFiyat, 2);
+
+                string yuzey = chkYuzey.Text;
+                string yuzey_kodu = txtYuzeyKodu.Text;
+
+                if (itemManager.UpdateProductByKalemId(kalem_id.Value, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar))
+                {
+                    offerManager.UpdateOfferById(teklif_id.Value);
+                    MessageHelper.ShowInfo("Kalem başarıyla güncellendi.");
+                    DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    MessageHelper.ShowError("Kalem güncellenemedi.");
+                }
             }
         }
 
@@ -188,13 +237,19 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 return;
             }
 
-            string boyText = txtBoy.Text.Replace(",", ".");
-            if (!decimal.TryParse(boyText, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal boy_mm))
+            decimal boy_mm = 0;
+
+            if (kategori == "Alüminyum")
             {
-                MessageHelper.ShowError("Boy değeri geçersiz.");
-                offerManager = null;
-                return;
+                string boyText = txtBoy.Text.Replace(",", ".");
+                if (!decimal.TryParse(boyText, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out boy_mm))
+                {
+                    MessageHelper.ShowError("Boy değeri geçersiz.");
+                    offerManager = null;
+                    return;
+                }
             }
+
 
             decimal lmeTon = itemManager.GetLMEFromTeklif(teklif_id.Value);
             if (lmeTon <= 0)

@@ -72,18 +72,21 @@
             this.button2 = new System.Windows.Forms.Button();
             this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label1.Location = new System.Drawing.Point(50, 50);
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 19);
+            this.label1.Size = new System.Drawing.Size(454, 30);
             this.label1.TabIndex = 0;
             this.label1.Text = "Teklif Editörü";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label2
             // 
@@ -438,7 +441,7 @@
             this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(484, 201);
+            this.dataGridView1.Size = new System.Drawing.Size(484, 193);
             this.dataGridView1.TabIndex = 34;
             this.dataGridView1.Visible = false;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
@@ -476,7 +479,7 @@
             // btnEdit
             // 
             this.btnEdit.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.btnEdit.Location = new System.Drawing.Point(373, 402);
+            this.btnEdit.Location = new System.Drawing.Point(375, 402);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(150, 30);
             this.btnEdit.TabIndex = 31;
@@ -487,13 +490,14 @@
             // 
             // button2
             // 
+            this.button2.Dock = System.Windows.Forms.DockStyle.Right;
             this.button2.FlatAppearance.BorderSize = 0;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.ImageKey = "pdf-48.png";
+            this.button2.ImageIndex = 0;
             this.button2.ImageList = this.imgButton;
-            this.button2.Location = new System.Drawing.Point(519, 14);
+            this.button2.Location = new System.Drawing.Point(454, 0);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(50, 50);
+            this.button2.Size = new System.Drawing.Size(30, 30);
             this.button2.TabIndex = 35;
             this.toolTip1.SetToolTip(this.button2, "PDF olarak kaydet");
             this.button2.UseVisualStyleBackColor = true;
@@ -504,18 +508,28 @@
             // 
             this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
             this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgButton.Images.SetKeyName(0, "pdf-48.png");
+            this.imgButton.Images.SetKeyName(0, "pdf-50.png");
             // 
             // toolTip1
             // 
             this.toolTip1.ToolTipTitle = "Teklif Hazırlayıcı";
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.button2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(50, 50);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(484, 30);
+            this.panel1.TabIndex = 36;
+            // 
             // offerEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 689);
-            this.Controls.Add(this.button2);
+            this.ClientSize = new System.Drawing.Size(584, 681);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.chkİskonto);
             this.Controls.Add(this.txtİscilik);
@@ -550,7 +564,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.chkFirmalar);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -560,6 +573,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -605,5 +619,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ImageList imgButton;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Panel panel1;
     }
 }
