@@ -606,13 +606,6 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
 
-
-
-        /*
-         * 
-         * PDF Çıktısı
-         * 
-         */
         #region Teklif Detay Getirme
         public DataTable GetOfferDetailById(int teklif_id)
         {
@@ -704,9 +697,5 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
         #endregion
-
-
-
-
     }
 }

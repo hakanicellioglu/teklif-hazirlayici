@@ -21,8 +21,7 @@ namespace Teklif_Hazırlayıcı.Business
         *
         */
         private readonly DataAccess.DbConnection _connection;
-
-
+                
         public AuthManager()
         {
             /*
@@ -34,6 +33,7 @@ namespace Teklif_Hazırlayıcı.Business
             _connection = new DataAccess.DbConnection();
 
         }
+        
         public DataTable GetAuth()
         {
             /*
@@ -52,6 +52,7 @@ namespace Teklif_Hazırlayıcı.Business
                 return dt;
             }
         }
+                
         public DataTable GetAuthWithCompanyName()
         {
             /*
@@ -74,7 +75,7 @@ namespace Teklif_Hazırlayıcı.Business
                 return dt;
             }
         }
-
+        
         public DataTable Search(string search)
         {
             /*
@@ -116,6 +117,87 @@ namespace Teklif_Hazırlayıcı.Business
 
             return dt.Rows.Count > 0 ? dt : null;
         }
+        
+        public List<Dictionary<string, string>> GetAuthById(int? authId)
+        {
+            /*
+             *
+             * Belirtilen `authId` değerine sahip yetkili kaydını getirir.
+             * Sorgu sonucunda elde edilen bilgiler bir sözlük (Dictionary) yapısında toplanır ve listeye eklenir.
+             * Her kayıt için firma_id, isim, soyisim, hitap, adres, telefon ve eposta alanları alınır.
+             * Sonuç olarak bu bilgileri içeren sözlük listesini döndürür.
+             *
+             */
+            List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+
+            string query = "SELECT firma_id, isim, soyisim, hitap, adres, telefon, eposta FROM yetkililer WHERE yetkili_id = @AuthId";
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@AuthId", authId ?? (object)DBNull.Value);
+
+                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Dictionary<string, string> row = new Dictionary<string, string>();
+                            row["firma_id"] = reader["firma_id"].ToString();
+                            row["isim"] = reader["isim"].ToString();
+                            row["soyisim"] = reader["soyisim"].ToString();
+                            row["hitap"] = reader["hitap"].ToString();
+                            row["adres"] = reader["adres"].ToString();
+                            row["telefon"] = reader["telefon"].ToString();
+                            row["eposta"] = reader["eposta"].ToString();
+                            result.Add(row);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        
+        public List<Dictionary<string, string>> GetAuthByCompanyId(long? companyId)
+        {
+            /*
+             *
+             * Belirtilen `companyId` değerine sahip firmanın yetkililerini getirir.
+             * "yetkililer" tablosundan yalnızca isim ve hitap alanları seçilir.
+             * Her kayıt bir sözlük olarak oluşturulup listeye eklenir.
+             * Hitap alanı null ise boş string atanır.
+             * Sonuç olarak bu bilgileri içeren sözlük listesi döndürülür.
+             *
+             */
+            List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+
+            string query = "SELECT yetkili_id, isim, hitap FROM yetkililer WHERE firma_id = @CompanyId";
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@CompanyId", companyId ?? (object)DBNull.Value);
+
+                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Dictionary<string, string> row = new Dictionary<string, string>();
+                            row["yetkili_id"] = reader["yetkili_id"].ToString();  // BU satır ekleniyor!
+                            row["isim"] = reader["isim"].ToString();
+                            row["hitap"] = reader["hitap"] != DBNull.Value ? reader["hitap"].ToString() : "";
+                            result.Add(row);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        #region CRUD İşlemleri
+
+        #region Ekleme
         public void AddAuth(int company_id, string name, string surname, string honorific, string address, string phone_number, string email)
         {
             /*
@@ -151,6 +233,9 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
+        #endregion
+
+        #region Güncelleme
         public void UpdateAuth(int? auth_id, int? company_id, string name, string surname, string honorific, string address, string phone_number, string email)
         {
             /*
@@ -237,6 +322,9 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
+        #endregion
+
+        #region Silme
         public void DeleteAuth(int auth_id)
         {
             /*
@@ -266,81 +354,8 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
-        public List<Dictionary<string, string>> GetAuthById(int? authId)
-        {
-            /*
-             *
-             * Belirtilen `authId` değerine sahip yetkili kaydını getirir.
-             * Sorgu sonucunda elde edilen bilgiler bir sözlük (Dictionary) yapısında toplanır ve listeye eklenir.
-             * Her kayıt için firma_id, isim, soyisim, hitap, adres, telefon ve eposta alanları alınır.
-             * Sonuç olarak bu bilgileri içeren sözlük listesini döndürür.
-             *
-             */
-            List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
-
-            string query = "SELECT firma_id, isim, soyisim, hitap, adres, telefon, eposta FROM yetkililer WHERE yetkili_id = @AuthId";
-            using (OleDbConnection conn = _connection.GetConnection())
-            {
-                conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@AuthId", authId ?? (object)DBNull.Value);
-
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Dictionary<string, string> row = new Dictionary<string, string>();
-                            row["firma_id"] = reader["firma_id"].ToString();
-                            row["isim"] = reader["isim"].ToString();
-                            row["soyisim"] = reader["soyisim"].ToString();
-                            row["hitap"] = reader["hitap"].ToString();
-                            row["adres"] = reader["adres"].ToString();
-                            row["telefon"] = reader["telefon"].ToString();
-                            row["eposta"] = reader["eposta"].ToString();
-                            result.Add(row);
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-        public List<Dictionary<string, string>> GetAuthByCompanyId(long? companyId)
-        {
-            /*
-             *
-             * Belirtilen `companyId` değerine sahip firmanın yetkililerini getirir.
-             * "yetkililer" tablosundan yalnızca isim ve hitap alanları seçilir.
-             * Her kayıt bir sözlük olarak oluşturulup listeye eklenir.
-             * Hitap alanı null ise boş string atanır.
-             * Sonuç olarak bu bilgileri içeren sözlük listesi döndürülür.
-             *
-             */
-            List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
-
-            string query = "SELECT yetkili_id, isim, hitap FROM yetkililer WHERE firma_id = @CompanyId";
-            using (OleDbConnection conn = _connection.GetConnection())
-            {
-                conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@CompanyId", companyId ?? (object)DBNull.Value);
-
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Dictionary<string, string> row = new Dictionary<string, string>();
-                            row["yetkili_id"] = reader["yetkili_id"].ToString();  // BU satır ekleniyor!
-                            row["isim"] = reader["isim"].ToString();
-                            row["hitap"] = reader["hitap"] != DBNull.Value ? reader["hitap"].ToString() : "";
-                            result.Add(row);
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
+        #endregion        
+        
+        #endregion
     }
 }

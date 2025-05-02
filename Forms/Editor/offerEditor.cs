@@ -484,10 +484,9 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
             else if (editor_mode == "Edit")
             {
-
                 OfferManager offerManager = new OfferManager();
 
-                int yetkiliId;
+                int yetkiliId, firmaId;
                 if (chkYetkililer.SelectedIndex >= 0 && chkYetkililer.SelectedValue != null)
                 {
                     yetkiliId = Convert.ToInt32(chkYetkililer.SelectedValue);
@@ -498,8 +497,18 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     return;
                 }
 
+                if (chkFirmalar.SelectedIndex >= 0 && chkFirmalar.SelectedValue != null)
+                {
+                    firmaId = Convert.ToInt32(chkFirmalar.SelectedValue);
+                }
+                else
+                {
+                    MessageHelper.ShowError("Lütfen bir firma seçiniz.");
+                    return;
+                }
 
-                offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtİscilik.Text, txtIskonto.Text, "20", chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
+
+                offerManager.UpdateOffer(offer_id, firmaId, yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtİscilik.Text, txtIskonto.Text, "20", chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
                 Close();
             }
         }
