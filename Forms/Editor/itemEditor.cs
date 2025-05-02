@@ -145,20 +145,17 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void button2_Click(object sender, EventArgs e)
         {
-            OfferManager offerManager = new OfferManager();
-            InitializeOfferManager(out offerManager);
-            offerManager.UpdateOfferById(teklif_id.Value);
-            DialogResult = DialogResult.OK;
+            button1_Click(sender, e);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            OfferManager offerManager;
-            InitializeOfferManager(out offerManager);
-            if (offerManager == null) return;
-
+            OfferManager offerManager = new OfferManager();
             if (editor_mode == "Add")
             {
+                InitializeOfferManager(out offerManager);
+                if (offerManager == null) return;
+
                 if (offerManager.UpdateOfferById(teklif_id.Value) == true)
                 {
                     chkUrunler.SelectedItem = -1;
@@ -200,6 +197,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
                 string yuzey = chkYuzey.Text;
                 string yuzey_kodu = txtYuzeyKodu.Text;
+
+                if (kategori == "Aksesuar")
+                {
+                    boy_mm = 0;
+                    yuzey = null;
+                    yuzey_kodu = null;
+                }
+
 
                 if (itemManager.UpdateProductByKalemId(kalem_id.Value, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar))
                 {

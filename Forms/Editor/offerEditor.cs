@@ -523,7 +523,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
                     Hide();
-                    itemEditor editor = new itemEditor(null, kalemId, "Edit");
+                    itemEditor editor = new itemEditor(offer_id, kalemId, "Edit");
                     editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
                     editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
                     editor.ShowDialog();
@@ -1049,5 +1049,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         {
             return value.ToString($"N{precision}", new CultureInfo("tr-TR"));
         }
+        
     }
 }

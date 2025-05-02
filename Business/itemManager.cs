@@ -29,58 +29,9 @@ namespace Teklif_Hazırlayıcı.Business
             _connection = new DataAccess.DbConnection();
 
         }
-
-        public string GetCategory(int? urun_id)
-        {
-            /*
-             *
-             * Belirtilen `urun_id` değerine sahip ürünün kategori bilgisini getirir.
-             * Eğer `urun_id` null ise veya kategori bilgisi bulunamazsa null döndürülür.
-             * Kategori bilgisi, "urunler" tablosundan çekilir ve string olarak döndürülür.
-             *
-             */
-            if (urun_id == null)
-                return null;
-
-            string query = "SELECT kategori FROM urunler WHERE urun_id = @ProductId";
-            using (OleDbConnection conn = _connection.GetConnection())
-            {
-                conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@ProductId", urun_id);
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return reader["kategori"]?.ToString();
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        public DataTable GetProduct()
-        {
-            /*
-             *
-             * Veritabanındaki "urunler" tablosundaki tüm ürün kayıtlarını getirir.
-             * OleDbCommand ile hazırlanan sorgu, OleDbDataAdapter kullanılarak bir DataTable nesnesine aktarılır.
-             * Doldurulan DataTable döndürülür.
-             *
-             */
-            string query = "SELECT * FROM urunler";
-            using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
-            {
-                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
-                return dt;
-            }
-        }
-
+        
+        #region CRUD İşlemleri
+        
         public void AddProduct(int? teklif_id, int urun_id, string yuzey, string yuzey_kodu, int adet, int boy, decimal kg, decimal birim_fiyat, decimal toplam_tutar)
         {
             /*
@@ -140,6 +91,105 @@ namespace Teklif_Hazırlayıcı.Business
                         MessageHelper.ShowError("Kalem eklenirken bir hata oluştu.");
                     }
                 }
+            }
+        }
+
+        public bool DeleteProductByKalemId(int? kalem_id)
+        {
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+
+                var deleteItemsCmd = new OleDbCommand("DELETE FROM kalemler WHERE kalem_id = @KalemId", conn);
+                deleteItemsCmd.Parameters.AddWithValue("@KalemId", kalem_id);
+
+                int result = deleteItemsCmd.ExecuteNonQuery();
+                return result > 0;
+            }
+        }
+        
+        public bool UpdateProductByKalemId(int kalem_id, string yuzey, string yuzey_kodu, int adet, int boy, decimal kg, decimal birim_fiyat, decimal toplam_tutar)
+        {
+            string query = @"
+        UPDATE kalemler SET 
+            yuzey = @Yuzey,
+            yuzey_kodu = @YuzeyKodu,
+            adet = @Adet,
+            boy = @Boy,
+            kg = @Kg,
+            birim_fiyat = @BirimFiyat,
+            toplam_tutar = @ToplamTutar
+        WHERE kalem_id = @KalemId";
+
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Yuzey", string.IsNullOrEmpty(yuzey) ? DBNull.Value : (object)yuzey);
+                    cmd.Parameters.AddWithValue("@YuzeyKodu", string.IsNullOrEmpty(yuzey_kodu) ? DBNull.Value : (object)yuzey_kodu);
+                    cmd.Parameters.AddWithValue("@Adet", adet);
+                    cmd.Parameters.AddWithValue("@Boy", boy);
+                    cmd.Parameters.AddWithValue("@Kg", kg);
+                    cmd.Parameters.AddWithValue("@BirimFiyat", birim_fiyat);
+                    cmd.Parameters.AddWithValue("@ToplamTutar", toplam_tutar);
+                    cmd.Parameters.AddWithValue("@KalemId", kalem_id);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+        
+        #endregion
+
+        public string GetCategory(int? urun_id)
+        {
+            /*
+             *
+             * Belirtilen `urun_id` değerine sahip ürünün kategori bilgisini getirir.
+             * Eğer `urun_id` null ise veya kategori bilgisi bulunamazsa null döndürülür.
+             * Kategori bilgisi, "urunler" tablosundan çekilir ve string olarak döndürülür.
+             *
+             */
+            if (urun_id == null)
+                return null;
+
+            string query = "SELECT kategori FROM urunler WHERE urun_id = @ProductId";
+            using (OleDbConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ProductId", urun_id);
+                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return reader["kategori"]?.ToString();
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public DataTable GetProduct()
+        {
+            /*
+             *
+             * Veritabanındaki "urunler" tablosundaki tüm ürün kayıtlarını getirir.
+             * OleDbCommand ile hazırlanan sorgu, OleDbDataAdapter kullanılarak bir DataTable nesnesine aktarılır.
+             * Doldurulan DataTable döndürülür.
+             *
+             */
+            string query = "SELECT * FROM urunler";
+            using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
+            {
+                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+                return dt;
             }
         }
 
@@ -257,51 +307,7 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
 
-        public bool DeleteProductByKalemId(int? kalem_id)
-        {
-            using (OleDbConnection conn = _connection.GetConnection())
-            {
-                conn.Open();
 
-                var deleteItemsCmd = new OleDbCommand("DELETE FROM kalemler WHERE kalem_id = @KalemId", conn);
-                deleteItemsCmd.Parameters.AddWithValue("@KalemId", kalem_id);
-
-                int result = deleteItemsCmd.ExecuteNonQuery();
-                return result > 0;
-            }
-        }
-
-        public bool UpdateProductByKalemId(int kalem_id, string yuzey, string yuzey_kodu, int adet, int boy, decimal kg, decimal birim_fiyat, decimal toplam_tutar)
-        {
-            string query = @"
-        UPDATE kalemler SET 
-            yuzey = @Yuzey,
-            yuzey_kodu = @YuzeyKodu,
-            adet = @Adet,
-            boy = @Boy,
-            kg = @Kg,
-            birim_fiyat = @BirimFiyat,
-            toplam_tutar = @ToplamTutar
-        WHERE kalem_id = @KalemId";
-
-            using (OleDbConnection conn = _connection.GetConnection())
-            {
-                conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Yuzey", string.IsNullOrEmpty(yuzey) ? DBNull.Value : (object)yuzey);
-                    cmd.Parameters.AddWithValue("@YuzeyKodu", string.IsNullOrEmpty(yuzey_kodu) ? DBNull.Value : (object)yuzey_kodu);
-                    cmd.Parameters.AddWithValue("@Adet", adet);
-                    cmd.Parameters.AddWithValue("@Boy", boy);
-                    cmd.Parameters.AddWithValue("@Kg", kg);
-                    cmd.Parameters.AddWithValue("@BirimFiyat", birim_fiyat);
-                    cmd.Parameters.AddWithValue("@ToplamTutar", toplam_tutar);
-                    cmd.Parameters.AddWithValue("@KalemId", kalem_id);
-
-                    return cmd.ExecuteNonQuery() > 0;
-                }
-            }
-        }
 
     }
 }

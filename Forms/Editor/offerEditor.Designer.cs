@@ -509,6 +509,7 @@
             this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
             this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
             this.imgButton.Images.SetKeyName(0, "pdf-50.png");
+            this.imgButton.Images.SetKeyName(1, "");
             // 
             // toolTip1
             // 
