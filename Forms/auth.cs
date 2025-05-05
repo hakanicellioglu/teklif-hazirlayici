@@ -46,11 +46,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void SetupGridColumnProperties()
         {
-            foreach (DataGridViewColumn col in dataGridView1.Columns)
-            {
-                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                col.Resizable = DataGridViewTriState.False;
-            }
+            DataGridHelper.SetupGridColumnProperties(dataGridView1);
         }
 
         private void SetupAuthGridColumns()
@@ -120,7 +116,11 @@ namespace Teklif_Hazırlayıcı.Forms
             {
                 var result = authManager.Search(txtSearch.Text);
 
+<<<<<<< HEAD
+                if (result != null && result.Rows.Count > 0)
+=======
                 if (result != null)
+>>>>>>> 72663746561d7c813290c7a9213299493627ebf4
                 {
                     dataGridView1.DataSource = result;
                     SetupGridColumnProperties();

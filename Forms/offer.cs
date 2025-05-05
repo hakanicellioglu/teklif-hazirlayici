@@ -15,9 +15,9 @@ using Teklif_Hazırlayıcı.Validation;
 
 namespace Teklif_Hazırlayıcı.Forms
 {
-    public partial class offer: Form
+    public partial class offer : Form
     {
-        OfferManager offerManager= new OfferManager();
+        OfferManager offerManager = new OfferManager();
         public offer()
         {
             InitializeComponent();
@@ -33,11 +33,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void SetupGridColumnProperties()
         {
-            foreach (DataGridViewColumn col in dataGridView1.Columns)
-            {
-                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                col.Resizable = DataGridViewTriState.False;
-            }
+            DataGridHelper.SetupGridColumnProperties(dataGridView1);
         }
 
         private void SetupOfferGridColumns()
@@ -75,9 +71,13 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddCompany_Click(object sender, EventArgs e)
         {
-            //offerEditor offerEditor = new offerEditor(null, "Add");
-            //offerEditor.ShowDialog();
-            //LoadCompany();
+            using (var editor = new offerEditor(null, "Add"))
+            {
+                Width = Screen.PrimaryScreen.WorkingArea.Width;
+                Height = Screen.PrimaryScreen.WorkingArea.Height;
+                editor.ShowDialog();
+            }
+            LoadOffer();
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -133,7 +133,7 @@ namespace Teklif_Hazırlayıcı.Forms
                     }
                     Parent.Parent.Show();
                     LoadOffer();
-                    
+
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)
                 {
