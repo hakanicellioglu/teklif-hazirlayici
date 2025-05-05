@@ -188,6 +188,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\offer.resx">
       <DependentUpon>offer.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\product.resx">
       <DependentUpon>product.cs</DependentUpon>

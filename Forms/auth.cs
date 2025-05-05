@@ -120,7 +120,7 @@ namespace Teklif_Hazırlayıcı.Forms
             {
                 var result = authManager.Search(txtSearch.Text);
 
-                if (result != null)
+                if (result != null && result.Rows.Count > 0)
                 {
                     dataGridView1.DataSource = result;
                     SetupGridColumnProperties();

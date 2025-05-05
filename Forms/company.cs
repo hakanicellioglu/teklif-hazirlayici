@@ -85,7 +85,7 @@ namespace Teklif_Hazırlayıcı.Forms
             {
                 var result = CompanyManager.Search(txtSearch.Text);
 
-                if (result != null)
+                if (result != null && result.Rows.Count > 0)
                 {
                     dataGridView1.DataSource = result;
                     SetupGridColumnProperties();
@@ -95,6 +95,7 @@ namespace Teklif_Hazırlayıcı.Forms
                 {
                     MessageHelper.ShowError("Aramaya uygun firma bulunamadı.");
                 }
+
             }
         }
 
