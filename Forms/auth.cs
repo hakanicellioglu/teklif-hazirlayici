@@ -113,20 +113,21 @@ namespace Teklif_Hazırlayıcı.Forms
 
             if (TextboxValidator.IsNullOrWhiteSpace(txtSearch) || txtSearch.Text == "Yetkili arayın...")
             {
-                MessageHelper.ShowError("Arama alanı boş bırakılamaz.");
+                MessageHelper.ShowError("Arama alanı boş bırakılamaz. Tüm yetkililer listeleniyor.");
                 LoadAuth();
             }
             else
             {
-                if (authManager.Search(txtSearch.Text) != null)
+                var result = authManager.Search(txtSearch.Text);
+
+                if (result != null)
                 {
-                    dataGridView1.DataSource = authManager.Search(txtSearch.Text);
+                    dataGridView1.DataSource = result;
                     SetupGridColumnProperties();
                     SetupAuthGridColumns();
                 }
                 else
                 {
-                    dataGridView1.DataSource = null;
                     MessageHelper.ShowError("Aramaya uygun yetkili bulunamadı.");
                 }
             }

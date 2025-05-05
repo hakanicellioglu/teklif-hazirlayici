@@ -76,25 +76,24 @@ namespace Teklif_Hazırlayıcı.Forms
 
             if (TextboxValidator.IsNullOrWhiteSpace(txtSearch) || txtSearch.Text == "Firma arayın...")
             {
-                MessageHelper.ShowError("Arama alanı boş bırakılamaz.");
+                MessageHelper.ShowError("Arama alanı boş bırakılamaz. Tüm firmalar yükleniyor.");
                 LoadCompany();
             }
             else
             {
-                if (CompanyManager.Search(txtSearch.Text) != null)
+                var result = CompanyManager.Search(txtSearch.Text);
+
+                if (result != null)
                 {
-                    dataGridView1.DataSource = CompanyManager.Search(txtSearch.Text);
+                    dataGridView1.DataSource = result;
                     SetupGridColumnProperties();
                     SetupCompanyGridColumns();
                 }
                 else
                 {
-                    dataGridView1.DataSource = null;
                     MessageHelper.ShowError("Aramaya uygun firma bulunamadı.");
                 }
             }
-
-
         }
 
         PlaceHolder placeHolder = new PlaceHolder("Firma arayın...");

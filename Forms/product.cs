@@ -92,18 +92,20 @@ namespace Teklif_Hazırlayıcı.Forms
             }
             else
             {
-                if (productManager.Search(txtSearch.Text) != null)
+                var result = productManager.Search(txtSearch.Text);
+
+                if (result != null)
                 {
-                    dataGridView1.DataSource = productManager.Search(txtSearch.Text);
+                    dataGridView1.DataSource = result;
                     SetupGridColumnProperties();
                     SetupProductGridColumns();
                 }
                 else
                 {
-                    dataGridView1.DataSource = null;
-                    MessageHelper.ShowError("Aramaya uygun yetkili bulunamadı.");
+                    MessageHelper.ShowError("Aramaya uygun ürün bulunamadı.");
                 }
             }
+
         }
 
         private void btnAddProduct_Click(object sender, EventArgs e)
