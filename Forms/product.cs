@@ -42,11 +42,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void SetupGridColumnProperties()
         {
-            foreach (DataGridViewColumn col in dataGridView1.Columns)
-            {
-                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                col.Resizable = DataGridViewTriState.False;
-            }
+            DataGridHelper.SetupGridColumnProperties(dataGridView1);
         }
 
         private void SetupProductGridColumns()

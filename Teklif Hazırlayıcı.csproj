@@ -137,6 +137,7 @@
     <Compile Include="Forms\product.Designer.cs">
       <DependentUpon>product.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DataGridHelper.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
     <Compile Include="Helpers\PlaceHolder.cs" />
     <Compile Include="Helpers\ThemeManager.cs" />
