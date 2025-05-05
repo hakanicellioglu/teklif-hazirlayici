@@ -65,7 +65,7 @@ namespace Teklif_Hazırlayıcı.Business
                             string query = "INSERT INTO kullanicilar(isim,soyisim,kullanici_adi, eposta, parola) VALUES (@Name, @Surname, @Username, @Email, @Password)";
                             using (OleDbCommand command = new OleDbCommand(query, _connection.GetConnection()))
                             {
-                                command.Parameters.AddWithValue("@Name", username);
+                                command.Parameters.AddWithValue("@Name", name);
                                 command.Parameters.AddWithValue("@Surname", surname);
                                 command.Parameters.AddWithValue("@Username", username);
                                 command.Parameters.AddWithValue("@Email", email);
