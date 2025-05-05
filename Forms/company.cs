@@ -64,8 +64,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddCompany_Click(object sender, EventArgs e)
         {
-            companyEditor companyEditor = new companyEditor(null, "Add");
-            companyEditor.ShowDialog();
+            using (var companyEditor = new companyEditor(null, "Add"))
+            {
+                companyEditor.ShowDialog();
+            }
             LoadCompany();
         }
 
@@ -76,25 +78,24 @@ namespace Teklif_Hazırlayıcı.Forms
 
             if (TextboxValidator.IsNullOrWhiteSpace(txtSearch) || txtSearch.Text == "Firma arayın...")
             {
-                MessageHelper.ShowError("Arama alanı boş bırakılamaz.");
+                MessageHelper.ShowError("Arama alanı boş bırakılamaz. Tüm firmalar yükleniyor.");
                 LoadCompany();
             }
             else
             {
-                if (CompanyManager.Search(txtSearch.Text) != null)
+                var result = CompanyManager.Search(txtSearch.Text);
+
+                if (result != null)
                 {
-                    dataGridView1.DataSource = CompanyManager.Search(txtSearch.Text);
+                    dataGridView1.DataSource = result;
                     SetupGridColumnProperties();
                     SetupCompanyGridColumns();
                 }
                 else
                 {
-                    dataGridView1.DataSource = null;
                     MessageHelper.ShowError("Aramaya uygun firma bulunamadı.");
                 }
             }
-
-
         }
 
         PlaceHolder placeHolder = new PlaceHolder("Firma arayın...");
@@ -116,8 +117,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    companyEditor editor = new companyEditor(value, "Edit");
-                    editor.ShowDialog();
+                    using (var editor = new companyEditor(value, "Edit"))
+                    {
+                        editor.ShowDialog();
+                    }
                     LoadCompany();
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)

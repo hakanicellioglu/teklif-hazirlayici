@@ -209,13 +209,17 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void DeleteCompany(int id)
         {
-            /*
-             *
-             * Belirtilen `id` değerine sahip firma kaydını "firmalar" tablosundan siler.
-             * Silme işlemi başarıyla gerçekleşirse kullanıcıya başarı mesajı gösterilir.
-             * Herhangi bir hata durumunda kullanıcıya hata mesajı verilir.
-             *
-             */
+            // Önce firmaya bağlı yetkili var mı kontrol edelim
+            AuthManager authManager = new AuthManager();
+            var authList = authManager.GetAuthByCompanyId(id);
+
+            if (authList != null && authList.Count > 0)
+            {
+                MessageHelper.ShowWarning("Bu firmaya bağlı yetkililer var. Önce bağlı yetkilileri silmelisiniz.");
+                return;
+            }
+
+            // Daha sonra sil
             string query = "DELETE FROM firmalar WHERE firma_id = @CompanyId";
             using (OleDbConnection conn = _connection.GetConnection())
             {
@@ -226,16 +230,13 @@ namespace Teklif_Hazırlayıcı.Business
                     int result = cmd.ExecuteNonQuery();
 
                     if (result > 0)
-                    {
-                        MessageHelper.ShowSuccess("Firma başarıyla silindi");
-                    }
+                        MessageHelper.ShowSuccess("Firma başarıyla silindi.");
                     else
-                    {
                         MessageHelper.ShowError("Firma silerken hata oluştu.");
-                    }
                 }
             }
         }
+
         public bool CompanyExistsName(string parameter)
         {
             /*

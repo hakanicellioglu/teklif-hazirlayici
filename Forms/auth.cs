@@ -113,20 +113,21 @@ namespace Teklif_Hazırlayıcı.Forms
 
             if (TextboxValidator.IsNullOrWhiteSpace(txtSearch) || txtSearch.Text == "Yetkili arayın...")
             {
-                MessageHelper.ShowError("Arama alanı boş bırakılamaz.");
+                MessageHelper.ShowError("Arama alanı boş bırakılamaz. Tüm yetkililer listeleniyor.");
                 LoadAuth();
             }
             else
             {
-                if (authManager.Search(txtSearch.Text) != null)
+                var result = authManager.Search(txtSearch.Text);
+
+                if (result != null)
                 {
-                    dataGridView1.DataSource = authManager.Search(txtSearch.Text);
+                    dataGridView1.DataSource = result;
                     SetupGridColumnProperties();
                     SetupAuthGridColumns();
                 }
                 else
                 {
-                    dataGridView1.DataSource = null;
                     MessageHelper.ShowError("Aramaya uygun yetkili bulunamadı.");
                 }
             }
@@ -134,8 +135,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddAuth_Click(object sender, EventArgs e)
         {
-            authEditor authEditor = new authEditor(null, "Add");
-            authEditor.ShowDialog();
+            using (var authEditor = new authEditor(null, "Add"))
+            {
+                authEditor.ShowDialog();
+            }
             LoadAuth();
         }
 
@@ -148,8 +151,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    authEditor editor = new authEditor(value, "Edit");
-                    editor.ShowDialog();
+                    using (var editor = new authEditor(value, "Edit"))
+                    {
+                        editor.ShowDialog();
+                    }
                     LoadAuth();
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)

@@ -114,7 +114,8 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
 
-            return dt.Rows.Count > 0 ? dt : null;
+            return dt;
+
         }
         public void AddAuth(int company_id, string name, string surname, string honorific, string address, string phone_number, string email)
         {
@@ -239,33 +240,38 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void DeleteAuth(int auth_id)
         {
-            /*
-             *
-             * Belirtilen `auth_id` değerine sahip yetkili kaydını veritabanından siler.
-             * Silme işlemi başarılı olursa kullanıcıya bilgilendirme mesajı gösterilir.
-             * Herhangi bir sorun oluşursa hata mesajı verilir.
-             *
-             */
-            string query = "DELETE FROM yetkililer WHERE yetkili_id = @AuthId";
+            // Tekliflere bağlı mı kontrol et (örnek: teklifler tablosunda yetkili_id kolonu varsa)
+            string checkQuery = "SELECT COUNT(*) FROM teklifler WHERE yetkili_id = @AuthId";
             using (OleDbConnection conn = _connection.GetConnection())
             {
                 conn.Open();
+                using (OleDbCommand checkCmd = new OleDbCommand(checkQuery, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@AuthId", auth_id);
+                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+                    if (count > 0)
+                    {
+                        MessageHelper.ShowWarning("Bu yetkiliye ait teklifler mevcut. Önce teklifleri silmelisiniz.");
+                        return;
+                    }
+                }
+
+                // Silme işlemi
+                string query = "DELETE FROM yetkililer WHERE yetkili_id = @AuthId";
                 using (OleDbCommand cmd = new OleDbCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@AuthId", auth_id);
                     int result = cmd.ExecuteNonQuery();
 
                     if (result > 0)
-                    {
-                        MessageHelper.ShowSuccess("Yetkili başarıyla silindi");
-                    }
+                        MessageHelper.ShowSuccess("Yetkili başarıyla silindi.");
                     else
-                    {
-                        MessageHelper.ShowError("Yetkili silerken hata oluştu.");
-                    }
+                        MessageHelper.ShowError("Yetkili silinirken hata oluştu.");
                 }
             }
         }
+
         public List<Dictionary<string, string>> GetAuthById(int? authId)
         {
             /*

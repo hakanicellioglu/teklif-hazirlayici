@@ -21,12 +21,20 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             panel1.Visible = false;
             btnHome.Visible = true;
-            pnlForm.Controls.Clear();
+
+            if (pnlForm.Controls.Count > 0)
+            {
+                var oldForm = pnlForm.Controls[0] as Form;
+                oldForm?.Dispose();
+                pnlForm.Controls.Clear();
+            }
+
             formToLoad.TopLevel = false;
             formToLoad.Dock = DockStyle.Fill;
             pnlForm.Controls.Add(formToLoad);
             formToLoad.Show();
         }
+
 
         private void btnHome_Click(object sender, EventArgs e)
         {

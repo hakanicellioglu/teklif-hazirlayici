@@ -91,16 +91,17 @@ namespace Teklif_Hazırlayıcı.Forms
             }
             else
             {
-                if (offerManager.Search(txtSearch.Text) != null)
+                var result = offerManager.Search(txtSearch.Text);
+
+                if (result != null)
                 {
-                    dataGridView1.DataSource = offerManager.Search(txtSearch.Text);
+                    dataGridView1.DataSource = result;
                     SetupGridColumnProperties();
                     SetupOfferGridColumns();
                 }
                 else
                 {
-                    dataGridView1.DataSource = null;
-                    MessageHelper.ShowError("Aramaya uygun yetkili bulunamadı.");
+                    MessageHelper.ShowError("Aramaya uygun teklif bulunamadı.");
                 }
             }
         }
@@ -124,10 +125,12 @@ namespace Teklif_Hazırlayıcı.Forms
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
                     Parent.Parent.Hide();
-                    offerEditor editor = new offerEditor(teklifId, "Edit");
-                    editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
-                    editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
-                    editor.ShowDialog();
+                    using (var editor = new offerEditor(teklifId, "Edit"))
+                    {
+                        editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
+                        editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
+                        editor.ShowDialog();
+                    }
                     Parent.Parent.Show();
                     LoadOffer();
                     
@@ -154,8 +157,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddOffer_Click(object sender, EventArgs e)
         {
-            offerEditor offerEditor = new offerEditor(null, "Add");
-            offerEditor.ShowDialog();
+            using (var offerEditor = new offerEditor(null, "Add"))
+            {
+                offerEditor.ShowDialog();
+            }
             LoadOffer();
 
         }
