@@ -135,8 +135,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddAuth_Click(object sender, EventArgs e)
         {
-            authEditor authEditor = new authEditor(null, "Add");
-            authEditor.ShowDialog();
+            using (var authEditor = new authEditor(null, "Add"))
+            {
+                authEditor.ShowDialog();
+            }
             LoadAuth();
         }
 
@@ -149,8 +151,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    authEditor editor = new authEditor(value, "Edit");
-                    editor.ShowDialog();
+                    using (var editor = new authEditor(value, "Edit"))
+                    {
+                        editor.ShowDialog();
+                    }
                     LoadAuth();
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)

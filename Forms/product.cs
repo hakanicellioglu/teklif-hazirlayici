@@ -110,8 +110,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
-            productEditor productEditor = new productEditor(null, "Add");
-            productEditor.ShowDialog();
+            using (var productEditor = new productEditor(null, "Add"))
+            {
+                productEditor.ShowDialog();
+            }
             LoadProduct();
         }
 
@@ -124,8 +126,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    productEditor editor = new productEditor(value, "Edit");
-                    editor.ShowDialog();
+                    using (var editor = new productEditor(value, "Edit"))
+                    {
+                        editor.ShowDialog();
+                    }
                     LoadProduct();
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)

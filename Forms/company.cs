@@ -64,8 +64,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddCompany_Click(object sender, EventArgs e)
         {
-            companyEditor companyEditor = new companyEditor(null, "Add");
-            companyEditor.ShowDialog();
+            using (var companyEditor = new companyEditor(null, "Add"))
+            {
+                companyEditor.ShowDialog();
+            }
             LoadCompany();
         }
 
@@ -115,8 +117,10 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    companyEditor editor = new companyEditor(value, "Edit");
-                    editor.ShowDialog();
+                    using (var editor = new companyEditor(value, "Edit"))
+                    {
+                        editor.ShowDialog();
+                    }
                     LoadCompany();
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)
