@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.DataAccess;
 using Teklif_Hazırlayıcı.Helpers;
+using System.Security.Cryptography;
+
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -32,6 +34,20 @@ namespace Teklif_Hazırlayıcı.Business
              */
             _connection = new DataAccess.DbConnection();
         }
+
+
+        private string ComputeSha256Hash(string rawData)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+                StringBuilder builder = new StringBuilder();
+                foreach (var b in bytes)
+                    builder.Append(b.ToString("x2")); // hex format
+                return builder.ToString();
+            }
+        }
+
 
         public bool AddUser(string name, string surname, string username, string email, string password)
         {
@@ -62,14 +78,19 @@ namespace Teklif_Hazırlayıcı.Business
                     {
                         using (OleDbConnection conn = _connection.GetConnection())
                         {
+
+                            conn.Open();
+
                             string query = "INSERT INTO kullanicilar(isim,soyisim,kullanici_adi, eposta, parola) VALUES (@Name, @Surname, @Username, @Email, @Password)";
-                            using (OleDbCommand command = new OleDbCommand(query, _connection.GetConnection()))
+                            using (OleDbCommand command = new OleDbCommand(query, conn))
                             {
+                                string hashedPassword = ComputeSha256Hash(password);
                                 command.Parameters.AddWithValue("@Name", name);
                                 command.Parameters.AddWithValue("@Surname", surname);
                                 command.Parameters.AddWithValue("@Username", username);
                                 command.Parameters.AddWithValue("@Email", email);
-                                command.Parameters.AddWithValue("@Password", password);
+                                command.Parameters.AddWithValue("@Password", hashedPassword);
+
                                 int result = command.ExecuteNonQuery();
                                 if (result > 0)
                                 {
@@ -107,7 +128,7 @@ namespace Teklif_Hazırlayıcı.Business
             {
                 conn.Open();
                 string query = "SELECT COUNT(*) FROM kullanicilar WHERE kullanici_adi = @Parameter";
-                using (OleDbCommand command = new OleDbCommand(query, _connection.GetConnection()))
+                using (OleDbCommand command = new OleDbCommand(query, conn))
                 {
                     command.Parameters.AddWithValue("@Parameter", parameter);
                     int count = (int)command.ExecuteScalar();
@@ -118,6 +139,7 @@ namespace Teklif_Hazırlayıcı.Business
 
         public bool UserExists(string username, string password)
         {
+
             /*
              *
              * Verilen kullanıcı adı ve parola bilgilerine sahip bir kullanıcının olup olmadığını kontrol eder.
@@ -132,8 +154,12 @@ namespace Teklif_Hazırlayıcı.Business
                 string query = "SELECT COUNT(*) AS KayıtSayisi FROM kullanicilar WHERE kullanici_adi = @Username AND parola = @Password";
                 using (OleDbCommand command = new OleDbCommand(query, conn))
                 {
+
+                    string hashedPassword = ComputeSha256Hash(password);
+
+
                     command.Parameters.AddWithValue("@Username", username);
-                    command.Parameters.AddWithValue("@Password", password);
+                    command.Parameters.AddWithValue("@Password", hashedPassword);
 
 
 
