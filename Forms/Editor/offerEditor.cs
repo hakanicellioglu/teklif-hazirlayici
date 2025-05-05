@@ -615,6 +615,20 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
         }
 
+        private void LogError(string message)
+        {
+            try
+            {
+                string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log.txt");
+                File.AppendAllText(logPath, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}{Environment.NewLine}");
+            }
+            catch
+            {
+                // loglama başarısızsa sessiz geç
+            }
+        }
+
+
         private void ExportOfferToPdf()
         {
             try
@@ -689,8 +703,26 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
                 if (saveFile.ShowDialog() != DialogResult.OK)
                     return;
-                string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
-                BaseFont baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                //string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+
+
+                BaseFont baseFont;
+                try
+                {
+                    string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+                    if (!File.Exists(fontPath))
+                        throw new FileNotFoundException("Arial font bulunamadı.", fontPath);
+
+                    baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                }
+                catch (Exception ex)
+                {
+                    LogError("Yazı tipi yükleme hatası: " + ex.Message);
+                    baseFont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED); // fallback
+                }
+
+
+                //BaseFont baseFont = BaseFont.CreateFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 var normalFont = new iTextSharp.text.Font(baseFont, 5);
                 var titleFont = new iTextSharp.text.Font(baseFont, 9, iTextSharp.text.Font.BOLD);
                 var smallFont = new iTextSharp.text.Font(baseFont, 5);
