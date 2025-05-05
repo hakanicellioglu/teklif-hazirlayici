@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Teklif_Hazırlayıcı.Helpers;
+using System.Windows.Forms;
+using System.IO;
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -107,39 +109,53 @@ namespace Teklif_Hazırlayıcı.Business
                 return result > 0;
             }
         }
-        
+
         public bool UpdateProductByKalemId(int kalem_id, string yuzey, string yuzey_kodu, int adet, int boy, decimal kg, decimal birim_fiyat, decimal toplam_tutar)
         {
             string query = @"
-        UPDATE kalemler SET 
-            yuzey = @Yuzey,
-            yuzey_kodu = @YuzeyKodu,
-            adet = @Adet,
-            boy = @Boy,
-            kg = @Kg,
-            birim_fiyat = @BirimFiyat,
-            toplam_tutar = @ToplamTutar
-        WHERE kalem_id = @KalemId";
+UPDATE kalemler SET 
+    yuzey = @Yuzey,
+    yuzey_kodu = @YuzeyKodu,
+    adet = @Adet,
+    boy = @Boy,
+    kg = @Kg,
+    birim_fiyat = @BirimFiyat,
+    toplam_tutar = @ToplamTutar
+WHERE kalem_id = @KalemId";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            try
             {
-                conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (OleDbConnection conn = _connection.GetConnection())
                 {
-                    cmd.Parameters.AddWithValue("@Yuzey", string.IsNullOrEmpty(yuzey) ? DBNull.Value : (object)yuzey);
-                    cmd.Parameters.AddWithValue("@YuzeyKodu", string.IsNullOrEmpty(yuzey_kodu) ? DBNull.Value : (object)yuzey_kodu);
-                    cmd.Parameters.AddWithValue("@Adet", adet);
-                    cmd.Parameters.AddWithValue("@Boy", boy);
-                    cmd.Parameters.AddWithValue("@Kg", kg);
-                    cmd.Parameters.AddWithValue("@BirimFiyat", birim_fiyat);
-                    cmd.Parameters.AddWithValue("@ToplamTutar", toplam_tutar);
-                    cmd.Parameters.AddWithValue("@KalemId", kalem_id);
+                    conn.Open();
+                    using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Yuzey", string.IsNullOrEmpty(yuzey) ? DBNull.Value : (object)yuzey);
+                        cmd.Parameters.AddWithValue("@YuzeyKodu", string.IsNullOrEmpty(yuzey_kodu) ? DBNull.Value : (object)yuzey_kodu);
+                        cmd.Parameters.AddWithValue("@Adet", adet);
+                        cmd.Parameters.AddWithValue("@Boy", boy);
+                        cmd.Parameters.AddWithValue("@Kg", kg);
+                        cmd.Parameters.AddWithValue("@BirimFiyat", birim_fiyat);
+                        cmd.Parameters.AddWithValue("@ToplamTutar", toplam_tutar);
+                        cmd.Parameters.AddWithValue("@KalemId", kalem_id);
 
-                    return cmd.ExecuteNonQuery() > 0;
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                // Log dosyasına yaz
+                File.AppendAllText("log.txt", $"[{DateTime.Now}] UpdateProductByKalemId ERROR: {ex.Message}{Environment.NewLine}");
+
+                // Kullanıcıya bilgi vermek için (isteğe bağlı): MessageBox.Show kullanılabilir
+                MessageBox.Show("Ürün güncellenirken bir hata oluştu. Detaylar log dosyasına kaydedildi.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return false;
+            }
         }
-        
+
+
         #endregion
 
         public string GetCategory(int? urun_id)
