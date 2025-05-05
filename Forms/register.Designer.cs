@@ -206,6 +206,7 @@
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";
+            this.Load += new System.EventHandler(this.register_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
