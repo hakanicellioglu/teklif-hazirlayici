@@ -76,7 +76,7 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
 
-            return dt.Rows.Count > 0 ? dt : null;
+            return dt;
         }
         public void AddProduct(string mold_number, string product, decimal weight, string category)
         {

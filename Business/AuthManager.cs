@@ -114,7 +114,8 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
 
-            return dt.Rows.Count > 0 ? dt : null;
+            return dt;
+
         }
         public void AddAuth(int company_id, string name, string surname, string honorific, string address, string phone_number, string email)
         {
