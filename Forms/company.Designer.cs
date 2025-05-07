@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(company));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -72,7 +71,6 @@
             this.btnClear.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnClear.FlatAppearance.BorderSize = 0;
             this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClear.ImageIndex = 0;
             this.btnClear.ImageList = this.imgButton;
             this.btnClear.Location = new System.Drawing.Point(550, 0);
             this.btnClear.Name = "btnClear";
@@ -84,18 +82,15 @@
             // 
             // imgButton
             // 
-            this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
+            this.imgButton.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imgButton.ImageSize = new System.Drawing.Size(16, 16);
             this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgButton.Images.SetKeyName(0, "clear-48.png");
-            this.imgButton.Images.SetKeyName(1, "search-48.png");
-            this.imgButton.Images.SetKeyName(2, "add-48.png");
             // 
             // btnSearch
             // 
             this.btnSearch.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnSearch.FlatAppearance.BorderSize = 0;
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearch.ImageIndex = 1;
             this.btnSearch.ImageList = this.imgButton;
             this.btnSearch.Location = new System.Drawing.Point(600, 0);
             this.btnSearch.Name = "btnSearch";
@@ -161,7 +156,6 @@
             this.btnAddCompany.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnAddCompany.FlatAppearance.BorderSize = 0;
             this.btnAddCompany.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAddCompany.ImageIndex = 2;
             this.btnAddCompany.ImageList = this.imgButton;
             this.btnAddCompany.Location = new System.Drawing.Point(650, 0);
             this.btnAddCompany.Name = "btnAddCompany";
@@ -228,7 +222,6 @@
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(800, 450);
             this.Name = "company";
             this.Padding = new System.Windows.Forms.Padding(50, 0, 50, 50);

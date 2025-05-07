@@ -86,9 +86,6 @@
             // 
             this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
             this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgButton.Images.SetKeyName(0, "search-48.png");
-            this.imgButton.Images.SetKeyName(1, "clear-48.png");
-            this.imgButton.Images.SetKeyName(2, "add-48.png");
             // 
             // btnSearch
             // 

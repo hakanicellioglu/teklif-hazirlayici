@@ -159,9 +159,11 @@
     <Compile Include="Validation\TextboxValidator.cs" />
     <EmbeddedResource Include="Forms\auth.resx">
       <DependentUpon>auth.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\company.resx">
       <DependentUpon>company.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Custom Item\CustomMessageBox.resx">
       <DependentUpon>CustomMessageBox.cs</DependentUpon>
@@ -193,6 +195,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\product.resx">
       <DependentUpon>product.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
