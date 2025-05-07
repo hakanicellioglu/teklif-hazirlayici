@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(auth));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(auth));
             this.label1 = new System.Windows.Forms.Label();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnClear = new System.Windows.Forms.Button();
@@ -85,6 +85,7 @@
             this.btnClear.FlatAppearance.BorderSize = 0;
             this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClear.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.btnClear.ImageKey = "clear-48.png";
             this.btnClear.ImageList = this.imgButton;
             this.btnClear.Location = new System.Drawing.Point(550, 0);
             this.btnClear.Name = "btnClear";
@@ -96,9 +97,11 @@
             // 
             // imgButton
             // 
-            this.imgButton.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imgButton.ImageSize = new System.Drawing.Size(16, 16);
+            this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
             this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgButton.Images.SetKeyName(0, "clear-48.png");
+            this.imgButton.Images.SetKeyName(1, "search-48.png");
+            this.imgButton.Images.SetKeyName(2, "add-48.png");
             // 
             // btnSearch
             // 
@@ -106,6 +109,7 @@
             this.btnSearch.FlatAppearance.BorderSize = 0;
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSearch.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.btnSearch.ImageKey = "search-48.png";
             this.btnSearch.ImageList = this.imgButton;
             this.btnSearch.Location = new System.Drawing.Point(600, 0);
             this.btnSearch.Name = "btnSearch";
@@ -121,6 +125,7 @@
             this.btnAddAuth.FlatAppearance.BorderSize = 0;
             this.btnAddAuth.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddAuth.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.btnAddAuth.ImageKey = "add-48.png";
             this.btnAddAuth.ImageList = this.imgButton;
             this.btnAddAuth.Location = new System.Drawing.Point(650, 0);
             this.btnAddAuth.Name = "btnAddAuth";

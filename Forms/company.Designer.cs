@@ -33,9 +33,9 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(company));
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnClear = new System.Windows.Forms.Button();
-            this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.btnSearch = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.btnAddCompany = new System.Windows.Forms.Button();
@@ -44,6 +44,7 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.imgButton = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -71,6 +72,7 @@
             this.btnClear.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnClear.FlatAppearance.BorderSize = 0;
             this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClear.ImageIndex = 0;
             this.btnClear.ImageList = this.imgButton;
             this.btnClear.Location = new System.Drawing.Point(550, 0);
             this.btnClear.Name = "btnClear";
@@ -80,17 +82,12 @@
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // imgButton
-            // 
-            this.imgButton.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imgButton.ImageSize = new System.Drawing.Size(16, 16);
-            this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
-            // 
             // btnSearch
             // 
             this.btnSearch.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnSearch.FlatAppearance.BorderSize = 0;
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSearch.ImageIndex = 1;
             this.btnSearch.ImageList = this.imgButton;
             this.btnSearch.Location = new System.Drawing.Point(600, 0);
             this.btnSearch.Name = "btnSearch";
@@ -156,6 +153,7 @@
             this.btnAddCompany.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnAddCompany.FlatAppearance.BorderSize = 0;
             this.btnAddCompany.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddCompany.ImageIndex = 2;
             this.btnAddCompany.ImageList = this.imgButton;
             this.btnAddCompany.Location = new System.Drawing.Point(650, 0);
             this.btnAddCompany.Name = "btnAddCompany";
@@ -214,6 +212,14 @@
             // 
             this.toolTip1.ToolTipTitle = "Teklif Hazırlayıcı";
             // 
+            // imgButton
+            // 
+            this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
+            this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgButton.Images.SetKeyName(0, "clear-48.png");
+            this.imgButton.Images.SetKeyName(1, "search-48.png");
+            this.imgButton.Images.SetKeyName(2, "add-48.png");
+            // 
             // company
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -243,11 +249,11 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btnAddCompany;
-        private System.Windows.Forms.ImageList imgButton;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.ImageList imgButton;
     }
 }

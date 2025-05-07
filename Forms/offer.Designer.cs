@@ -29,14 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(offer));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(offer));
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnClear = new System.Windows.Forms.Button();
-            this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnAddOffer = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -45,6 +44,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.imgButton = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -81,11 +81,6 @@
             this.toolTip1.SetToolTip(this.btnClear, "Temizle");
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
-            // imgButton
-            // 
-            this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
-            this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // btnSearch
             // 
@@ -218,6 +213,14 @@
             this.label1.Text = "Teklifler";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // imgButton
+            // 
+            this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
+            this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgButton.Images.SetKeyName(0, "clear-48.png");
+            this.imgButton.Images.SetKeyName(1, "search-48.png");
+            this.imgButton.Images.SetKeyName(2, "add-48.png");
+            // 
             // offer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -246,10 +249,10 @@
         private System.Windows.Forms.Button btnAddOffer;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.ImageList imgButton;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.ImageList imgButton;
     }
 }
