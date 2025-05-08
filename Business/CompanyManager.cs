@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -21,7 +22,7 @@ namespace Teklif_Hazırlayıcı.Business
         * Uygulama boyunca yalnızca okunabilir (readonly) olarak tanımlanmıştır.
         *
         */
-        private readonly DataAccess.DbConnection _connection;
+        private readonly DataAccess.SqlDbConnection _connection;
 
         public CompanyManager()
         {
@@ -31,7 +32,7 @@ namespace Teklif_Hazırlayıcı.Business
              * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
              *
              */
-            _connection = new DataAccess.DbConnection();
+            _connection = new DataAccess.SqlDbConnection();
         }
 
         public DataTable GetCompany()
@@ -44,9 +45,9 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = "SELECT * FROM firmalar";
-            using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
+            using (SqlCommand cmd = new SqlCommand(query, _connection.GetConnection()))
             {
-                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 return dt;
@@ -65,10 +66,10 @@ namespace Teklif_Hazırlayıcı.Business
             string query = "SELECT * FROM firmalar WHERE adi LIKE @ad";
             DataTable dt = new DataTable();
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
+                using (SqlCommand cmd = new SqlCommand(query, _connection.GetConnection()))
                 {
                     // Parametreleri ekle
                     cmd.Parameters.Clear();
@@ -77,7 +78,7 @@ namespace Teklif_Hazırlayıcı.Business
                     //cmd.Parameters.AddWithValue("@telefon", $"%{search}%");
                     //cmd.Parameters.AddWithValue("@eposta", $"%{search}%");
 
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(cmd))
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                     {
                         adapter.Fill(dt);
                     }
@@ -105,10 +106,10 @@ namespace Teklif_Hazırlayıcı.Business
             if (!CompanyExistsName(name))
             {
                 string query = "INSERT INTO firmalar(adi, adres, telefon, eposta) VALUES(@Name, @Address, @PhoneNumber, @Email)";
-                using (OleDbConnection conn = _connection.GetConnection())
+                using (SqlConnection conn = _connection.GetConnection())
                 {
                     conn.Open();
-                    using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@Name", name);
                         cmd.Parameters.AddWithValue("@Address", address);
@@ -148,17 +149,17 @@ namespace Teklif_Hazırlayıcı.Business
                 return;
             }
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
 
                 // Mevcut veriyi çekiyoruz
                 string selectQuery = "SELECT adi, adres, telefon, eposta FROM firmalar WHERE firma_id = @CompanyId";
-                using (OleDbCommand selectCmd = new OleDbCommand(selectQuery, conn))
+                using (SqlCommand selectCmd = new SqlCommand(selectQuery, conn))
                 {
                     selectCmd.Parameters.AddWithValue("@CompanyId", id);
 
-                    using (OleDbDataReader reader = selectCmd.ExecuteReader())
+                    using (SqlDataReader reader = selectCmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -187,7 +188,7 @@ namespace Teklif_Hazırlayıcı.Business
 
                 // Güncelleme işlemi
                 string updateQuery = "UPDATE firmalar SET adi = @Name, adres = @Address, telefon = @PhoneNumber, eposta = @Email WHERE firma_id = @CompanyId";
-                using (OleDbCommand updateCmd = new OleDbCommand(updateQuery, conn))
+                using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
                 {
                     updateCmd.Parameters.AddWithValue("@Name", name);
                     updateCmd.Parameters.AddWithValue("@Address", address);
@@ -221,10 +222,10 @@ namespace Teklif_Hazırlayıcı.Business
 
             // Daha sonra sil
             string query = "DELETE FROM firmalar WHERE firma_id = @CompanyId";
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@CompanyId", id);
                     int result = cmd.ExecuteNonQuery();
@@ -247,13 +248,13 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = "SELECT adi FROM firmalar WHERE adi = @Name";
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Name", parameter);
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -281,14 +282,14 @@ namespace Teklif_Hazırlayıcı.Business
             List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
             string query = "SELECT adi,adres,telefon,eposta FROM firmalar WHERE firma_id = @CompanyId";
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@CompanyId", companyId ?? (object)DBNull.Value);
 
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {

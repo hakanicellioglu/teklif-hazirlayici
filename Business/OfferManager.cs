@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Forms;
@@ -16,7 +17,7 @@ namespace Teklif_Hazırlayıcı.Business
         * Uygulama boyunca yalnızca okunabilir (readonly) olarak tanımlanmıştır.
         *
         */
-        private readonly DataAccess.DbConnection _connection;
+        private readonly DataAccess.SqlDbConnection _connection;
         public OfferManager()
         {
             /*
@@ -25,8 +26,7 @@ namespace Teklif_Hazırlayıcı.Business
              * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
              *
              */
-            _connection = new DataAccess.DbConnection();
-
+            _connection = new DataAccess.SqlDbConnection();
         }
 
 
@@ -47,9 +47,9 @@ namespace Teklif_Hazırlayıcı.Business
             LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id;";
 
-            using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
+            using (SqlCommand cmd = new SqlCommand(query, _connection.GetConnection()))
             {
-                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 return dt;
@@ -95,14 +95,14 @@ namespace Teklif_Hazırlayıcı.Business
         LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id
     WHERE t.teklif_id = ?";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("?", offer_id); // OleDb: parametre adı değil, sırası önemli
 
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(cmd))
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
@@ -136,16 +136,16 @@ namespace Teklif_Hazırlayıcı.Business
 
             DataTable dt = new DataTable();
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     string likeValue = $"%{search}%";
                     cmd.Parameters.AddWithValue("@Name", likeValue);
                     cmd.Parameters.AddWithValue("@Surname", likeValue);
                     cmd.Parameters.AddWithValue("@CompanyName", likeValue);
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(cmd))
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                     {
                         adapter.Fill(dt);
                     }
@@ -206,28 +206,28 @@ namespace Teklif_Hazırlayıcı.Business
 
             string getIdQuery = "SELECT @@IDENTITY;";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.Add("@CompanyId", OleDbType.Integer).Value = firma_id;
-                    cmd.Parameters.Add("@AuthorizedPersonId", OleDbType.Integer).Value = yetkili_id;
-                    cmd.Parameters.Add("@OfferDate", OleDbType.Date).Value = teklif_tarih;
-                    cmd.Parameters.Add("@DeliveryMethod", OleDbType.VarChar).Value = teslim_sekli;
-                    cmd.Parameters.Add("@PaymentMethod", OleDbType.VarChar).Value = odeme_sekli;
-                    cmd.Parameters.Add("@PaymentDue", OleDbType.Integer).Value = odeme_vadesi;
-                    cmd.Parameters.Add("@OfferValidity", OleDbType.Integer).Value = teklif_suresi;
-                    cmd.Parameters.Add("@ExchangeRate", OleDbType.VarChar).Value = doviz_kuru;
-                    cmd.Parameters.Add("@CurrencyUnit", OleDbType.VarChar).Value = doviz_birimi.ToString(); // char -> string
-                    cmd.Parameters.Add("@Term", OleDbType.VarChar).Value = vade;
-                    cmd.Parameters.AddWithValue("@Lme", lmeStr);
-                    cmd.Parameters.AddWithValue("@Workmanship", iscilikStr);
-                    cmd.Parameters.AddWithValue("@IskontoOrani", iskontoStr);
-                    cmd.Parameters.AddWithValue("@KdvOrani", kdvStr);
-                    cmd.Parameters.Add("@Withholding", OleDbType.Boolean).Value = tevkifat;
-                    cmd.Parameters.AddWithValue("@TevkifatOrani", tevkifatStr);
-                    cmd.Parameters.Add("@Status", OleDbType.VarChar).Value = durum;
+                    cmd.Parameters.Add("@CompanyId", SqlDbType.Int).Value = firma_id;
+                    cmd.Parameters.Add("@AuthorizedPersonId", SqlDbType.Int).Value = yetkili_id;
+                    cmd.Parameters.Add("@OfferDate", SqlDbType.Date).Value = teklif_tarih;
+                    cmd.Parameters.Add("@DeliveryMethod", SqlDbType.NVarChar).Value = teslim_sekli;
+                    cmd.Parameters.Add("@PaymentMethod", SqlDbType.NVarChar).Value = odeme_sekli;
+                    cmd.Parameters.Add("@PaymentDue", SqlDbType.Int).Value = odeme_vadesi;
+                    cmd.Parameters.Add("@OfferValidity", SqlDbType.Int).Value = teklif_suresi;
+                    cmd.Parameters.Add("@ExchangeRate", SqlDbType.NVarChar).Value = doviz_kuru;
+                    cmd.Parameters.Add("@CurrencyUnit", SqlDbType.NVarChar).Value = doviz_birimi.ToString();
+                    cmd.Parameters.Add("@Term", SqlDbType.NVarChar).Value = vade;
+                    cmd.Parameters.Add("@Lme", SqlDbType.Decimal).Value = Convert.ToDecimal(lmeStr);
+                    cmd.Parameters.Add("@Workmanship", SqlDbType.Decimal).Value = Convert.ToDecimal(iscilikStr);
+                    cmd.Parameters.Add("@IskontoOrani", SqlDbType.Decimal).Value = Convert.ToDecimal(iskontoStr);
+                    cmd.Parameters.Add("@KdvOrani", SqlDbType.Decimal).Value = Convert.ToDecimal(kdvStr);
+                    cmd.Parameters.Add("@Withholding", SqlDbType.Bit).Value = tevkifat;
+                    cmd.Parameters.Add("@TevkifatOrani", SqlDbType.Decimal).Value = Convert.ToDecimal(tevkifatStr);
+                    cmd.Parameters.Add("@Status", SqlDbType.NVarChar).Value = durum;
 
 
                     int result = cmd.ExecuteNonQuery();
@@ -283,18 +283,18 @@ namespace Teklif_Hazırlayıcı.Business
 
 
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
 
 
                 // Mevcut teklifi çek
                 string selectQuery = "SELECT * FROM teklifler WHERE teklif_id = @TeklifId";
-                using (OleDbCommand selectCmd = new OleDbCommand(selectQuery, conn))
+                using (SqlCommand selectCmd = new SqlCommand(selectQuery, conn))
                 {
                     selectCmd.Parameters.AddWithValue("@TeklifId", teklif_id);
 
-                    using (OleDbDataReader reader = selectCmd.ExecuteReader())
+                    using (SqlDataReader reader = selectCmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -350,7 +350,7 @@ namespace Teklif_Hazırlayıcı.Business
                             durum = @Durum
                         WHERE teklif_id = @TeklifId";
 
-                        using (OleDbCommand updateCmd = new OleDbCommand(updateQuery, conn))
+                        using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
                         {
                             updateCmd.Parameters.Add(new OleDbParameter("@FirmaId", OleDbType.Integer) { Value = firma_id });
                             updateCmd.Parameters.Add(new OleDbParameter("@YetkiliId", OleDbType.Integer) { Value = yetkili_id });
@@ -402,10 +402,10 @@ namespace Teklif_Hazırlayıcı.Business
 
             string offerQuery = "SELECT iskonto_orani FROM teklifler WHERE teklif_id = @teklifId";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(offerQuery, conn))
+                using (SqlCommand cmd = new SqlCommand(offerQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@teklifId", teklifId);
                     var result = cmd.ExecuteScalar();
@@ -428,10 +428,10 @@ namespace Teklif_Hazırlayıcı.Business
             FROM kalemler k
             INNER JOIN urunler u ON k.urun_id = u.urun_id
             WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar')";
-                using (OleDbCommand cmd = new OleDbCommand(selectQuery, conn))
+                using (SqlCommand cmd = new  SqlCommand(selectQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@teklifId", teklifId);
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -478,7 +478,7 @@ namespace Teklif_Hazırlayıcı.Business
                     odenecek_tutar = @odenecek
                 WHERE teklif_id = @teklifId";
 
-                using (OleDbCommand cmd = new OleDbCommand(updateQuery, conn))
+                using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@toplamAdet", toplamAdetStr);
                     cmd.Parameters.AddWithValue("@toplamKg", toplamKgStr);
@@ -499,17 +499,17 @@ namespace Teklif_Hazırlayıcı.Business
         #region Teklif Silme
         public bool DeleteOffer(int teklif_id)
         {
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
 
                 // Önce kalemleri sil
-                var deleteItemsCmd = new OleDbCommand("DELETE FROM kalemler WHERE teklif_id = @TeklifId", conn);
+                var deleteItemsCmd = new SqlCommand("DELETE FROM kalemler WHERE teklif_id = @TeklifId", conn);
                 deleteItemsCmd.Parameters.AddWithValue("@TeklifId", teklif_id);
                 deleteItemsCmd.ExecuteNonQuery();
 
                 // Sonra teklifi sil
-                var deleteOfferCmd = new OleDbCommand("DELETE FROM teklifler WHERE teklif_id = @TeklifId", conn);
+                var deleteOfferCmd = new SqlCommand("DELETE FROM teklifler WHERE teklif_id = @TeklifId", conn);
                 deleteOfferCmd.Parameters.AddWithValue("@TeklifId", teklif_id);
                 int result = deleteOfferCmd.ExecuteNonQuery();
 
@@ -530,14 +530,14 @@ namespace Teklif_Hazırlayıcı.Business
         LEFT JOIN yetkililer y ON y.yetkili_id = t.yetkili_id)
         WHERE t.teklif_id = ?";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("?", teklif_id);
 
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(cmd))
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
@@ -556,14 +556,14 @@ namespace Teklif_Hazırlayıcı.Business
         INNER JOIN urunler u ON k.urun_id = u.urun_id
         WHERE k.teklif_id = ?";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand command = new OleDbCommand(query, conn))
+                using (SqlCommand command = new SqlCommand(query, conn))
                 {
                     command.Parameters.AddWithValue("?", teklif_id);
 
-                    using (OleDbDataReader rdr = command.ExecuteReader())
+                    using (SqlDataReader rdr = command.ExecuteReader())
                     {
                         while (rdr.Read())
                         {
@@ -589,14 +589,14 @@ namespace Teklif_Hazırlayıcı.Business
         INNER JOIN urunler u ON k.urun_id = u.urun_id
         WHERE k.teklif_id = ?";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand command = new OleDbCommand(query, conn))
+                using (SqlCommand command = new SqlCommand(query, conn))
                 {
                     command.Parameters.AddWithValue("?", teklif_id);
 
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
@@ -616,10 +616,10 @@ namespace Teklif_Hazırlayıcı.Business
         #region Teklif Detay Getirme
         public DataTable GetOfferDetailById(int teklif_id)
         {
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                var cmd = new OleDbCommand(@"
+                var cmd = new SqlCommand(@"
                 SELECT 
                     f.adi, 
                     y.isim, 
@@ -656,10 +656,10 @@ namespace Teklif_Hazırlayıcı.Business
         #region Alüminyum Tutarı Getirme
         public decimal GetToplamAluminyumTutari(int teklif_id)
         {
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                var cmd = new OleDbCommand(@"
+                var cmd = new SqlCommand(@"
             SELECT u.kategori, k.toplam_tutar
             FROM kalemler k
             INNER JOIN urunler u ON k.urun_id = u.urun_id
@@ -687,10 +687,10 @@ namespace Teklif_Hazırlayıcı.Business
         #region Teklif Kalemleri Getirme
         public DataTable GetTeklifKalemleri(int teklif_id)
         {
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                var cmd = new OleDbCommand(@"
+                var cmd = new SqlCommand(@"
             SELECT u.kalip_no, u.urun, k.yuzey, k.yuzey_kodu, k.boy, k.adet, k.kg, k.birim_fiyat, k.toplam_tutar
             FROM kalemler k
             INNER JOIN urunler u ON k.urun_id = u.urun_id

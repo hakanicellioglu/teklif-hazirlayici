@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Teklif_Hazırlayıcı.Helpers;
+using System.Data.SqlClient;
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -17,7 +18,7 @@ namespace Teklif_Hazırlayıcı.Business
         * Uygulama boyunca yalnızca okunabilir (readonly) olarak tanımlanmıştır.
         *
         */
-        private readonly DataAccess.DbConnection _connection;
+        private readonly DataAccess.SqlDbConnection _connection;
         public ProductManager()
         {
             /*
@@ -26,7 +27,7 @@ namespace Teklif_Hazırlayıcı.Business
              * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
              *
              */
-            _connection = new DataAccess.DbConnection();
+            _connection = new DataAccess.SqlDbConnection();
         }
         public DataTable GetProduct()
         {
@@ -38,9 +39,9 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = "SELECT * FROM urunler";
-            using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
+            using (SqlCommand cmd = new SqlCommand(query, _connection.GetConnection()))
             {
-                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 return dt;
@@ -60,16 +61,16 @@ namespace Teklif_Hazırlayıcı.Business
 
             DataTable dt = new DataTable();
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     string likeValue = $"%{search}%";
                     cmd.Parameters.AddWithValue("@Product", likeValue);
                     cmd.Parameters.AddWithValue("@MoldNumber", likeValue);
 
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(cmd))
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                     {
                         adapter.Fill(dt);
                     }
@@ -89,14 +90,14 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = "INSERT INTO urunler(kalip_no, urun, gramaj, kategori) VALUES(@MoldNumber, @Product, @Weight, @Category)";
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@MoldNumber", mold_number);
                     cmd.Parameters.AddWithValue("@Product", product);
-                    cmd.Parameters.Add("@Weight", OleDbType.Double).Value = weight;
+                    cmd.Parameters.Add("@Weight", SqlDbType.Decimal).Value = weight;
                     cmd.Parameters.AddWithValue("@Category", category);
                     int result = cmd.ExecuteNonQuery();
 
@@ -128,17 +129,17 @@ namespace Teklif_Hazırlayıcı.Business
                 return;
             }
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
 
                 // Mevcut veriyi çekiyoruz
                 string selectQuery = "SELECT urun_id, kalip_no, urun, gramaj, kategori FROM urunler WHERE urun_id = @AuthId";
-                using (OleDbCommand selectCmd = new OleDbCommand(selectQuery, conn))
+                using (SqlCommand selectCmd = new SqlCommand(selectQuery, conn))
                 {
                     selectCmd.Parameters.AddWithValue("@AuthId", product_id);
 
-                    using (OleDbDataReader reader = selectCmd.ExecuteReader())
+                    using (SqlDataReader reader = selectCmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -168,11 +169,11 @@ namespace Teklif_Hazırlayıcı.Business
 
                 // Güncelleme işlemi
                 string updateQuery = "UPDATE urunler SET kalip_no = @MoldNumber, urun = @Product, gramaj = @Weight, kategori = @Category WHERE urun_id = @ProductId";
-                using (OleDbCommand updateCmd = new OleDbCommand(updateQuery, conn))
+                using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
                 {
                     updateCmd.Parameters.AddWithValue("@MoldNumber", mold_number);
                     updateCmd.Parameters.AddWithValue("@Product", product);
-                    updateCmd.Parameters.Add("@Weight", OleDbType.Double).Value = weight;
+                    updateCmd.Parameters.Add("@Weight", SqlDbType.Decimal).Value = weight;
                     updateCmd.Parameters.AddWithValue("@Category", category);
                     updateCmd.Parameters.AddWithValue("@ProductId", product_id);
 
@@ -199,10 +200,10 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = "DELETE FROM urunler WHERE urun_id = @ProductId";
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@ProductId", product_id);
                     int result = cmd.ExecuteNonQuery();
@@ -231,14 +232,14 @@ namespace Teklif_Hazırlayıcı.Business
             List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
             string query = "SELECT urun_id, kalip_no, urun, gramaj, kategori FROM urunler WHERE urun_id = @ProductId";
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@ProductId", product_id ?? (object)DBNull.Value);
 
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {

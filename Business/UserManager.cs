@@ -22,7 +22,7 @@ namespace Teklif_Hazırlayıcı.Business
         * Uygulama boyunca yalnızca okunabilir (readonly) olarak tanımlanmıştır.
         *
         */
-        private readonly DataAccess.DbConnection _connection;
+        private readonly DataAccess.SqlDbConnection _connection;
 
         public UserManager()
         {
@@ -32,7 +32,7 @@ namespace Teklif_Hazırlayıcı.Business
              * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
              *
              */
-            _connection = new DataAccess.DbConnection();
+            _connection = new DataAccess.SqlDbConnection();
         }
 
 
@@ -76,13 +76,13 @@ namespace Teklif_Hazırlayıcı.Business
                 {
                     try
                     {
-                        using (OleDbConnection conn = _connection.GetConnection())
+                        using (SqlConnection conn = _connection.GetConnection())
                         {
 
                             conn.Open();
 
                             string query = "INSERT INTO kullanicilar(isim,soyisim,kullanici_adi, eposta, parola) VALUES (@Name, @Surname, @Username, @Email, @Password)";
-                            using (OleDbCommand command = new OleDbCommand(query, conn))
+                            using (SqlCommand command = new SqlCommand(query, conn))
                             {
                                 string hashedPassword = ComputeSha256Hash(password);
                                 command.Parameters.AddWithValue("@Name", name);
@@ -124,11 +124,11 @@ namespace Teklif_Hazırlayıcı.Business
              * Sonuç 0'dan büyükse true (mevcut), değilse false (yok) döndürülür.
              *
              */
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
                 string query = "SELECT COUNT(*) FROM kullanicilar WHERE kullanici_adi = @Parameter";
-                using (OleDbCommand command = new OleDbCommand(query, conn))
+                using (SqlCommand command = new SqlCommand(query, conn))
                 {
                     command.Parameters.AddWithValue("@Parameter", parameter);
                     int count = (int)command.ExecuteScalar();
@@ -147,12 +147,12 @@ namespace Teklif_Hazırlayıcı.Business
              * Eşleşme varsa true, yoksa false döndürülür.
              *
              */
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
 
                 conn.Open();
                 string query = "SELECT COUNT(*) AS KayıtSayisi FROM kullanicilar WHERE kullanici_adi = @Username AND parola = @Password";
-                using (OleDbCommand command = new OleDbCommand(query, conn))
+                using (SqlCommand command = new SqlCommand(query, conn))
                 {
 
                     string hashedPassword = ComputeSha256Hash(password);
@@ -172,14 +172,14 @@ namespace Teklif_Hazırlayıcı.Business
         public void SelectUserId(string username)
         {
             int kullanici_id = -1;
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
                 string queryId = "SELECT kullanici_id FROM kullanicilar WHERE kullanici_adi = @Username";
-                using (OleDbCommand command2 = new OleDbCommand(queryId, conn))
+                using (SqlCommand command2 = new SqlCommand(queryId, conn))
                 {
                     command2.Parameters.AddWithValue("@Username", username);
-                    using (OleDbDataReader reader = command2.ExecuteReader())
+                    using (SqlDataReader reader = command2.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -202,10 +202,10 @@ namespace Teklif_Hazırlayıcı.Business
 
             string query = "SELECT isim, soyisim FROM Kullanicilar WHERE kullanici_id = @kullaniciId";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand command = new OleDbCommand(query, conn))
+                using (SqlCommand command = new SqlCommand(query, conn))
                 {
                     command.Parameters.AddWithValue("@kullaniciId", kullaniciId);
 
