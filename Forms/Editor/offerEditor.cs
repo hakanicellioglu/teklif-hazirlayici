@@ -67,7 +67,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     var offer = data.Rows[0];
 
                     // Firma ComboBox eşleşmesi
-                    string firmaAdi = offer["firma_adi"].ToString();
+                    string firmaAdi = offer["isim"].ToString();
                     int firmaIndex = chkFirmalar.FindStringExact(firmaAdi);
                     if (firmaIndex >= 0) chkFirmalar.SelectedIndex = firmaIndex;
 
@@ -344,7 +344,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
 
             chkFirmalar.DataSource = dt;
-            chkFirmalar.DisplayMember = "adi"; // Görünen
+            chkFirmalar.DisplayMember = "isim"; // Görünen
             chkFirmalar.ValueMember = "firma_id";    // Firma ID (veritabanı ID'si)
             return true;
         }
@@ -643,7 +643,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
                 var row = teklifDetay.Rows[0];
-                string firmaAdi = row["adi"].ToString();
+                string firmaAdi = row["isim"].ToString();
                 string yetkiliAdi = row["isim"].ToString();
                 string teklifTarih = Convert.ToDateTime(row["teklif_tarih"]).ToString("dd.MM.yyyy");
 
@@ -1081,6 +1081,27 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         {
             return value.ToString($"N{precision}", new CultureInfo("tr-TR"));
         }
-        
+
+        private void txtİscilik_TextChanged(object sender, EventArgs e)
+        {
+            HesaplaVeGoster();
+        }
+
+        private void txtLME_TextChanged(object sender, EventArgs e)
+        {
+            HesaplaVeGoster();
+        }
+
+        private void HesaplaVeGoster()
+        {
+            decimal iscilik = 0, lme = 0, sonuc = 0;
+
+            // TryParse ile güvenli dönüşüm
+            decimal.TryParse(txtİscilik.Text, NumberStyles.Any, new CultureInfo("tr-TR"), out iscilik);
+            decimal.TryParse(txtLME.Text, NumberStyles.Any, new CultureInfo("tr-TR"), out lme);
+
+            sonuc = (iscilik / 1000) + (lme / 1000);
+            label12.Text = sonuc.ToString("N3", new CultureInfo("tr-TR"));
+        }
     }
 }
