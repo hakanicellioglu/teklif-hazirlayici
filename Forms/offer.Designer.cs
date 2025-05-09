@@ -55,12 +55,12 @@
             // 
             this.txtSearch.BackColor = System.Drawing.SystemColors.Control;
             this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Right;
             this.txtSearch.Font = new System.Drawing.Font("Century Gothic", 11F);
             this.txtSearch.ForeColor = System.Drawing.Color.Silver;
-            this.txtSearch.Location = new System.Drawing.Point(0, 15);
+            this.txtSearch.Location = new System.Drawing.Point(400, 15);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(550, 18);
+            this.txtSearch.Size = new System.Drawing.Size(150, 18);
             this.txtSearch.TabIndex = 0;
             this.txtSearch.Text = "Teklif arayın...";
             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);

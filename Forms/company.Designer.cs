@@ -29,13 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(company));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(company));
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnClear = new System.Windows.Forms.Button();
+            this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.btnSearch = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.btnAddCompany = new System.Windows.Forms.Button();
@@ -44,7 +45,6 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.imgButton = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -55,12 +55,12 @@
             // 
             this.txtSearch.BackColor = System.Drawing.SystemColors.Control;
             this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Right;
             this.txtSearch.Font = new System.Drawing.Font("Century Gothic", 11F);
             this.txtSearch.ForeColor = System.Drawing.Color.Silver;
-            this.txtSearch.Location = new System.Drawing.Point(0, 15);
+            this.txtSearch.Location = new System.Drawing.Point(400, 15);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(550, 18);
+            this.txtSearch.Size = new System.Drawing.Size(150, 18);
             this.txtSearch.TabIndex = 0;
             this.txtSearch.Text = "Firma arayın...";
             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
@@ -81,6 +81,14 @@
             this.toolTip1.SetToolTip(this.btnClear, "Temizle");
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // imgButton
+            // 
+            this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
+            this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgButton.Images.SetKeyName(0, "clear-48.png");
+            this.imgButton.Images.SetKeyName(1, "search-48.png");
+            this.imgButton.Images.SetKeyName(2, "add-48.png");
             // 
             // btnSearch
             // 
@@ -211,14 +219,6 @@
             // toolTip1
             // 
             this.toolTip1.ToolTipTitle = "Teklif Hazırlayıcı";
-            // 
-            // imgButton
-            // 
-            this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
-            this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgButton.Images.SetKeyName(0, "clear-48.png");
-            this.imgButton.Images.SetKeyName(1, "search-48.png");
-            this.imgButton.Images.SetKeyName(2, "add-48.png");
             // 
             // company
             // 
