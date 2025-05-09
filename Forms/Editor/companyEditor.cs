@@ -43,7 +43,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 if (data.Any())
                 {
                     var company = data.First();
-                    textBox1.Text = company["adi"];
+                    textBox1.Text = company["isim"];
                     textBox2.Text = company["adres"];
                     textBox3.Text = company["telefon"];
                     textBox4.Text = company["eposta"];
