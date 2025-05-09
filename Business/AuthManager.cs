@@ -63,7 +63,7 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = @"
-            SELECT y.yetkili_id, f.adi AS Firma, y.isim, y.soyisim, y.hitap, y.adres, y.telefon, y.eposta
+            SELECT y.yetkili_id, f.isim AS Firma, y.isim, y.soyisim, y.hitap, y.adres, y.telefon, y.eposta
             FROM yetkililer y
             LEFT JOIN firmalar f ON y.firma_id = f.firma_id";
 
@@ -87,7 +87,7 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = @"
-            SELECT y.*, f.adi AS Firma 
+            SELECT y.*, f.isim AS Firma 
             FROM yetkililer y 
             LEFT JOIN firmalar f ON y.firma_id = f.firma_id 
             WHERE y.isim LIKE @Isim 
@@ -133,7 +133,7 @@ namespace Teklif_Hazırlayıcı.Business
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@firma_id", company_id);
+                    cmd.Parameters.AddWithValue("@CompanyId", company_id);
                     cmd.Parameters.AddWithValue("@Name", name);
                     cmd.Parameters.AddWithValue("@Surname", surname);
                     cmd.Parameters.AddWithValue("@Honorific", honorific);

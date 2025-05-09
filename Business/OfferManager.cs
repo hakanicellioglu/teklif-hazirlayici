@@ -42,7 +42,7 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = @"
-            SELECT t.teklif_id, t.yetkili_id, y.isim, y.soyisim, y.hitap, f.adi, t.teklif_tarih, t.durum
+            SELECT t.teklif_id, t.yetkili_id, y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
             FROM (teklifler AS t
             LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id;";
@@ -62,7 +62,7 @@ namespace Teklif_Hazırlayıcı.Business
         t.teklif_id,
         t.firma_id,
         t.yetkili_id,
-        f.adi AS firma_adi,
+        f.isim AS firma_adi,
         y.isim AS yetkili_adi,
         y.soyisim AS yetkili_soyadi,
         y.hitap,
@@ -126,13 +126,13 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             string query = @"
-            SELECT y.isim, y.soyisim, y.hitap, f.adi, t.teklif_tarih, t.durum
+            SELECT y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
             FROM (teklifler t 
             LEFT JOIN firmalar f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer y ON y.firma_id = f.firma_id
             WHERE y.isim LIKE @Name 
                OR y.soyisim LIKE @Surname
-               OR f.adi LIKE @CompanyName";
+               OR f.isim LIKE @CompanyName";
 
             DataTable dt = new DataTable();
 
@@ -223,10 +223,10 @@ namespace Teklif_Hazırlayıcı.Business
                     cmd.Parameters.Add("@Term", SqlDbType.NVarChar).Value = vade;
                     cmd.Parameters.Add("@Lme", SqlDbType.Decimal).Value = Convert.ToDecimal(lmeStr);
                     cmd.Parameters.Add("@Workmanship", SqlDbType.Decimal).Value = Convert.ToDecimal(iscilikStr);
-                    cmd.Parameters.Add("@IskontoOrani", SqlDbType.Decimal).Value = Convert.ToDecimal(iskontoStr);
-                    cmd.Parameters.Add("@KdvOrani", SqlDbType.Decimal).Value = Convert.ToDecimal(kdvStr);
+                    cmd.Parameters.Add("@DiscountRate", SqlDbType.Decimal).Value = Convert.ToDecimal(iskontoStr);
+                    cmd.Parameters.Add("@VatRate", SqlDbType.Decimal).Value = Convert.ToDecimal(kdvStr);
                     cmd.Parameters.Add("@Withholding", SqlDbType.Bit).Value = tevkifat;
-                    cmd.Parameters.Add("@TevkifatOrani", SqlDbType.Decimal).Value = Convert.ToDecimal(tevkifatStr);
+                    cmd.Parameters.Add("@WithholdingRate", SqlDbType.Decimal).Value = Convert.ToDecimal(tevkifatStr);
                     cmd.Parameters.Add("@Status", SqlDbType.NVarChar).Value = durum;
 
 
@@ -522,7 +522,7 @@ namespace Teklif_Hazırlayıcı.Business
         public DataTable GetOfferDetailById(int? teklif_id)
         {
             string query = @"
-        SELECT f.adi, y.isim, t.teklif_tarih, t.toplam_adet, t.toplam_kg, 
+        SELECT f.isim, y.isim, t.teklif_tarih, t.toplam_adet, t.toplam_kg, 
                t.mal_hizmet_tutari, t.iskonto_orani, t.iskonto_tutari, t.kdv_tutari, 
                t.tevkifat_tutari, t.genel_toplam, t.odenecek_tutar, t.doviz_birimi
         FROM ((teklifler t
@@ -621,7 +621,7 @@ namespace Teklif_Hazırlayıcı.Business
                 conn.Open();
                 var cmd = new SqlCommand(@"
                 SELECT 
-                    f.adi, 
+                    f.isim, 
                     y.isim, 
                     t.teklif_tarih, 
                     t.toplam_adet, 

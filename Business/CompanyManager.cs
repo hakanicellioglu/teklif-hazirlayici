@@ -63,7 +63,7 @@ namespace Teklif_Hazırlayıcı.Business
              * Sonuç bulunamazsa null döndürülür, aksi halde doldurulmuş DataTable döndürülür.
              *
              */
-            string query = "SELECT * FROM firmalar WHERE adi LIKE @ad";
+            string query = "SELECT * FROM firmalar WHERE isim LIKE @ad";
             DataTable dt = new DataTable();
 
             using (SqlConnection conn = _connection.GetConnection())
@@ -105,7 +105,7 @@ namespace Teklif_Hazırlayıcı.Business
              */
             if (!CompanyExistsName(name))
             {
-                string query = "INSERT INTO firmalar(adi, adres, telefon, eposta) VALUES(@Name, @Address, @PhoneNumber, @Email)";
+                string query = "INSERT INTO firmalar(isim, adres, telefon, eposta) VALUES(@Name, @Address, @PhoneNumber, @Email)";
                 using (SqlConnection conn = _connection.GetConnection())
                 {
                     conn.Open();
@@ -154,7 +154,7 @@ namespace Teklif_Hazırlayıcı.Business
                 conn.Open();
 
                 // Mevcut veriyi çekiyoruz
-                string selectQuery = "SELECT adi, adres, telefon, eposta FROM firmalar WHERE firma_id = @CompanyId";
+                string selectQuery = "SELECT isim, adres, telefon, eposta FROM firmalar WHERE firma_id = @CompanyId";
                 using (SqlCommand selectCmd = new SqlCommand(selectQuery, conn))
                 {
                     selectCmd.Parameters.AddWithValue("@CompanyId", id);
@@ -163,7 +163,7 @@ namespace Teklif_Hazırlayıcı.Business
                     {
                         if (reader.Read())
                         {
-                            string currentName = reader["adi"].ToString();
+                            string currentName = reader["isim"].ToString();
                             string currentAddress = reader["adres"].ToString();
                             string currentPhone = reader["telefon"].ToString();
                             string currentEmail = reader["eposta"].ToString();
@@ -187,7 +187,7 @@ namespace Teklif_Hazırlayıcı.Business
                 }
 
                 // Güncelleme işlemi
-                string updateQuery = "UPDATE firmalar SET adi = @Name, adres = @Address, telefon = @PhoneNumber, eposta = @Email WHERE firma_id = @CompanyId";
+                string updateQuery = "UPDATE firmalar SET isim = @Name, adres = @Address, telefon = @PhoneNumber, eposta = @Email WHERE firma_id = @CompanyId";
                 using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
                 {
                     updateCmd.Parameters.AddWithValue("@Name", name);
@@ -247,7 +247,7 @@ namespace Teklif_Hazırlayıcı.Business
              * Karşılaştırma büyük/küçük harf duyarsız yapılır.
              *
              */
-            string query = "SELECT adi FROM firmalar WHERE adi = @Name";
+            string query = "SELECT isim FROM firmalar WHERE isim = @Name";
             using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
@@ -281,7 +281,7 @@ namespace Teklif_Hazırlayıcı.Business
              */
             List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
-            string query = "SELECT adi,adres,telefon,eposta FROM firmalar WHERE firma_id = @CompanyId";
+            string query = "SELECT isim,adres,telefon,eposta FROM firmalar WHERE firma_id = @CompanyId";
             using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
@@ -294,7 +294,7 @@ namespace Teklif_Hazırlayıcı.Business
                         while (reader.Read())
                         {
                             Dictionary<string, string> row = new Dictionary<string, string>();
-                            row["adi"] = reader["adi"].ToString();
+                            row["isim"] = reader["isim"].ToString();
                             row["adres"] = reader["adres"].ToString();
                             row["telefon"] = reader["telefon"].ToString();
                             row["eposta"] = reader["eposta"].ToString();

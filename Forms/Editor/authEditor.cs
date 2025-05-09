@@ -41,7 +41,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
 
             comboBox1.DataSource = dt;
-            comboBox1.DisplayMember = "adi"; // Görünen
+            comboBox1.DisplayMember = "isim"; // Görünen
             comboBox1.ValueMember = "firma_id";    // Firma ID (veritabanı ID'si)
         }
 
@@ -68,7 +68,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     var authList = companyManager.GetCompanyById(Convert.ToInt32(auth["firma_id"]));
                     if (authList.Count > 0)
                     {
-                        string firmaAdi = authList[0]["adi"].ToString();
+                        string firmaAdi = authList[0]["isim"].ToString();
                         int index = comboBox1.FindStringExact(firmaAdi);
                         if (index >= 0)
                         {
@@ -109,6 +109,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 else
                 {
                     companyId = Convert.ToInt32(comboBox1.SelectedValue);
+                    MessageBox.Show(companyId.ToString());
                     AuthManager.AddAuth(companyId, textBox1.Text, textBox2.Text, comboBox2.Text, textBox3.Text, textBox4.Text, textBox5.Text);
                     DialogResult = DialogResult.OK;
                 }
