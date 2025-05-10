@@ -17,11 +17,14 @@ namespace Teklif_Hazırlayıcı.Forms
 {
     public partial class auth : Form
     {
-        AuthManager authManager = new AuthManager();
+        private readonly CompanyManager _companyManager;
+        private readonly AuthManager _authManager;
 
-        public auth()
+        public auth(CompanyManager companyManager, AuthManager authManager)
         {
             InitializeComponent();
+            _companyManager = companyManager;
+            _authManager = authManager;
             LoadAuth();
         }
 
@@ -39,7 +42,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void LoadAuth()
         {
-            dataGridView1.DataSource = authManager.GetAuthWithCompanyName();
+            dataGridView1.DataSource = _authManager.GetAuthWithCompanyName();
             SetupGridColumnProperties();
             SetupAuthGridColumns();
         }
@@ -114,7 +117,7 @@ namespace Teklif_Hazırlayıcı.Forms
             }
             else
             {
-                var result = authManager.Search(txtSearch.Text);
+                var result = _authManager.Search(txtSearch.Text);
 
 
                 if (result != null && result.Rows.Count > 0)
@@ -134,7 +137,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddAuth_Click(object sender, EventArgs e)
         {
-            using (var authEditor = new authEditor(null, "Add"))
+            using (var authEditor = new authEditor(null, "Add", new CompanyManager(), new AuthManager()))
             {
                 authEditor.ShowDialog();
             }
@@ -150,17 +153,18 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    using (var editor = new authEditor(value, "Edit"))
+                    using (var authEditor = new authEditor(null, "Edit", new CompanyManager(), new AuthManager()))
                     {
-                        editor.ShowDialog();
+                        authEditor.ShowDialog();
                     }
+
                     LoadAuth();
                 }
                 else if (result == CustomMessageBox.CustomResult.Sil)
                 {
                     if (MessageHelper.ShowQuestion("Bu yetkiliyi silmek istediğinize emin misiniz?") == DialogResult.Yes)
                     {
-                        authManager.DeleteAuth(value.Value);
+                        _authManager.DeleteAuth(value.Value);
                         LoadAuth();
                     }
                 }
@@ -190,7 +194,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = authManager.GetAuthWithCompanyName();
+            dataGridView1.DataSource = _authManager.GetAuthWithCompanyName();
             SetupGridColumnProperties();
             SetupAuthGridColumns();
         }

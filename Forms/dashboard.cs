@@ -50,7 +50,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAuth_Click(object sender, EventArgs e)
         {
-            LoadForm(new auth());
+            LoadForm(new auth(new Business.CompanyManager(), new Business.AuthManager()));
         }
 
         private void dashboard_Resize(object sender, EventArgs e)

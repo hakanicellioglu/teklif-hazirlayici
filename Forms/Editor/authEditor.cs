@@ -18,21 +18,26 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
     {
         string editor_mode;
         int? auth_id;
-        CompanyManager CompanyManager = new CompanyManager();
-        AuthManager AuthManager = new AuthManager();
+        
+        private readonly CompanyManager _companyManager;
+        private readonly AuthManager _authManager;
+        //CompanyManager CompanyManager = new CompanyManager();
+        //uthManager AuthManager = new AuthManager();
 
-        public authEditor(int? authId, string editorMode)
+        public authEditor(int? authId, string editorMode, CompanyManager companyManager, AuthManager authManager)
         {
             InitializeComponent();
             auth_id = authId;
             editor_mode = editorMode;
+            _companyManager = companyManager;
+            _authManager = authManager;
             LoadCompany();
             SelectionMode();
         }
 
         private void LoadCompany()
         {
-            var dt = CompanyManager.GetCompany(); // DataTable
+            var dt = _companyManager.GetCompany(); // DataTable
 
             if (dt == null || dt.Rows.Count == 0)
             {
@@ -110,7 +115,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 {
                     companyId = Convert.ToInt32(comboBox1.SelectedValue);
                     MessageBox.Show(companyId.ToString());
-                    AuthManager.AddAuth(companyId, textBox1.Text, textBox2.Text, comboBox2.Text, textBox3.Text, textBox4.Text, textBox5.Text);
+                    _authManager.AddAuth(companyId, textBox1.Text, textBox2.Text, comboBox2.Text, textBox3.Text, textBox4.Text, textBox5.Text);
                     DialogResult = DialogResult.OK;
                 }
             }
@@ -127,7 +132,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     // Ardından çağrı
                     companyId = Convert.ToInt32(comboBox1.SelectedValue);
 
-                    AuthManager.UpdateAuth(
+                    _authManager.UpdateAuth(
                         auth_id,
                         companyId,
                         textBox1.Text,
