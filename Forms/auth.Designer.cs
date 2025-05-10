@@ -43,6 +43,7 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -90,7 +91,7 @@
             this.btnClear.Location = new System.Drawing.Point(550, 0);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(50, 50);
-            this.btnClear.TabIndex = 1;
+            this.btnClear.TabIndex = 2;
             this.toolTip1.SetToolTip(this.btnClear, "Temizle");
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.button1_Click);
@@ -100,8 +101,9 @@
             this.imgButton.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgButton.ImageStream")));
             this.imgButton.TransparentColor = System.Drawing.Color.Transparent;
             this.imgButton.Images.SetKeyName(0, "clear-48.png");
-            this.imgButton.Images.SetKeyName(1, "search-48.png");
-            this.imgButton.Images.SetKeyName(2, "add-48.png");
+            this.imgButton.Images.SetKeyName(1, "add-48.png");
+            this.imgButton.Images.SetKeyName(2, "search-48.png");
+            this.imgButton.Images.SetKeyName(3, "refresh-48.png");
             // 
             // btnSearch
             // 
@@ -114,7 +116,7 @@
             this.btnSearch.Location = new System.Drawing.Point(600, 0);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(50, 50);
-            this.btnSearch.TabIndex = 2;
+            this.btnSearch.TabIndex = 3;
             this.toolTip1.SetToolTip(this.btnSearch, "Ara");
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -130,7 +132,7 @@
             this.btnAddAuth.Location = new System.Drawing.Point(650, 0);
             this.btnAddAuth.Name = "btnAddAuth";
             this.btnAddAuth.Size = new System.Drawing.Size(50, 50);
-            this.btnAddAuth.TabIndex = 3;
+            this.btnAddAuth.TabIndex = 4;
             this.toolTip1.SetToolTip(this.btnAddAuth, "Ekle");
             this.btnAddAuth.UseVisualStyleBackColor = true;
             this.btnAddAuth.Click += new System.EventHandler(this.btnAddAuth_Click);
@@ -169,7 +171,7 @@
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.EnableHeadersVisualStyles = false;
-            this.dataGridView1.Location = new System.Drawing.Point(50, 100);
+            this.dataGridView1.Location = new System.Drawing.Point(50, 172);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -182,7 +184,7 @@
             this.dataGridView1.RowTemplate.Height = 40;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(700, 300);
+            this.dataGridView1.Size = new System.Drawing.Size(700, 228);
             this.dataGridView1.TabIndex = 1;
             this.toolTip1.SetToolTip(this.dataGridView1, "Yetkililer");
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
@@ -195,11 +197,12 @@
             this.panel1.Location = new System.Drawing.Point(50, 0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.panel1.Size = new System.Drawing.Size(700, 100);
+            this.panel1.Size = new System.Drawing.Size(700, 172);
             this.panel1.TabIndex = 0;
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btnRefresh);
             this.panel2.Controls.Add(this.panel3);
             this.panel2.Controls.Add(this.btnClear);
             this.panel2.Controls.Add(this.btnSearch);
@@ -209,6 +212,22 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(700, 50);
             this.panel2.TabIndex = 1;
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnRefresh.FlatAppearance.BorderSize = 0;
+            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRefresh.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.btnRefresh.ImageIndex = 3;
+            this.btnRefresh.ImageList = this.imgButton;
+            this.btnRefresh.Location = new System.Drawing.Point(500, 0);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(50, 50);
+            this.btnRefresh.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.btnRefresh, "Temizle");
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // panel3
             // 
@@ -259,5 +278,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }

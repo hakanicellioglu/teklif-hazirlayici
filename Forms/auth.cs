@@ -187,5 +187,12 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             txtSearch.Focus();
         }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = authManager.GetAuthWithCompanyName();
+            SetupGridColumnProperties();
+            SetupAuthGridColumns();
+        }
     }
 }

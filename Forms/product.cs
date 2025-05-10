@@ -157,5 +157,10 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             placeHolder.LeavePlaceHolder(txtSearch);
         }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadProduct();
+        }
     }
 }

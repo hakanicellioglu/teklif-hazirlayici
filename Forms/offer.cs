@@ -190,5 +190,10 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             txtSearch.Focus();
         }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadOffer();
+        }
     }
 }
