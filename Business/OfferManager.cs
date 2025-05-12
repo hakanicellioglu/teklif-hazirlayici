@@ -247,6 +247,7 @@ namespace Teklif_Hazırlayıcı.Business
         #endregion
 
         #region Teklif Güncelleme
+
         public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
         {
             // İskonto
@@ -329,7 +330,8 @@ namespace Teklif_Hazırlayıcı.Business
                             return;
                         }
                     }
-                    if (!isDifferent)
+
+                    if (isDifferent)
                     {
                         string updateQuery = @"
                         UPDATE teklifler SET 
@@ -338,8 +340,8 @@ namespace Teklif_Hazırlayıcı.Business
                             teklif_tarih = @TeklifTarih,
                             teslim_sekli = @TeslimSekli,
                             odeme_sekli = @OdemeSekli,
-                            odeme_vadesi = @OdemeVadesi,
-                            teklif_suresi = @TeklifSuresi,
+                            odeme_vade = @OdemeVadesi,
+                            teklif_sure = @TeklifSuresi,
                             doviz_kuru = @DovizKuru,
                             doviz_birimi = @DovizBirimi,
                             vade = @Vade,
@@ -388,8 +390,6 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
-
-
 
         public bool UpdateOfferById(int? teklifId)
         {
