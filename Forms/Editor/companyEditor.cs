@@ -17,12 +17,13 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
     {
         string editor_mode;
         int? company_id;
-        CompanyManager companyManager = new CompanyManager();
-        public companyEditor(int? companyId, string editorMode)
+        private readonly CompanyManager _companyManager;
+        public companyEditor(int? companyId, string editorMode, CompanyManager companyManager)
         {
             InitializeComponent();
             editor_mode = editorMode;
             company_id = companyId;
+            _companyManager = companyManager;
             SelectionMode();
         }
         private void SelectionMode()
@@ -37,13 +38,12 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 button1.Text = "Kaydet";
                 btnCancel.Visible = true;
 
-                CompanyManager manager = new CompanyManager();
-                var data = manager.GetCompanyById(company_id);
+                var data = _companyManager.GetCompanyById(company_id);
 
                 if (data.Any())
                 {
                     var company = data.First();
-                    textBox1.Text = company["adi"];
+                    textBox1.Text = company["isim"];
                     textBox2.Text = company["adres"];
                     textBox3.Text = company["telefon"];
                     textBox4.Text = company["eposta"];
@@ -65,7 +65,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
                 else
                 {
-                    companyManager.AddCompany(textBox1.Text, textBox2.Text, textBox3.Text, textBox4.Text);
+                    _companyManager.AddCompany(textBox1.Text, textBox2.Text, textBox3.Text, textBox4.Text);
                     DialogResult = DialogResult.OK;
                 }
             }
@@ -73,7 +73,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             {
                 if(MessageHelper.ShowQuestion("Kaydetmek istediğinize emin misiniz? Bu işlem geri alınamaz.") == DialogResult.Yes)
                 {
-                    companyManager.UpdateCompany(company_id, textBox1.Text, textBox2.Text, textBox3.Text, textBox4.Text);
+                    _companyManager.UpdateCompany(company_id, textBox1.Text, textBox2.Text, textBox3.Text, textBox4.Text);
                     DialogResult = DialogResult.OK;
                 }
             }

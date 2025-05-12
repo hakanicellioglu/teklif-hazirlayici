@@ -25,16 +25,21 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
     {
         string editor_mode;
         int? offer_id;
-        CompanyManager CompanyManager = new CompanyManager();
-        AuthManager AuthManager = new AuthManager();
+        private readonly CompanyManager _companyManager = new CompanyManager();
+        private readonly AuthManager _authManager = new AuthManager();
+        private readonly OfferManager _offerManager = new OfferManager();
 
-        public offerEditor(int? offerId, string editMode)
+
+        public offerEditor(int? offerId, string editMode, AuthManager authManager, CompanyManager companyManager, OfferManager offerManager)
         {
             InitializeComponent();
             offer_id = offerId;
             editor_mode = editMode;
             LoadOffer();
             SelectionMode();
+            _authManager = authManager;
+            _companyManager = companyManager;
+            _offerManager = offerManager;
         }
 
         private void SelectionMode()
@@ -59,15 +64,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 btnEdit.Visible = true;
                 button2.Visible = true;
 
-                OfferManager manager = new OfferManager();
-                var data = manager.GetOfferById(offer_id);
+                var data = _offerManager.GetOfferById(offer_id);
 
                 if (data != null && data.Rows.Count > 0)
                 {
                     var offer = data.Rows[0];
 
                     // Firma ComboBox eşleşmesi
-                    string firmaAdi = offer["firma_adi"].ToString();
+                    string firmaAdi = offer["isim"].ToString();
                     int firmaIndex = chkFirmalar.FindStringExact(firmaAdi);
                     if (firmaIndex >= 0) chkFirmalar.SelectedIndex = firmaIndex;
 
@@ -89,10 +93,10 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     dateTimePicker1.Value = Convert.ToDateTime(offer["teklif_tarih"]);
                     chkTeslimSekli.SelectedItem = offer["teslim_sekli"].ToString();
                     chkOdemeSekli.SelectedItem = offer["odeme_sekli"].ToString();
-                    txtOdemeVadesi.Text = offer["odeme_vadesi"].ToString();
+                    txtOdemeVadesi.Text = offer["odeme_vade"].ToString();
                     chkDovizBirimi.SelectedItem = offer["doviz_birimi"].ToString();
                     txtDovizKuru.Text = offer["doviz_kuru"].ToString();
-                    txtTeklifSuresi.Text = offer["teklif_suresi"].ToString();
+                    txtTeklifSuresi.Text = offer["teklif_sure"].ToString();
                     txtLME.Text = offer["lme"].ToString();
                     txtİscilik.Text = offer["iscilik"].ToString();
 
@@ -301,7 +305,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         }
         private bool LoadAuth(long firma_id)
         {
-            var authList = AuthManager.GetAuthByCompanyId(firma_id);
+            var authList = _authManager.GetAuthByCompanyId(firma_id);
             chkYetkililer.DataSource = null; // eski kaynakları sıfırla
 
             if (authList == null || authList.Count == 0)
@@ -335,18 +339,26 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private bool LoadCompany()
         {
-            var dt = CompanyManager.GetCompany(); // DataTable
+            var dt = _companyManager.GetCompany();
 
-            if (dt == null || dt.Rows.Count == 0)
+            if (dt == null)
             {
-                MessageHelper.ShowError("Şirket verileri yüklenemedi.");
+                MessageHelper.ShowError("GetCompany null döndü!");
                 return false;
             }
 
+            foreach (DataColumn col in dt.Columns)
+            {
+                Console.WriteLine("Kolon: " + col.ColumnName);
+            }
+
+            // Sütun adı doğruysa devam et
             chkFirmalar.DataSource = dt;
-            chkFirmalar.DisplayMember = "adi"; // Görünen
-            chkFirmalar.ValueMember = "firma_id";    // Firma ID (veritabanı ID'si)
+            chkFirmalar.DisplayMember = "isim";  // ← isim yerine firma_adi olabilir
+            chkFirmalar.ValueMember = "firma_id";
+
             return true;
+
         }
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -467,7 +479,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         if (MessageHelper.ShowQuestion("Teklif başarıyla oluşturuldu. Ürün eklemek ister misiniz?") == DialogResult.Yes)
                         {
                             Hide();
-                            itemEditor itemEditor = new itemEditor(teklifId, null, "Add");
+                            itemEditor itemEditor = new itemEditor(teklifId, null, "Add", new itemManager());
                             if (itemEditor.ShowDialog() == DialogResult.OK)
                             {
                                 offerManager.UpdateOfferById(teklifId);
@@ -484,9 +496,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
             else if (editor_mode == "Edit")
             {
-
-                OfferManager offerManager = new OfferManager();
-
                 int yetkiliId;
                 if (chkYetkililer.SelectedIndex >= 0 && chkYetkililer.SelectedValue != null)
                 {
@@ -499,7 +508,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
 
-                offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtİscilik.Text, txtIskonto.Text, "20", chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
+                _offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtİscilik.Text, txtIskonto.Text, "20", chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
                 Close();
             }
         }
@@ -523,7 +532,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
                     Hide();
-                    itemEditor editor = new itemEditor(offer_id, kalemId, "Edit");
+                    itemEditor editor = new itemEditor(offer_id, kalemId, "Edit", new itemManager());
                     editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
                     editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
                     editor.ShowDialog();
@@ -596,7 +605,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            itemEditor itemEditor = new itemEditor(offer_id, null, "Add");
+            itemEditor itemEditor = new itemEditor(offer_id, null, "Add", new itemManager());
             itemEditor.ShowDialog();
             LoadProducts();
         }
@@ -643,7 +652,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
                 var row = teklifDetay.Rows[0];
-                string firmaAdi = row["adi"].ToString();
+                string firmaAdi = row["isim"].ToString();
                 string yetkiliAdi = row["isim"].ToString();
                 string teklifTarih = Convert.ToDateTime(row["teklif_tarih"]).ToString("dd.MM.yyyy");
 
@@ -1081,6 +1090,27 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         {
             return value.ToString($"N{precision}", new CultureInfo("tr-TR"));
         }
-        
+
+        private void txtİscilik_TextChanged(object sender, EventArgs e)
+        {
+            HesaplaVeGoster();
+        }
+
+        private void txtLME_TextChanged(object sender, EventArgs e)
+        {
+            HesaplaVeGoster();
+        }
+
+        private void HesaplaVeGoster()
+        {
+            decimal iscilik = 0, lme = 0, sonuc = 0;
+
+            // TryParse ile güvenli dönüşüm
+            decimal.TryParse(txtİscilik.Text, NumberStyles.Any, new CultureInfo("tr-TR"), out iscilik);
+            decimal.TryParse(txtLME.Text, NumberStyles.Any, new CultureInfo("tr-TR"), out lme);
+
+            sonuc = (iscilik / 1000) + (lme / 1000);
+            label12.Text = sonuc.ToString("N3", new CultureInfo("tr-TR"));
+        }
     }
 }

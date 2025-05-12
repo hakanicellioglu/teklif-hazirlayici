@@ -18,21 +18,26 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
     {
         string editor_mode;
         int? auth_id;
-        CompanyManager CompanyManager = new CompanyManager();
-        AuthManager AuthManager = new AuthManager();
+        
+        private readonly CompanyManager _companyManager;
+        private readonly AuthManager _authManager;
+        //CompanyManager CompanyManager = new CompanyManager();
+        //uthManager AuthManager = new AuthManager();
 
-        public authEditor(int? authId, string editorMode)
+        public authEditor(int? authId, string editorMode, CompanyManager companyManager, AuthManager authManager)
         {
             InitializeComponent();
             auth_id = authId;
             editor_mode = editorMode;
+            _companyManager = companyManager;
+            _authManager = authManager;
             LoadCompany();
             SelectionMode();
         }
 
         private void LoadCompany()
         {
-            var dt = CompanyManager.GetCompany(); // DataTable
+            var dt = _companyManager.GetCompany(); // DataTable
 
             if (dt == null || dt.Rows.Count == 0)
             {
@@ -41,7 +46,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
 
             comboBox1.DataSource = dt;
-            comboBox1.DisplayMember = "adi"; // Görünen
+            comboBox1.DisplayMember = "isim"; // Görünen
             comboBox1.ValueMember = "firma_id";    // Firma ID (veritabanı ID'si)
         }
 
@@ -68,7 +73,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     var authList = companyManager.GetCompanyById(Convert.ToInt32(auth["firma_id"]));
                     if (authList.Count > 0)
                     {
-                        string firmaAdi = authList[0]["adi"].ToString();
+                        string firmaAdi = authList[0]["isim"].ToString();
                         int index = comboBox1.FindStringExact(firmaAdi);
                         if (index >= 0)
                         {
@@ -109,7 +114,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 else
                 {
                     companyId = Convert.ToInt32(comboBox1.SelectedValue);
-                    AuthManager.AddAuth(companyId, textBox1.Text, textBox2.Text, comboBox2.Text, textBox3.Text, textBox4.Text, textBox5.Text);
+                    _authManager.AddAuth(companyId, textBox1.Text, textBox2.Text, comboBox2.Text, textBox3.Text, textBox4.Text, textBox5.Text);
                     DialogResult = DialogResult.OK;
                 }
             }
@@ -126,7 +131,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     // Ardından çağrı
                     companyId = Convert.ToInt32(comboBox1.SelectedValue);
 
-                    AuthManager.UpdateAuth(
+                    _authManager.UpdateAuth(
                         auth_id,
                         companyId,
                         textBox1.Text,

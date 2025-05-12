@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Teklif_Hazırlayıcı.Helpers;
 using System.Windows.Forms;
 using System.IO;
+using System.Data.SqlClient;
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -19,7 +20,7 @@ namespace Teklif_Hazırlayıcı.Business
         * Uygulama boyunca yalnızca okunabilir (readonly) olarak tanımlanmıştır.
         *
         */
-        private readonly DataAccess.DbConnection _connection;
+        private readonly DataAccess.SqlDbConnection _connection;
         public itemManager()
         {
             /*
@@ -28,12 +29,12 @@ namespace Teklif_Hazırlayıcı.Business
              * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
              *
              */
-            _connection = new DataAccess.DbConnection();
+            _connection = new DataAccess.SqlDbConnection();
 
         }
-        
+
         #region CRUD İşlemleri
-        
+
         public void AddProduct(int? teklif_id, int urun_id, string yuzey, string yuzey_kodu, int adet, int boy, decimal kg, decimal birim_fiyat, decimal toplam_tutar)
         {
             /*
@@ -56,10 +57,10 @@ namespace Teklif_Hazırlayıcı.Business
                      VALUES 
                      (@TeklifId, @UrunId, @Yuzey, @YuzeyKodu, @Adet, @Boy, @Kg, @BirimFiyat, @ToplamTutar)";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     var kgParam = new OleDbParameter("@kg", OleDbType.Double);
                     kgParam.Value = kg;
@@ -98,11 +99,11 @@ namespace Teklif_Hazırlayıcı.Business
 
         public bool DeleteProductByKalemId(int? kalem_id)
         {
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
 
-                var deleteItemsCmd = new OleDbCommand("DELETE FROM kalemler WHERE kalem_id = @KalemId", conn);
+                var deleteItemsCmd = new SqlCommand("DELETE FROM kalemler WHERE kalem_id = @KalemId", conn);
                 deleteItemsCmd.Parameters.AddWithValue("@KalemId", kalem_id);
 
                 int result = deleteItemsCmd.ExecuteNonQuery();
@@ -125,10 +126,10 @@ WHERE kalem_id = @KalemId";
 
             try
             {
-                using (OleDbConnection conn = _connection.GetConnection())
+                using (SqlConnection conn = _connection.GetConnection())
                 {
                     conn.Open();
-                    using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@Yuzey", string.IsNullOrEmpty(yuzey) ? DBNull.Value : (object)yuzey);
                         cmd.Parameters.AddWithValue("@YuzeyKodu", string.IsNullOrEmpty(yuzey_kodu) ? DBNull.Value : (object)yuzey_kodu);
@@ -171,13 +172,13 @@ WHERE kalem_id = @KalemId";
                 return null;
 
             string query = "SELECT kategori FROM urunler WHERE urun_id = @ProductId";
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@ProductId", urun_id);
-                    using (OleDbDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -200,9 +201,9 @@ WHERE kalem_id = @KalemId";
              *
              */
             string query = "SELECT * FROM urunler";
-            using (OleDbCommand cmd = new OleDbCommand(query, _connection.GetConnection()))
+            using (SqlCommand cmd = new SqlCommand(query, _connection.GetConnection()))
             {
-                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 adapter.Fill(dt);
                 return dt;
@@ -220,10 +221,10 @@ WHERE kalem_id = @KalemId";
              */
             string query = "SELECT lme FROM teklifler WHERE teklif_id = @TeklifId";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
                     object result = cmd.ExecuteScalar();
@@ -240,10 +241,10 @@ WHERE kalem_id = @KalemId";
         {
             string query = "SELECT iscilik FROM teklifler WHERE teklif_id = @TeklifId";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
                     object result = cmd.ExecuteScalar();
@@ -266,10 +267,10 @@ WHERE kalem_id = @KalemId";
              *
              */
             string query = "SELECT gramaj FROM urunler WHERE urun_id = @ProductId";
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@ProductId", urun_id);
                     var result = cmd.ExecuteScalar();
@@ -286,13 +287,13 @@ WHERE kalem_id = @KalemId";
                      INNER JOIN urunler u ON k.urun_id = u.urun_id
                      WHERE k.teklif_id = @TeklifId";
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
-                    OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     return dt;
@@ -309,13 +310,13 @@ WHERE kalem_id = @KalemId";
             "WHERE k.kalem_id = @KalemId";
 
 
-            using (OleDbConnection conn = _connection.GetConnection())
+            using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@KalemId", kalem_id);
-                    OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     return dt;

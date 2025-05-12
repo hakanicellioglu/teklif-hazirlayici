@@ -69,7 +69,7 @@
             this.panel1.Location = new System.Drawing.Point(75, 25);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1064, 50);
-            this.panel1.TabIndex = 7;
+            this.panel1.TabIndex = 0;
             // 
             // btnSettings
             // 
@@ -81,7 +81,7 @@
             this.btnSettings.Location = new System.Drawing.Point(964, 0);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(100, 50);
-            this.btnSettings.TabIndex = 5;
+            this.btnSettings.TabIndex = 4;
             this.btnSettings.Text = "Ayarlar";
             this.btnSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolTip1.SetToolTip(this.btnSettings, "Ayarlar");
@@ -97,7 +97,7 @@
             this.btnOffer.Location = new System.Drawing.Point(300, 0);
             this.btnOffer.Name = "btnOffer";
             this.btnOffer.Size = new System.Drawing.Size(100, 50);
-            this.btnOffer.TabIndex = 4;
+            this.btnOffer.TabIndex = 3;
             this.btnOffer.Text = "Teklifler";
             this.btnOffer.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolTip1.SetToolTip(this.btnOffer, "Teklifler");
@@ -114,7 +114,7 @@
             this.btnProduct.Location = new System.Drawing.Point(200, 0);
             this.btnProduct.Name = "btnProduct";
             this.btnProduct.Size = new System.Drawing.Size(100, 50);
-            this.btnProduct.TabIndex = 3;
+            this.btnProduct.TabIndex = 2;
             this.btnProduct.Text = "Ürünler";
             this.btnProduct.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolTip1.SetToolTip(this.btnProduct, "Ürünler");
@@ -131,7 +131,7 @@
             this.btnAuth.Location = new System.Drawing.Point(100, 0);
             this.btnAuth.Name = "btnAuth";
             this.btnAuth.Size = new System.Drawing.Size(100, 50);
-            this.btnAuth.TabIndex = 2;
+            this.btnAuth.TabIndex = 1;
             this.btnAuth.Text = "Yetkililer";
             this.btnAuth.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolTip1.SetToolTip(this.btnAuth, "Yetkililer");
@@ -148,7 +148,7 @@
             this.btnCompany.Location = new System.Drawing.Point(0, 0);
             this.btnCompany.Name = "btnCompany";
             this.btnCompany.Size = new System.Drawing.Size(100, 50);
-            this.btnCompany.TabIndex = 1;
+            this.btnCompany.TabIndex = 0;
             this.btnCompany.Text = "Firmalar";
             this.btnCompany.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolTip1.SetToolTip(this.btnCompany, "Firmalar");
@@ -165,7 +165,7 @@
             this.btnLogout.Location = new System.Drawing.Point(1139, 25);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Size = new System.Drawing.Size(100, 50);
-            this.btnLogout.TabIndex = 6;
+            this.btnLogout.TabIndex = 2;
             this.btnLogout.Text = "Çıkış Yap";
             this.btnLogout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolTip1.SetToolTip(this.btnLogout, "Çıkış Yap");
@@ -183,7 +183,7 @@
             this.btnHome.Location = new System.Drawing.Point(25, 25);
             this.btnHome.Name = "btnHome";
             this.btnHome.Size = new System.Drawing.Size(50, 50);
-            this.btnHome.TabIndex = 0;
+            this.btnHome.TabIndex = 1;
             this.btnHome.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnHome.UseVisualStyleBackColor = true;
             this.btnHome.Visible = false;

@@ -64,7 +64,8 @@
     <Compile Include="Business\OfferManager.cs" />
     <Compile Include="Business\ProductManager.cs" />
     <Compile Include="Business\UserManager.cs" />
-    <Compile Include="DataAccess\DbConnection.cs" />
+    <Compile Include="DataAccess\DatabaseInitializer.cs" />
+    <Compile Include="DataAccess\SqlDbConnection.cs" />
     <Compile Include="Forms\auth.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -236,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataAccess\teklif-hazirlayici.mdb" />
+    <Content Include="Forms\Resources\favicon.ico" />
     <Content Include="Forms\Resources\icons\add-48.png" />
     <Content Include="Forms\Resources\icons\clear-48.png" />
     <Content Include="Forms\Resources\icons\document-48.png" />
@@ -245,7 +247,9 @@
     <Content Include="Forms\Resources\icons\left-48.png" />
     <Content Include="Forms\Resources\icons\logout-48.png" />
     <Content Include="Forms\Resources\icons\pdf-48.png" />
+    <Content Include="Forms\Resources\icons\pdf-50.png" />
     <Content Include="Forms\Resources\icons\product-48.png" />
+    <Content Include="Forms\Resources\icons\refresh-48.png" />
     <Content Include="Forms\Resources\icons\search-48.png" />
     <Content Include="Forms\Resources\icons\settings-48.png" />
     <Content Include="Forms\Resources\icons\show-48.png" />

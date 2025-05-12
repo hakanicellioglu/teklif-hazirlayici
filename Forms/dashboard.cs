@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Teklif_Hazırlayıcı.Forms.Editor;
 
 namespace Teklif_Hazırlayıcı.Forms
 {
-    public partial class dashboard: Form
+    public partial class dashboard : Form
     {
         public dashboard()
         {
@@ -20,6 +21,7 @@ namespace Teklif_Hazırlayıcı.Forms
         private void LoadForm(Form formToLoad)
         {
             panel1.Visible = false;
+            panel1.Enabled = false;
             btnHome.Visible = true;
 
             if (pnlForm.Controls.Count > 0)
@@ -39,18 +41,19 @@ namespace Teklif_Hazırlayıcı.Forms
         private void btnHome_Click(object sender, EventArgs e)
         {
             panel1.Visible = true;
+            panel1.Enabled = true;
             btnHome.Visible = false;
             pnlForm.Controls.Clear();
         }
 
         private void btnCompany_Click(object sender, EventArgs e)
         {
-            LoadForm(new company());
+            LoadForm(new company(new Business.CompanyManager()));
         }
 
         private void btnAuth_Click(object sender, EventArgs e)
         {
-            LoadForm(new auth());
+            LoadForm(new auth(new Business.CompanyManager(), new Business.AuthManager()));
         }
 
         private void dashboard_Resize(object sender, EventArgs e)
@@ -60,12 +63,12 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnProduct_Click(object sender, EventArgs e)
         {
-            LoadForm(new product());
+            LoadForm(new product(new Business.ProductManager()));
         }
 
         private void btnOffer_Click(object sender, EventArgs e)
         {
-            LoadForm(new offer());
+            LoadForm(new offer(new Business.OfferManager(), new offerEditor(null, "Add", new Business.AuthManager(), new Business.CompanyManager(), new Business.OfferManager())));
         }
 
         private void btnLogout_Click(object sender, EventArgs e)

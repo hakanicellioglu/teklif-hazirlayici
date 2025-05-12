@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Teklif_Hazırlayıcı.DataAccess;
 
 namespace Teklif_Hazırlayıcı
 {
@@ -15,6 +16,8 @@ namespace Teklif_Hazırlayıcı
         [STAThread]
         static void Main()
         {
+            DatabaseInitializer.Initialize();
+
             string projectPath = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\.."));
             AppDomain.CurrentDomain.SetData("DataDirectory", projectPath);
 
