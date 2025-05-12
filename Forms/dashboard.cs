@@ -20,6 +20,7 @@ namespace Teklif_Hazırlayıcı.Forms
         private void LoadForm(Form formToLoad)
         {
             panel1.Visible = false;
+            panel1.Enabled = false;
             btnHome.Visible = true;
 
             if (pnlForm.Controls.Count > 0)
@@ -39,6 +40,7 @@ namespace Teklif_Hazırlayıcı.Forms
         private void btnHome_Click(object sender, EventArgs e)
         {
             panel1.Visible = true;
+            panel1.Enabled = true;
             btnHome.Visible = false;
             pnlForm.Controls.Clear();
         }
@@ -65,7 +67,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnOffer_Click(object sender, EventArgs e)
         {
-            LoadForm(new offer());
+            LoadForm(new offer(new Business.OfferManager()));
         }
 
         private void btnLogout_Click(object sender, EventArgs e)

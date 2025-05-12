@@ -16,14 +16,15 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
     {
         int? teklif_id, kalem_id;
         string kategori, editor_mode;
-        itemManager itemManager = new itemManager();
+        private readonly itemManager _itemManager;
 
-        public itemEditor(int? teklifId, int? kalemId, string editMode)
+        public itemEditor(int? teklifId, int? kalemId, string editMode, itemManager itemManager)
         {
             InitializeComponent();
             teklif_id = teklifId;
             kalem_id = kalemId;
             editor_mode = editMode;
+            _itemManager = itemManager;
             LoadProduct();
             SelectionMode();
         }
@@ -49,7 +50,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 button1.Text = "Kaydet";
                 btnCancel.Visible = true;
 
-                var data = itemManager.GetProductById(kalem_id);
+                var data = _itemManager.GetProductById(kalem_id);
 
                 if (data != null && data.Rows.Count > 0)
                 {
@@ -99,7 +100,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private bool LoadProduct()
         {
-            var dt = itemManager.GetProduct(); // DataTable
+            var dt = _itemManager.GetProduct(); // DataTable
 
             if (dt == null || dt.Rows.Count == 0)
             {
@@ -121,7 +122,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
             if (int.TryParse(chkUrunler.SelectedValue.ToString(), out int item_id))
             {
-                string kategoriBilgisi = itemManager.GetCategory(item_id);
+                string kategoriBilgisi = _itemManager.GetCategory(item_id);
                 kategori = kategoriBilgisi;
 
                 if (kategoriBilgisi == "Alüminyum")
@@ -186,11 +187,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     boy_mm = 0;
                 }
 
-                decimal lmeTon = itemManager.GetLMEFromTeklif(teklif_id.Value);
-                decimal iscilikTon = itemManager.Getİscilik(teklif_id.Value);
+                decimal lmeTon = _itemManager.GetLMEFromTeklif(teklif_id.Value);
+                decimal iscilikTon = _itemManager.Getİscilik(teklif_id.Value);
                 decimal birimFiyat = (lmeTon / 1000m) + (iscilikTon / 1000m);
 
-                decimal gramaj = itemManager.GetGramaj((int)chkUrunler.SelectedValue);
+                decimal gramaj = _itemManager.GetGramaj((int)chkUrunler.SelectedValue);
                 decimal boy_m = boy_mm / 1000m;
                 decimal toplamKg = Math.Round(gramaj * boy_m * adet * 1.1m, 3);
                 decimal toplamTutar = Math.Round(toplamKg * birimFiyat, 2);
@@ -206,7 +207,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
 
-                if (itemManager.UpdateProductByKalemId(kalem_id.Value, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar))
+                if (_itemManager.UpdateProductByKalemId(kalem_id.Value, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar))
                 {
                     offerManager.UpdateOfferById(teklif_id.Value);
                     MessageHelper.ShowInfo("Kalem başarıyla güncellendi.");
@@ -256,7 +257,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
 
 
-            decimal lmeTon = itemManager.GetLMEFromTeklif(teklif_id.Value);
+            decimal lmeTon = _itemManager.GetLMEFromTeklif(teklif_id.Value);
             if (lmeTon <= 0)
             {
                 MessageHelper.ShowError("Teklif için geçerli bir LME değeri bulunamadı.");
@@ -264,7 +265,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 return;
             }
 
-            decimal iscilikTon = itemManager.Getİscilik(teklif_id.Value);
+            decimal iscilikTon = _itemManager.Getİscilik(teklif_id.Value);
             if (iscilikTon <= 0)
             {
                 MessageHelper.ShowError("Teklif için geçerli bir işçilik değeri bulunamadı.");
@@ -274,7 +275,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
             decimal birimFiyat = (lmeTon / 1000m) + (iscilikTon / 1000m);
 
-            decimal gramaj = itemManager.GetGramaj(urun_id);
+            decimal gramaj = _itemManager.GetGramaj(urun_id);
             decimal boy_m = boy_mm / 1000m;
             decimal toplamKg = Math.Round(gramaj * boy_m * adet * 1.1m, 3);
             decimal toplamTutar = Math.Round(toplamKg * birimFiyat, 2);
@@ -282,7 +283,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             string yuzey = chkYuzey.Text;
             string yuzey_kodu = txtYuzeyKodu.Text;
 
-            itemManager.AddProduct(teklif_id, urun_id, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar);
+            _itemManager.AddProduct(teklif_id, urun_id, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar);
             offerManager = new OfferManager();
         }
 

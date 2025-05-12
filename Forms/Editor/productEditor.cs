@@ -20,12 +20,13 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
     {
         string editor_mode;
         int? product_id;
-        ProductManager productManager = new ProductManager();
-        public productEditor(int? productId, string editorMode)
+        private readonly ProductManager _productManager;
+        public productEditor(int? productId, string editorMode, ProductManager productManager)
         {
             InitializeComponent();
             editor_mode = editorMode;
             product_id = productId;
+            _productManager = productManager;
             SelectionMode();
         }
 
@@ -41,8 +42,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 button1.Text = "Kaydet";
                 btnCancel.Visible = true;
 
-                ProductManager manager = new ProductManager();
-                var data = manager.GetProductById(product_id);
+                var data = _productManager.GetProductById(product_id);
 
                 if (data.Any())
                 {
@@ -81,7 +81,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     {
                         decimal gramaj;
                         ExtractGramaj(out gramaj);
-                        productManager.AddProduct(textBox2.Text, textBox1.Text, gramaj, comboBox2.Text);
+                        _productManager.AddProduct(textBox2.Text, textBox1.Text, gramaj, comboBox2.Text);
                         DialogResult = DialogResult.OK;
                     }
                 }
@@ -92,7 +92,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 {
                     decimal gramaj;
                     ExtractGramaj(out gramaj);
-                    productManager.UpdateProduct(product_id, textBox2.Text, textBox1.Text, gramaj, comboBox2.Text);
+                    _productManager.UpdateProduct(product_id, textBox2.Text, textBox1.Text, gramaj, comboBox2.Text);
                     DialogResult = DialogResult.OK;
                 }
             }

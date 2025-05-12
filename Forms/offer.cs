@@ -17,16 +17,19 @@ namespace Teklif_Hazırlayıcı.Forms
 {
     public partial class offer : Form
     {
-        OfferManager offerManager = new OfferManager();
-        public offer()
+        private readonly OfferManager _offerManager;
+        private readonly offerEditor _offerEditor;
+
+        public offer(OfferManager offerManager)
         {
             InitializeComponent();
+            _offerManager = offerManager;
             LoadOffer();
         }
 
         private void LoadOffer()
         {
-            dataGridView1.DataSource = offerManager.GetOffer();
+            dataGridView1.DataSource = _offerManager.GetOffer();
             SetupGridColumnProperties();
             SetupOfferGridColumns();
         }
@@ -71,7 +74,11 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddCompany_Click(object sender, EventArgs e)
         {
-            using (var editor = new offerEditor(null, "Add"))
+            using (var editor = new offerEditor(null, 
+                "Add", 
+                new AuthManager(), 
+                new CompanyManager(), 
+                new OfferManager()))
             {
                 Width = Screen.PrimaryScreen.WorkingArea.Width;
                 Height = Screen.PrimaryScreen.WorkingArea.Height;
@@ -91,7 +98,7 @@ namespace Teklif_Hazırlayıcı.Forms
             }
             else
             {
-                var result = offerManager.Search(txtSearch.Text);
+                var result = _offerManager.Search(txtSearch.Text);
 
                 if (result != null)
                 {
@@ -125,7 +132,7 @@ namespace Teklif_Hazırlayıcı.Forms
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
                     Parent.Parent.Hide();
-                    using (var editor = new offerEditor(teklifId, "Edit"))
+                    using (var editor = new offerEditor(teklifId, "Edit", new AuthManager(), new CompanyManager(), new OfferManager()))
                     {
                         editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
                         editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
@@ -140,8 +147,8 @@ namespace Teklif_Hazırlayıcı.Forms
                     var confirm = MessageHelper.ShowQuestion("Bu teklifi ve ilişkili tüm ürünleri silmek istediğinize emin misiniz?");
                     if (confirm == DialogResult.Yes)
                     {
-                        OfferManager manager = new OfferManager();
-                        if (manager.DeleteOffer(teklifId))
+                        
+                        if (_offerManager.DeleteOffer(teklifId))
                         {
                             MessageHelper.ShowInfo("Teklif başarıyla silindi.");
                             LoadOffer();
@@ -157,7 +164,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddOffer_Click(object sender, EventArgs e)
         {
-            using (var offerEditor = new offerEditor(null, "Add"))
+            using (var offerEditor = new offerEditor(null, "Add", new AuthManager(), new CompanyManager(), new OfferManager()))
             {
                 offerEditor.ShowDialog();
             }

@@ -17,10 +17,11 @@ namespace Teklif_Hazırlayıcı.Forms
 {
     public partial class product: Form
     {
-        ProductManager productManager = new ProductManager();
-        public product()
+        private readonly ProductManager _productManager;
+        public product(ProductManager productManager)
         {
             InitializeComponent();
+            _productManager = productManager;
             LoadProduct();
         }
 
@@ -35,7 +36,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void LoadProduct()
         {
-            dataGridView1.DataSource = productManager.GetProduct();
+            dataGridView1.DataSource = _productManager.GetProduct();
             SetupGridColumnProperties();
             SetupProductGridColumns();
         }
@@ -88,7 +89,7 @@ namespace Teklif_Hazırlayıcı.Forms
             }
             else
             {
-                var result = productManager.Search(txtSearch.Text);
+                var result = _productManager.Search(txtSearch.Text);
 
                 if (result != null && result.Rows.Count > 0)
                 if (result != null)
@@ -108,7 +109,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddProduct_Click(object sender, EventArgs e)
         {
-            using (var productEditor = new productEditor(null, "Add"))
+            using (var productEditor = new productEditor(null, "Add", new ProductManager()))
             {
                 productEditor.ShowDialog();
             }
@@ -124,7 +125,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    using (var editor = new productEditor(value, "Edit"))
+                    using (var editor = new productEditor(value, "Edit", new ProductManager()))
                     {
                         editor.ShowDialog();
                     }
@@ -135,7 +136,7 @@ namespace Teklif_Hazırlayıcı.Forms
                     var confirm = MessageBox.Show("Bu yetkiliyi silmek istediğinize emin misiniz?", "Onay", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (confirm == DialogResult.Yes)
                     {
-                        productManager.DeleteProduct(value.Value);
+                        _productManager.DeleteProduct(value.Value);
                         LoadProduct();
                     }
                 }

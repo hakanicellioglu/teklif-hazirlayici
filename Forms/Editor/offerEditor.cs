@@ -30,13 +30,16 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         private readonly OfferManager _offerManager = new OfferManager();
 
 
-        public offerEditor(int? offerId, string editMode)
+        public offerEditor(int? offerId, string editMode, AuthManager authManager, CompanyManager companyManager, OfferManager offerManager)
         {
             InitializeComponent();
             offer_id = offerId;
             editor_mode = editMode;
             LoadOffer();
             SelectionMode();
+            _authManager = authManager;
+            _companyManager = companyManager;
+            _offerManager = offerManager;
         }
 
         private void SelectionMode()

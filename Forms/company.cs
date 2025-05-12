@@ -18,7 +18,7 @@ namespace Teklif_Hazırlayıcı.Forms
 {
     public partial class company : Form
     {
-        CompanyManager CompanyManager = new CompanyManager();
+        private readonly CompanyManager _companyManager;
         public company()
         {
             InitializeComponent();
@@ -27,7 +27,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void LoadCompany()
         {
-            dataGridView1.DataSource = CompanyManager.GetCompany();
+            dataGridView1.DataSource = _companyManager.GetCompany();
             SetupGridColumnProperties();
             SetupCompanyGridColumns();
         }
@@ -79,7 +79,7 @@ namespace Teklif_Hazırlayıcı.Forms
             }
             else
             {
-                var result = CompanyManager.Search(txtSearch.Text);
+                var result = _companyManager.Search(txtSearch.Text);
 
                 if (result != null && result.Rows.Count > 0)
                 if (result != null)
@@ -126,7 +126,7 @@ namespace Teklif_Hazırlayıcı.Forms
                     var confirm = MessageBox.Show("Bu şirketi silmek istediğinize emin misiniz?", "Onay", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (confirm == DialogResult.Yes)
                     {
-                        CompanyManager.DeleteCompany(value.Value);
+                        _companyManager.DeleteCompany(value.Value);
                         LoadCompany();
                     }
                 }
