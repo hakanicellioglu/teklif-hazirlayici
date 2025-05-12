@@ -114,7 +114,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 else
                 {
                     companyId = Convert.ToInt32(comboBox1.SelectedValue);
-                    MessageBox.Show(companyId.ToString());
                     _authManager.AddAuth(companyId, textBox1.Text, textBox2.Text, comboBox2.Text, textBox3.Text, textBox4.Text, textBox5.Text);
                     DialogResult = DialogResult.OK;
                 }

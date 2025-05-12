@@ -153,7 +153,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    using (var authEditor = new authEditor(null, "Edit", new CompanyManager(), new AuthManager()))
+                    using (var authEditor = new authEditor(value.Value, "Edit", new CompanyManager(), new AuthManager()))
                     {
                         authEditor.ShowDialog();
                     }

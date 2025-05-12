@@ -25,8 +25,10 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
     {
         string editor_mode;
         int? offer_id;
-        CompanyManager CompanyManager = new CompanyManager();
-        AuthManager AuthManager = new AuthManager();
+        private readonly CompanyManager _companyManager = new CompanyManager();
+        private readonly AuthManager _authManager = new AuthManager();
+        private readonly OfferManager _offerManager = new OfferManager();
+
 
         public offerEditor(int? offerId, string editMode)
         {
@@ -59,8 +61,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 btnEdit.Visible = true;
                 button2.Visible = true;
 
-                OfferManager manager = new OfferManager();
-                var data = manager.GetOfferById(offer_id);
+                var data = _offerManager.GetOfferById(offer_id);
 
                 if (data != null && data.Rows.Count > 0)
                 {
@@ -89,10 +90,10 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     dateTimePicker1.Value = Convert.ToDateTime(offer["teklif_tarih"]);
                     chkTeslimSekli.SelectedItem = offer["teslim_sekli"].ToString();
                     chkOdemeSekli.SelectedItem = offer["odeme_sekli"].ToString();
-                    txtOdemeVadesi.Text = offer["odeme_vadesi"].ToString();
+                    txtOdemeVadesi.Text = offer["odeme_vade"].ToString();
                     chkDovizBirimi.SelectedItem = offer["doviz_birimi"].ToString();
                     txtDovizKuru.Text = offer["doviz_kuru"].ToString();
-                    txtTeklifSuresi.Text = offer["teklif_suresi"].ToString();
+                    txtTeklifSuresi.Text = offer["teklif_sure"].ToString();
                     txtLME.Text = offer["lme"].ToString();
                     txtİscilik.Text = offer["iscilik"].ToString();
 
@@ -301,7 +302,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         }
         private bool LoadAuth(long firma_id)
         {
-            var authList = AuthManager.GetAuthByCompanyId(firma_id);
+            var authList = _authManager.GetAuthByCompanyId(firma_id);
             chkYetkililer.DataSource = null; // eski kaynakları sıfırla
 
             if (authList == null || authList.Count == 0)
@@ -335,18 +336,28 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private bool LoadCompany()
         {
-            var dt = CompanyManager.GetCompany(); // DataTable
+            var dt = _companyManager.GetCompany();
 
-            if (dt == null || dt.Rows.Count == 0)
+            if (dt == null)
             {
-                MessageHelper.ShowError("Şirket verileri yüklenemedi.");
+                MessageHelper.ShowError("GetCompany null döndü!");
                 return false;
             }
 
+            MessageHelper.ShowInfo("Satır sayısı: " + dt.Rows.Count);
+
+            foreach (DataColumn col in dt.Columns)
+            {
+                Console.WriteLine("Kolon: " + col.ColumnName);
+            }
+
+            // Sütun adı doğruysa devam et
             chkFirmalar.DataSource = dt;
-            chkFirmalar.DisplayMember = "isim"; // Görünen
-            chkFirmalar.ValueMember = "firma_id";    // Firma ID (veritabanı ID'si)
+            chkFirmalar.DisplayMember = "isim";  // ← isim yerine firma_adi olabilir
+            chkFirmalar.ValueMember = "firma_id";
+
             return true;
+
         }
         private void btnCancel_Click(object sender, EventArgs e)
         {
