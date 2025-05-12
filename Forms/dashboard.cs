@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Teklif_Hazırlayıcı.Forms.Editor;
 
 namespace Teklif_Hazırlayıcı.Forms
 {
-    public partial class dashboard: Form
+    public partial class dashboard : Form
     {
         public dashboard()
         {
@@ -47,7 +48,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnCompany_Click(object sender, EventArgs e)
         {
-            LoadForm(new company());
+            LoadForm(new company(new Business.CompanyManager()));
         }
 
         private void btnAuth_Click(object sender, EventArgs e)
@@ -62,12 +63,12 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnProduct_Click(object sender, EventArgs e)
         {
-            LoadForm(new product());
+            LoadForm(new product(new Business.ProductManager()));
         }
 
         private void btnOffer_Click(object sender, EventArgs e)
         {
-            LoadForm(new offer(new Business.OfferManager()));
+            LoadForm(new offer(new Business.OfferManager(), new offerEditor(null, "Add", new Business.AuthManager(), new Business.CompanyManager(), new Business.OfferManager())));
         }
 
         private void btnLogout_Click(object sender, EventArgs e)

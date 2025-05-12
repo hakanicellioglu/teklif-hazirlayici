@@ -479,7 +479,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         if (MessageHelper.ShowQuestion("Teklif başarıyla oluşturuldu. Ürün eklemek ister misiniz?") == DialogResult.Yes)
                         {
                             Hide();
-                            itemEditor itemEditor = new itemEditor(teklifId, null, "Add");
+                            itemEditor itemEditor = new itemEditor(teklifId, null, "Add", new itemManager());
                             if (itemEditor.ShowDialog() == DialogResult.OK)
                             {
                                 offerManager.UpdateOfferById(teklifId);
@@ -532,7 +532,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
                     Hide();
-                    itemEditor editor = new itemEditor(offer_id, kalemId, "Edit");
+                    itemEditor editor = new itemEditor(offer_id, kalemId, "Edit", new itemManager());
                     editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
                     editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
                     editor.ShowDialog();
@@ -605,7 +605,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            itemEditor itemEditor = new itemEditor(offer_id, null, "Add");
+            itemEditor itemEditor = new itemEditor(offer_id, null, "Add", new itemManager());
             itemEditor.ShowDialog();
             LoadProducts();
         }

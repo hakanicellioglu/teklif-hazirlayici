@@ -20,10 +20,11 @@ namespace Teklif_Hazırlayıcı.Forms
         private readonly OfferManager _offerManager;
         private readonly offerEditor _offerEditor;
 
-        public offer(OfferManager offerManager)
+        public offer(OfferManager offerManager, offerEditor offerEditor)
         {
             InitializeComponent();
             _offerManager = offerManager;
+            _offerEditor = offerEditor;
             LoadOffer();
         }
 

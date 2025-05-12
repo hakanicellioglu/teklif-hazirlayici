@@ -18,11 +18,12 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         string editor_mode;
         int? company_id;
         private readonly CompanyManager _companyManager;
-        public companyEditor(int? companyId, string editorMode)
+        public companyEditor(int? companyId, string editorMode, CompanyManager companyManager)
         {
             InitializeComponent();
             editor_mode = editorMode;
             company_id = companyId;
+            _companyManager = companyManager;
             SelectionMode();
         }
         private void SelectionMode()

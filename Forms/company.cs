@@ -19,9 +19,10 @@ namespace Teklif_Hazırlayıcı.Forms
     public partial class company : Form
     {
         private readonly CompanyManager _companyManager;
-        public company()
+        public company(CompanyManager companyManager)
         {
             InitializeComponent();
+            _companyManager = companyManager;
             LoadCompany();
         }
 
@@ -60,7 +61,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAddCompany_Click(object sender, EventArgs e)
         {
-            using (var companyEditor = new companyEditor(null, "Add"))
+            using (var companyEditor = new companyEditor(null, "Add", new CompanyManager())) 
             {
                 companyEditor.ShowDialog();
             }
@@ -115,7 +116,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
-                    using (var editor = new companyEditor(value, "Edit"))
+                    using (var editor = new companyEditor(value, "Edit", new CompanyManager())) 
                     {
                         editor.ShowDialog();
                     }
