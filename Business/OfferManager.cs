@@ -62,15 +62,15 @@ namespace Teklif_Hazırlayıcı.Business
         t.teklif_id,
         t.firma_id,
         t.yetkili_id,
-        f.isim AS firma_adi,
+        f.isim AS isim,
         y.isim AS yetkili_adi,
         y.soyisim AS yetkili_soyadi,
         y.hitap,
         t.teklif_tarih,
         t.teslim_sekli,
         t.odeme_sekli,
-        t.odeme_vadesi,
-        t.teklif_suresi,
+        t.odeme_vade,
+        t.teklif_sure,
         t.doviz_kuru,
         t.doviz_birimi,
         t.vade,
@@ -78,7 +78,7 @@ namespace Teklif_Hazırlayıcı.Business
         t.iscilik,
         t.toplam_adet,
         t.toplam_kg,
-        t.mal_hizmet_tutari,
+        t.mal_hizmet_bedeli,
         t.iskonto_orani,
         t.iskonto_tutari,
         t.kdv_orani,
@@ -87,20 +87,20 @@ namespace Teklif_Hazırlayıcı.Business
         t.tevkifat_orani,
         t.tevkifat_tutari,
         t.genel_toplam,
-        t.odenecek_tutar,
+        t.odencek,
         t.durum
     FROM 
         (teklifler AS t
         LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
         LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id
-    WHERE t.teklif_id = ?";
+    WHERE t.teklif_id = @OfferId";
 
             using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("?", offer_id); // OleDb: parametre adı değil, sırası önemli
+                    cmd.Parameters.AddWithValue("@OfferId", offer_id); // OleDb: parametre adı değil, sırası önemli
 
                     using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                     {
@@ -201,7 +201,7 @@ namespace Teklif_Hazırlayıcı.Business
 
             int teklifId = -1;
 
-            string query = "INSERT INTO teklifler (firma_id, yetkili_id, teklif_tarih, teslim_sekli, odeme_sekli, odeme_vadesi, teklif_suresi, doviz_kuru, doviz_birimi, vade, lme, iscilik, iskonto_orani, kdv_orani, tevkifat, tevkifat_orani, durum) " +
+            string query = "INSERT INTO teklifler (firma_id, yetkili_id, teklif_tarih, teslim_sekli, odeme_sekli, odeme_vade, teklif_sure, doviz_kuru, doviz_birimi, vade, lme, iscilik, iskonto_orani, kdv_orani, tevkifat, tevkifat_orani, durum) " +
                            "VALUES (@CompanyId, @AuthorizedPersonId, @OfferDate, @DeliveryMethod, @PaymentMethod, @PaymentDue, @OfferValidity, @ExchangeRate, @CurrencyUnit, @Term, @Lme, @Workmanship, @DiscountRate, @VatRate, @Withholding, @WithholdingRate, @Status);";
 
             string getIdQuery = "SELECT @@IDENTITY;";
@@ -293,19 +293,19 @@ namespace Teklif_Hazırlayıcı.Business
                 using (SqlCommand selectCmd = new SqlCommand(selectQuery, conn))
                 {
                     selectCmd.Parameters.AddWithValue("@TeklifId", teklif_id);
-
+                    bool isDifferent = false;
                     using (SqlDataReader reader = selectCmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            bool isDifferent =
+                            isDifferent =
                                 (int)reader["firma_id"] != firma_id ||
                                 (int)reader["yetkili_id"] != yetkili_id ||
                                 Convert.ToDateTime(reader["teklif_tarih"]) != teklif_tarih ||
                                 reader["teslim_sekli"].ToString() != teslim_sekli ||
                                 reader["odeme_sekli"].ToString() != odeme_sekli ||
-                                Convert.ToInt32(reader["odeme_vadesi"]) != odeme_vadesi ||
-                                Convert.ToInt32(reader["teklif_suresi"]) != teklif_suresi ||
+                                Convert.ToInt32(reader["odeme_vade"]) != odeme_vadesi ||
+                                Convert.ToInt32(reader["teklif_sure"]) != teklif_suresi ||
                                 reader["doviz_kuru"].ToString() != doviz_kuru ||
                                 Convert.ToChar(reader["doviz_birimi"]) != doviz_birimi ||
                                 reader["vade"].ToString() != vade ||
@@ -328,7 +328,9 @@ namespace Teklif_Hazırlayıcı.Business
                             MessageHelper.ShowError("Teklif bulunamadı.");
                             return;
                         }
-
+                    }
+                    if (!isDifferent)
+                    {
                         string updateQuery = @"
                         UPDATE teklifler SET 
                             firma_id = @FirmaId,
@@ -352,24 +354,24 @@ namespace Teklif_Hazırlayıcı.Business
 
                         using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
                         {
-                            updateCmd.Parameters.Add(new OleDbParameter("@FirmaId", OleDbType.Integer) { Value = firma_id });
-                            updateCmd.Parameters.Add(new OleDbParameter("@YetkiliId", OleDbType.Integer) { Value = yetkili_id });
-                            updateCmd.Parameters.Add(new OleDbParameter("@TeklifTarih", OleDbType.Date) { Value = teklif_tarih });
-                            updateCmd.Parameters.Add(new OleDbParameter("@TeslimSekli", OleDbType.VarChar) { Value = teslim_sekli });
-                            updateCmd.Parameters.Add(new OleDbParameter("@OdemeSekli", OleDbType.VarChar) { Value = odeme_sekli });
-                            updateCmd.Parameters.Add(new OleDbParameter("@OdemeVadesi", OleDbType.Integer) { Value = odeme_vadesi });
-                            updateCmd.Parameters.Add(new OleDbParameter("@TeklifSuresi", OleDbType.Integer) { Value = teklif_suresi });
-                            updateCmd.Parameters.Add(new OleDbParameter("@DovizKuru", OleDbType.VarChar) { Value = doviz_kuru });
-                            updateCmd.Parameters.Add(new OleDbParameter("@DovizBirimi", OleDbType.VarChar) { Value = doviz_birimi.ToString() });
-                            updateCmd.Parameters.Add(new OleDbParameter("@Vade", OleDbType.VarChar) { Value = vade });
+                            updateCmd.Parameters.Add(new SqlParameter("@FirmaId", SqlDbType.Int) { Value = firma_id });
+                            updateCmd.Parameters.Add(new SqlParameter("@YetkiliId", SqlDbType.Int) { Value = yetkili_id });
+                            updateCmd.Parameters.Add(new SqlParameter("@TeklifTarih", SqlDbType.Date) { Value = teklif_tarih });
+                            updateCmd.Parameters.Add(new SqlParameter("@TeslimSekli", SqlDbType.VarChar) { Value = teslim_sekli });
+                            updateCmd.Parameters.Add(new SqlParameter("@OdemeSekli", SqlDbType.VarChar) { Value = odeme_sekli });
+                            updateCmd.Parameters.Add(new SqlParameter("@OdemeVadesi", SqlDbType.Int) { Value = odeme_vadesi });
+                            updateCmd.Parameters.Add(new SqlParameter("@TeklifSuresi", SqlDbType.Int) { Value = teklif_suresi });
+                            updateCmd.Parameters.Add(new SqlParameter("@DovizKuru", SqlDbType.VarChar) { Value = doviz_kuru });
+                            updateCmd.Parameters.Add(new SqlParameter("@DovizBirimi", SqlDbType.VarChar) { Value = doviz_birimi.ToString() });
+                            updateCmd.Parameters.Add(new SqlParameter("@Vade", SqlDbType.VarChar) { Value = vade });
                             updateCmd.Parameters.AddWithValue("@Lme", lmeStr);
                             updateCmd.Parameters.AddWithValue("@Workmanship", iscilikStr);
                             updateCmd.Parameters.AddWithValue("@IskontoOrani", iskontoStr);
                             updateCmd.Parameters.AddWithValue("@KdvOrani", kdvStr);
-                            updateCmd.Parameters.Add(new OleDbParameter("@Tevkifat", OleDbType.Boolean) { Value = tevkifat });
+                            updateCmd.Parameters.Add(new SqlParameter("@Tevkifat", SqlDbType.Bit) { Value = tevkifat });
                             updateCmd.Parameters.AddWithValue("@TevkifatOrani", tevkifatStr);
-                            updateCmd.Parameters.Add(new OleDbParameter("@Durum", OleDbType.VarChar) { Value = durum });
-                            updateCmd.Parameters.Add(new OleDbParameter("@TeklifId", OleDbType.Integer) { Value = teklif_id });
+                            updateCmd.Parameters.Add(new SqlParameter("@Durum", SqlDbType.VarChar) { Value = durum });
+                            updateCmd.Parameters.Add(new SqlParameter("@TeklifId", SqlDbType.Int) { Value = teklif_id });
 
 
                             int result = updateCmd.ExecuteNonQuery();
@@ -386,6 +388,8 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
+
+
 
         public bool UpdateOfferById(int? teklifId)
         {
@@ -428,7 +432,7 @@ namespace Teklif_Hazırlayıcı.Business
             FROM kalemler k
             INNER JOIN urunler u ON k.urun_id = u.urun_id
             WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar')";
-                using (SqlCommand cmd = new  SqlCommand(selectQuery, conn))
+                using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@teklifId", teklifId);
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -436,10 +440,10 @@ namespace Teklif_Hazırlayıcı.Business
                         if (reader.Read())
                         {
 
-                            toplamAdetStr = reader["ToplamAdet"] != DBNull.Value ? reader["ToplamAdet"].ToString().Replace(".",",") : "0";
+                            toplamAdetStr = reader["ToplamAdet"] != DBNull.Value ? reader["ToplamAdet"].ToString().Replace(".", ",") : "0";
                             toplamAdet = Convert.ToDecimal(reader["ToplamAdet"].ToString());
 
-                            toplamKgStr = reader["ToplamKg"] != DBNull.Value ? reader["ToplamKg"].ToString().Replace(".",",") : "0";
+                            toplamKgStr = reader["ToplamKg"] != DBNull.Value ? reader["ToplamKg"].ToString().Replace(".", ",") : "0";
                             toplamKg = Convert.ToDecimal(reader["ToplamKg"].ToString());
 
                             toplamTutarStr = reader["ToplamTutar"] != DBNull.Value ? reader["ToplamTutar"].ToString().Replace(".", ",") : "0";
@@ -449,7 +453,7 @@ namespace Teklif_Hazırlayıcı.Business
                 }
 
                 // 3. Finansal hesaplamalar
-                decimal iskontoTutar = ((toplamTutar * (iskontoOrani/100)));
+                decimal iskontoTutar = ((toplamTutar * (iskontoOrani / 100)));
                 decimal iskontoSonrasi = toplamTutar - iskontoTutar;
                 decimal kdv = iskontoSonrasi * 0.20m;
                 decimal aluminyumTutar = GetToplamAluminyumTutari(teklifId.Value);

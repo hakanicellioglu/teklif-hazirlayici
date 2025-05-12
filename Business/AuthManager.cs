@@ -35,6 +35,7 @@ namespace Teklif_Hazırlayıcı.Business
             _connection = new DataAccess.SqlDbConnection();
 
         }
+
         public DataTable GetAuth()
         {
             /*
