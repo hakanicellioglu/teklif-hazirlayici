@@ -366,3 +366,5 @@ FodyWeavers.xsd
 .xlsx
 *.py
 *.xlsx
+/Forms/ColumnItem.cs
+/Forms/ColumnItem.cs
