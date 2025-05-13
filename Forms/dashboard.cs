@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Forms.Editor;
 
+
 namespace Teklif_Hazırlayıcı.Forms
 {
     public partial class dashboard : Form
@@ -61,7 +62,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAuth_Click(object sender, EventArgs e)
         {
-            LoadForm(new auth(new Business.CompanyManager(), new Business.AuthManager()));
+            LoadForm(new auth(new Business.CompanyManager(), new Business.AuthManager(), new ColumnForm(new Business.AuthManager())));
         }
 
         private void dashboard_Resize(object sender, EventArgs e)
