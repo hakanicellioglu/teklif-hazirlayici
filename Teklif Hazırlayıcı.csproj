@@ -72,6 +72,7 @@
     <Compile Include="Forms\auth.Designer.cs">
       <DependentUpon>auth.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ColumnItem.cs" />
     <Compile Include="Forms\company.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,12 +26,70 @@ namespace Teklif_Hazırlayıcı.Forms
             InitializeComponent();
             _companyManager = companyManager;
             _authManager = authManager;
+            GetColumns();
             LoadAuth();
         }
 
+        private void panel3_MouseClick(object sender, MouseEventArgs e)
+        {
+            textBox1.Focus();
+        }
 
         PlaceHolder placeHolder = new PlaceHolder("Yetkili arayın...");
+        private void txt_Enter(object sender, EventArgs e)
+        {
+            placeHolder.EnterPlaceHolder(textBox1);
+        }
 
+        private void txt_Leave(object sender, EventArgs e)
+        {
+            placeHolder.LeavePlaceHolder(textBox1);
+        }
+
+        private void GetColumns()
+        {
+            var columns = _authManager.GetColumnDisplayNames("yetkililer");
+            checkedListBox1.Items.Clear();
+
+            foreach (var col in columns)
+            {
+                checkedListBox1.Items.Add(new ColumnItem(col.Name, col.DisplayName), true);
+            }
+        }
+
+
+        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            // ItemCheck gerçekleştiğinde değer henüz uygulanmamış olur
+            // Bu yüzden kendi "ne olacak" değerini alıp uygula
+            if (checkedListBox1.Items[e.Index] is ColumnItem item)
+            {
+                bool isChecked = (e.NewValue == CheckState.Checked);
+                if (dataGridView1.Columns.Contains(item.Name))
+                {
+                    dataGridView1.Columns[item.Name].Visible = isChecked;
+                }
+            }
+        }
+
+
+
+        private void ApplyColumnVisibilityFromChecklist()
+        {
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                if (checkedListBox1.Items[i] is ColumnItem item)
+                {
+                    if (dataGridView1.Columns.Contains(item.Name))
+                    {
+                        dataGridView1.Columns[item.Name].Visible = checkedListBox1.GetItemChecked(i);
+                    }
+                }
+            }
+        }
+
+
+        /*
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -39,12 +98,12 @@ namespace Teklif_Hazırlayıcı.Forms
             dataGridView1.DataSource = null;
             LoadAuth();
         }
-
+        */
         private void LoadAuth()
         {
             dataGridView1.DataSource = _authManager.GetAuthWithCompanyName();
-            SetupGridColumnProperties();
-            SetupAuthGridColumns();
+            //SetupGridColumnProperties();
+            //SetupAuthGridColumns();
         }
 
         private void SetupGridColumnProperties()
@@ -105,6 +164,7 @@ namespace Teklif_Hazırlayıcı.Forms
             }
         }
 
+        /*
         private void btnSearch_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;
@@ -122,16 +182,16 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result != null && result.Rows.Count > 0)
 
-                if (result != null)
-                {
-                    dataGridView1.DataSource = result;
-                    SetupGridColumnProperties();
-                    SetupAuthGridColumns();
-                }
-                else
-                {
-                    MessageHelper.ShowError("Aramaya uygun yetkili bulunamadı.");
-                }
+                    if (result != null)
+                    {
+                        dataGridView1.DataSource = result;
+                        SetupGridColumnProperties();
+                        SetupAuthGridColumns();
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError("Aramaya uygun yetkili bulunamadı.");
+                    }
             }
         }
 
@@ -186,7 +246,6 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             placeHolder.LeavePlaceHolder(txtSearch);
         }
-
         private void panel3_MouseClick(object sender, MouseEventArgs e)
         {
             txtSearch.Focus();
@@ -198,5 +257,6 @@ namespace Teklif_Hazırlayıcı.Forms
             SetupGridColumnProperties();
             SetupAuthGridColumns();
         }
+        */
     }
 }

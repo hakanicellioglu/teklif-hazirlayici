@@ -350,5 +350,42 @@ namespace Teklif_Hazırlayıcı.Business
             return result;
         }
 
+        public List<(string Name, string DisplayName)> GetColumnDisplayNames(string tableName)
+        {
+            var list = new List<(string, string)>();
+
+            string query = @"
+    SELECT 
+        c.name AS ColumnName,
+        ISNULL(ep.value, c.name) AS DisplayName
+    FROM sys.columns c
+    LEFT JOIN sys.extended_properties ep 
+        ON ep.major_id = c.object_id 
+        AND ep.minor_id = c.column_id 
+        AND ep.name = 'MS_Description'
+    WHERE c.object_id = OBJECT_ID(@TableName)
+    ORDER BY c.column_id";
+
+            using (var conn = new SqlDbConnection().GetConnection())
+            using (var cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@TableName", "dbo." + tableName);
+                conn.Open();
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string name = reader.GetString(0);
+                        string display = reader.GetString(1);
+                        list.Add((name, display));
+                    }
+                }
+            }
+
+            return list;
+        }
+
+
     }
 }

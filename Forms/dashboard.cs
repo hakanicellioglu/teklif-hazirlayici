@@ -16,6 +16,14 @@ namespace Teklif_Hazırlayıcı.Forms
         public dashboard()
         {
             InitializeComponent();
+            ConfigureDashboard();
+        }
+
+        private void ConfigureDashboard()
+        {
+            Width = Screen.PrimaryScreen.WorkingArea.Width;
+            Height = Screen.PrimaryScreen.WorkingArea.Height;
+            CenterToScreen();
         }
 
         private void LoadForm(Form formToLoad)
@@ -74,6 +82,16 @@ namespace Teklif_Hazırlayıcı.Forms
         private void btnLogout_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
         }
     }
 }
