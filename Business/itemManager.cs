@@ -62,25 +62,25 @@ namespace Teklif_Hazırlayıcı.Business
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    var kgParam = new OleDbParameter("@kg", OleDbType.Double);
+                    var kgParam = new SqlParameter("@kg", SqlDbType.Float);
                     kgParam.Value = kg;
 
-                    var fiyatParam = new OleDbParameter("@birim_fiyat", OleDbType.Double);
+                    var fiyatParam = new SqlParameter("@birim_fiyat", SqlDbType.Float);
                     fiyatParam.Value = birim_fiyat;
 
-                    var tutarParam = new OleDbParameter("@toplam_tutar", OleDbType.Double);
+                    var tutarParam = new SqlParameter("@toplam_tutar", SqlDbType.Float);
                     tutarParam.Value = toplam_tutar;
 
 
-                    cmd.Parameters.Add(new OleDbParameter("@TeklifId", OleDbType.Integer) { Value = teklif_id });
-                    cmd.Parameters.Add(new OleDbParameter("@UrunId", OleDbType.Integer) { Value = urun_id });
-                    cmd.Parameters.Add(new OleDbParameter("@Yuzey", OleDbType.VarWChar) { Value = string.IsNullOrEmpty(yuzey) ? DBNull.Value : (object)yuzey });
-                    cmd.Parameters.Add(new OleDbParameter("@YuzeyKodu", OleDbType.VarWChar) { Value = string.IsNullOrEmpty(yuzey_kodu) ? DBNull.Value : (object)yuzey_kodu });
-                    cmd.Parameters.Add(new OleDbParameter("@Adet", OleDbType.Integer) { Value = adet });
-                    cmd.Parameters.Add(new OleDbParameter("@Boy", OleDbType.Integer) { Value = boy });
-                    cmd.Parameters.Add(new OleDbParameter("@Kg", OleDbType.Double) { Value = kg });
-                    cmd.Parameters.Add(new OleDbParameter("@BirimFiyat", OleDbType.Double) { Value = birim_fiyat });
-                    cmd.Parameters.Add(new OleDbParameter("@ToplamTutar", OleDbType.Double) { Value = toplam_tutar });
+                    cmd.Parameters.Add(new SqlParameter("@TeklifId", SqlDbType.Int) { Value = teklif_id });
+                    cmd.Parameters.Add(new SqlParameter("@UrunId", SqlDbType.Int) { Value = urun_id });
+                    cmd.Parameters.Add(new SqlParameter("@Yuzey", SqlDbType.VarChar) { Value = string.IsNullOrEmpty(yuzey) ? DBNull.Value : (object)yuzey });
+                    cmd.Parameters.Add(new SqlParameter("@YuzeyKodu", SqlDbType.VarChar) { Value = string.IsNullOrEmpty(yuzey_kodu) ? DBNull.Value : (object)yuzey_kodu });
+                    cmd.Parameters.Add(new SqlParameter("@Adet", SqlDbType.Int) { Value = adet });
+                    cmd.Parameters.Add(new SqlParameter("@Boy", SqlDbType.Int) { Value = boy });
+                    cmd.Parameters.Add(new SqlParameter("@Kg", SqlDbType.Float) { Value = kg });
+                    cmd.Parameters.Add(new SqlParameter("@BirimFiyat", SqlDbType.Float) { Value = birim_fiyat });
+                    cmd.Parameters.Add(new SqlParameter("@ToplamTutar", SqlDbType.Float) { Value = toplam_tutar });
 
 
                     int result = cmd.ExecuteNonQuery();

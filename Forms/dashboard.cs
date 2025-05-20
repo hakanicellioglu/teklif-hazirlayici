@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,6 +19,10 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             InitializeComponent();
             ConfigureDashboard();
+
+
+            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            label2.Text = "Versiyon: " + version;
         }
 
         private void ConfigureDashboard()
