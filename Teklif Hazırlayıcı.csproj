@@ -273,7 +273,6 @@
     <None Include="DataAccess\_teklif_hazirlayiciDataSet.xss">
       <DependentUpon>_teklif_hazirlayiciDataSet.xsd</DependentUpon>
     </None>
-    <None Include="Teklif Hazırlayıcı_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
