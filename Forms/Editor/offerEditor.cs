@@ -347,10 +347,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 return false;
             }
 
-            foreach (DataColumn col in dt.Columns)
-            {
-                Console.WriteLine("Kolon: " + col.ColumnName);
-            }
+            
 
             // Sütun adı doğruysa devam et
             chkFirmalar.DataSource = dt;
