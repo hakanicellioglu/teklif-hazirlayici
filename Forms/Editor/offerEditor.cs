@@ -649,8 +649,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
                 var row = teklifDetay.Rows[0];
-                string firmaAdi = row["isim"].ToString();
-                string yetkiliAdi = row["isim"].ToString();
+                string firmaAdi = row["FirmaIsim"].ToString();
+                string yetkiliAdi = row["YetkiliIsim"].ToString();
                 string teklifTarih = Convert.ToDateTime(row["teklif_tarih"]).ToString("dd.MM.yyyy");
 
 
@@ -773,7 +773,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 Paragraph solParagraf = new Paragraph();
                 solParagraf.Add(new Chunk($"Firma Adı  : {firmaAdi}\n", normalFont));
                 solParagraf.Add(new Chunk($"Yetkili    : {yetkiliAdi}\n", normalFont));
-                solParagraf.Add(new Chunk($"Tarih      : {teklifTarih}\n", normalFont));
 
                 PdfPCell solCell2 = new PdfPCell(solParagraf)
                 {
@@ -1108,6 +1107,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
             sonuc = (iscilik / 1000) + (lme / 1000);
             label12.Text = sonuc.ToString("N3", new CultureInfo("tr-TR"));
+        }
+
+        private void offerEditor_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -626,8 +626,8 @@ namespace Teklif_Hazırlayıcı.Business
                 conn.Open();
                 var cmd = new SqlCommand(@"
                 SELECT 
-                    f.isim, 
-                    y.isim, 
+                    f.isim AS FirmaIsim, 
+                    y.isim AS YetkiliIsim, 
                     t.teklif_tarih, 
                     t.toplam_adet, 
                     t.toplam_kg, 
