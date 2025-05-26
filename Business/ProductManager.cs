@@ -194,19 +194,35 @@ namespace Teklif_Hazırlayıcı.Business
         {
             /*
              *
-             * Belirtilen `product_id` değerine sahip ürünü "urunler" tablosundan siler.
-             * Silme işlemi başarıyla gerçekleşirse kullanıcıya bilgilendirme mesajı gösterilir.
-             * Silme başarısız olursa hata mesajı gösterilir.
+             * Ürünün başka bir teklifte kullanılıp kullanılmadığını kontrol eder.
+             * Eğer varsa hata mesajı verir, yoksa silme işlemini yapar.
              *
              */
-            string query = "DELETE FROM urunler WHERE urun_id = @ProductId";
             using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+
+                // Önce ürünü başka tabloda kullanan kayıt var mı diye kontrol et
+                string checkQuery = "SELECT COUNT(*) FROM kalemler WHERE urun_id = @ProductId";
+                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
                 {
-                    cmd.Parameters.AddWithValue("@ProductId", product_id);
-                    int result = cmd.ExecuteNonQuery();
+                    checkCmd.Parameters.AddWithValue("@ProductId", product_id);
+                    int count = (int)checkCmd.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        // Ürün başka bir teklifte kullanılmış
+                        MessageHelper.ShowError("Bu ürün herhangi bir teklifte kullanıldığı için silinemez.");
+                        return;
+                    }
+                }
+
+                // Silme işlemi
+                string deleteQuery = "DELETE FROM urunler WHERE urun_id = @ProductId";
+                using (SqlCommand deleteCmd = new SqlCommand(deleteQuery, conn))
+                {
+                    deleteCmd.Parameters.AddWithValue("@ProductId", product_id);
+                    int result = deleteCmd.ExecuteNonQuery();
 
                     if (result > 0)
                     {
@@ -219,6 +235,7 @@ namespace Teklif_Hazırlayıcı.Business
                 }
             }
         }
+
         public List<Dictionary<string, string>> GetProductById(int? product_id)
         {
             /*

@@ -78,5 +78,16 @@ namespace Teklif_Hazırlayıcı
         {
             //ThemeManager.ToggleTheme(this);
         }
+
+        private void txtUsername_Enter(object sender, EventArgs e)
+        {
+            txtUsername.BackColor = ColorTranslator.FromHtml("#FFFFFF");
+        }
+
+        private void txtUsername_Leave(object sender, EventArgs e)
+        {
+            txtUsername.BackColor = ColorTranslator.FromHtml("#E1E1E1");
+
+        }
     }
 }

@@ -425,13 +425,14 @@ namespace Teklif_Hazırlayıcı.Business
 
                 // 2. Toplamları hesapla
                 string selectQuery = @"
-            SELECT 
-                IIF(ISNULL(SUM(k.adet)), 0, SUM(k.adet)) AS ToplamAdet,
-                IIF(ISNULL(SUM(k.kg)), 0, SUM(k.kg)) AS ToplamKg,
-                IIF(ISNULL(SUM(k.toplam_tutar)), 0, SUM(k.toplam_tutar)) AS ToplamTutar
-            FROM kalemler k
-            INNER JOIN urunler u ON k.urun_id = u.urun_id
-            WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar')";
+                SELECT 
+                    ISNULL(SUM(k.adet), 0) AS ToplamAdet,
+                    ISNULL(SUM(k.kg), 0) AS ToplamKg,
+                    ISNULL(SUM(k.toplam_tutar), 0) AS ToplamTutar
+                FROM kalemler k
+                INNER JOIN urunler u ON k.urun_id = u.urun_id
+                WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar')";
+
                 using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@teklifId", teklifId);
@@ -461,11 +462,11 @@ namespace Teklif_Hazırlayıcı.Business
                 decimal genelToplam = iskontoSonrasi + kdv;
                 decimal odenecek = genelToplam - tevkifat;
 
-                string iskontoTutarStr = iskontoTutar.ToString().Replace(".", ",");
-                string kdvStr = kdv.ToString().Replace(".", ",");
-                string tevkifatStr = tevkifat.ToString().Replace(".", ",");
-                string genelToplamStr = genelToplam.ToString().Replace(".", ",");
-                string odenecekStr = odenecek.ToString().Replace(".", ",");
+                //string iskontoTutarStr = iskontoTutar.ToString().Replace(".", ",");
+                //string kdvStr = kdv.ToString().Replace(".", ",");
+                //string tevkifatStr = tevkifat.ToString().Replace(".", ",");
+                //string genelToplamStr = genelToplam.ToString().Replace(".", ",");
+                //string odenecekStr = odenecek.ToString().Replace(".", ",");
 
 
 
@@ -474,24 +475,24 @@ namespace Teklif_Hazırlayıcı.Business
                 UPDATE teklifler SET 
                     toplam_adet = @toplamAdet,
                     toplam_kg = @toplamKg,
-                    mal_hizmet_tutari = @toplamTutar,
+                    mal_hizmet_bedeli = @toplamTutar,
                     iskonto_tutari = @iskontoTutar,
                     kdv_tutari = @kdv,
                     tevkifat_tutari = @tevkifat,
                     genel_toplam = @genelToplam,
-                    odenecek_tutar = @odenecek
+                    odencek = @odenecek
                 WHERE teklif_id = @teklifId";
 
                 using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
                 {
-                    cmd.Parameters.AddWithValue("@toplamAdet", toplamAdetStr);
-                    cmd.Parameters.AddWithValue("@toplamKg", toplamKgStr);
-                    cmd.Parameters.AddWithValue("@toplamTutar", toplamTutarStr);
-                    cmd.Parameters.AddWithValue("@iskontoTutar", iskontoTutarStr);
-                    cmd.Parameters.AddWithValue("@kdv", kdvStr);
-                    cmd.Parameters.AddWithValue("@tevkifat", tevkifatStr);
-                    cmd.Parameters.AddWithValue("@genelToplam", genelToplamStr);
-                    cmd.Parameters.AddWithValue("@odenecek", odenecekStr);
+                    cmd.Parameters.AddWithValue("@toplamAdet", toplamAdet);
+                    cmd.Parameters.AddWithValue("@toplamKg", toplamKg);
+                    cmd.Parameters.AddWithValue("@toplamTutar", toplamTutar);
+                    cmd.Parameters.AddWithValue("@iskontoTutar", iskontoTutar);
+                    cmd.Parameters.AddWithValue("@kdv", kdv);
+                    cmd.Parameters.AddWithValue("@tevkifat", tevkifat);
+                    cmd.Parameters.AddWithValue("@genelToplam", genelToplam);
+                    cmd.Parameters.AddWithValue("@odenecek", odenecek);
                     cmd.Parameters.AddWithValue("@teklifId", teklifId);
 
                     return cmd.ExecuteNonQuery() > 0;
@@ -630,18 +631,18 @@ namespace Teklif_Hazırlayıcı.Business
                     t.teklif_tarih, 
                     t.toplam_adet, 
                     t.toplam_kg, 
-                    t.mal_hizmet_tutari, 
+                    t.mal_hizmet_bedeli, 
                     t.iskonto_orani, 
                     t.iskonto_tutari, 
                     t.kdv_tutari, 
                     t.tevkifat_tutari, 
                     t.genel_toplam, 
-                    t.odenecek_tutar, 
+                    t.odencek, 
                     t.doviz_birimi,
                     t.teslim_sekli,
                     t.odeme_sekli,
-                    t.odeme_vadesi,
-                    t.teklif_suresi,
+                    t.odeme_vade,
+                    t.teklif_sure,
                     t.doviz_kuru,
                     t.vade
                 FROM ((teklifler t

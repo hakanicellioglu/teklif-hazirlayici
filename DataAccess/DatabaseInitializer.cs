@@ -82,6 +82,18 @@ namespace Teklif_Hazırlayıcı.DataAccess
                 eposta NVARCHAR(100)
             );
 
+            CREATE TABLE yetkililer (
+                yetkili_id INT IDENTITY(1,1) PRIMARY KEY,
+                firma_id INT,
+                isim NVARCHAR(100),
+                soyisim NVARCHAR(100),
+                hitap NVARCHAR(50),
+                adres NVARCHAR(255),
+                telefon NVARCHAR(50),
+                eposta NVARCHAR(100),
+                FOREIGN KEY(firma_id) REFERENCES firmalar(firma_id)
+            );
+
             CREATE TABLE urunler (
                 urun_id INT IDENTITY(1,1) PRIMARY KEY,
                 kalip_no NVARCHAR(100),
@@ -142,18 +154,6 @@ namespace Teklif_Hazırlayıcı.DataAccess
                 toplam_tutar FLOAT,
                 FOREIGN KEY(teklif_id) REFERENCES teklifler(teklif_id),
                 FOREIGN KEY(urun_id) REFERENCES urunler(urun_id)
-            );
-
-            CREATE TABLE yetkililer (
-                yetkili_id INT IDENTITY(1,1) PRIMARY KEY,
-                firma_id INT,
-                isim NVARCHAR(100),
-                soyisim NVARCHAR(100),
-                hitap NVARCHAR(50),
-                adres NVARCHAR(255),
-                telefon NVARCHAR(50),
-                eposta NVARCHAR(100),
-                FOREIGN KEY(firma_id) REFERENCES firmalar(firma_id)
             );
         ";
 

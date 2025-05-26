@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,18 +20,39 @@ namespace Teklif_Hazırlayıcı.Forms
     {
         private readonly CompanyManager _companyManager;
         private readonly AuthManager _authManager;
+        private readonly ColumnForm _columnForm;
 
-        public auth(CompanyManager companyManager, AuthManager authManager)
+        public auth(CompanyManager companyManager, AuthManager authManager, ColumnForm columnForm)
         {
             InitializeComponent();
             _companyManager = companyManager;
             _authManager = authManager;
+            _columnForm = columnForm;
             LoadAuth();
         }
 
+        private void panel3_MouseClick(object sender, MouseEventArgs e)
+        {
+            txtSearch.Focus();
+        }
 
         PlaceHolder placeHolder = new PlaceHolder("Yetkili arayın...");
+        private void txt_Enter(object sender, EventArgs e)
+        {
+            placeHolder.EnterPlaceHolder(txtSearch);
+        }
 
+        private void txt_Leave(object sender, EventArgs e)
+        {
+            placeHolder.LeavePlaceHolder(txtSearch);
+        }
+
+
+
+
+
+
+        /*
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -39,12 +61,12 @@ namespace Teklif_Hazırlayıcı.Forms
             dataGridView1.DataSource = null;
             LoadAuth();
         }
-
+        */
         private void LoadAuth()
         {
             dataGridView1.DataSource = _authManager.GetAuthWithCompanyName();
-            SetupGridColumnProperties();
-            SetupAuthGridColumns();
+            //SetupGridColumnProperties();
+            //SetupAuthGridColumns();
         }
 
         private void SetupGridColumnProperties()
@@ -105,6 +127,37 @@ namespace Teklif_Hazırlayıcı.Forms
             }
         }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Point globalPos = button4.Parent.PointToScreen(button4.Location);
+            Point formPos = this.PointToClient(globalPos);
+
+            Rectangle buttonBounds = button4.RectangleToScreen(button4.ClientRectangle);
+            Point location = new Point(buttonBounds.X, buttonBounds.Bottom);
+
+            _columnForm.StartPosition = FormStartPosition.Manual;
+            _columnForm.Location = location;
+
+
+            int xWitdh = button4.Location.X;
+            int newSize = panel2.Width - xWitdh;
+            _columnForm.Size = new Size(newSize, _columnForm.Size.Height);
+
+
+            // Dialog olarak göster
+            if (_columnForm.ShowDialog(this) == DialogResult.OK)
+            {
+                List<ColumnItem> secilenler = _columnForm.SelectedColumns;
+
+                // Sütun görünürlüğünü güncelle
+                foreach (DataGridViewColumn col in dataGridView1.Columns)
+                {
+                    col.Visible = secilenler.Any(s => s.Name == col.Name);
+                }
+            }
+        }
+
+        
         private void btnSearch_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;
@@ -122,16 +175,16 @@ namespace Teklif_Hazırlayıcı.Forms
 
                 if (result != null && result.Rows.Count > 0)
 
-                if (result != null)
-                {
-                    dataGridView1.DataSource = result;
-                    SetupGridColumnProperties();
-                    SetupAuthGridColumns();
-                }
-                else
-                {
-                    MessageHelper.ShowError("Aramaya uygun yetkili bulunamadı.");
-                }
+                    if (result != null)
+                    {
+                        dataGridView1.DataSource = result;
+                        SetupGridColumnProperties();
+                        SetupAuthGridColumns();
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError("Aramaya uygun yetkili bulunamadı.");
+                    }
             }
         }
 
@@ -177,26 +230,12 @@ namespace Teklif_Hazırlayıcı.Forms
 
         }
 
-        private void txtSearch_Enter(object sender, EventArgs e)
-        {
-            placeHolder.EnterPlaceHolder(txtSearch);
-        }
-
-        private void txtSearch_Leave(object sender, EventArgs e)
-        {
-            placeHolder.LeavePlaceHolder(txtSearch);
-        }
-
-        private void panel3_MouseClick(object sender, MouseEventArgs e)
-        {
-            txtSearch.Focus();
-        }
-
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = _authManager.GetAuthWithCompanyName();
             SetupGridColumnProperties();
             SetupAuthGridColumns();
         }
+        
     }
 }

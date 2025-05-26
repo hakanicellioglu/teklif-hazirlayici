@@ -16,7 +16,7 @@ using System.Threading;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {
-    public partial class productEditor: Form
+    public partial class productEditor : Form
     {
         string editor_mode;
         int? product_id;
@@ -101,6 +101,13 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void ExtractGramaj(out decimal gramaj)
         {
+            if(comboBox2.Text == "Aksesuar")
+            {
+                textBox3.Text = "0"; // Aksesuar için gramaj 0 olarak ayarlanır
+                gramaj = 0; // Aksesuar için gramaj 0 olarak ayarlanır
+                return;
+            }
+
             string gramajMetin = textBox3.Text.Trim();
             gramajMetin = gramajMetin.Replace(',', '.');
             bool isValid = decimal.TryParse(
@@ -127,6 +134,20 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             if (char.IsLetter(e.KeyChar))
             {
                 e.Handled = true; // karakter girişini iptal eder
+            }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox2.Text == "Aksesuar")
+            {
+                textBox3.Enabled = false;
+                textBox3.Text = "0"; // Aksesuar için gramaj 0 olarak ayarlanır
+            }
+            else
+            {
+                textBox3.Enabled = true;
+                textBox3.Text = ""; // Diğer kategoriler için gramaj alanı boş bırakılır
             }
         }
     }

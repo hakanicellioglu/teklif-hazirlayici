@@ -659,8 +659,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
                 string teslimSekli = row["teslim_sekli"]?.ToString() ?? "-";
                 string odemeSekli = row["odeme_sekli"]?.ToString() ?? "-";
-                string odemeVadesi = row["odeme_vadesi"]?.ToString() ?? "-";
-                string teklifSuresi = row["teklif_suresi"]?.ToString() ?? "-";
+                string odemeVadesi = row["odeme_vade"]?.ToString() ?? "-";
+                string teklifSuresi = row["teklif_sure"]?.ToString() ?? "-";
                 string dovizKuru = Convert.ToDecimal(row["doviz_kuru"], CultureInfo.InvariantCulture).ToString("N2", new CultureInfo("tr-TR"));
                 string vade = row["vade"]?.ToString() ?? "-";
 
@@ -672,7 +672,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
 
 
-                decimal malHizmetTutari = Convert.ToDecimal(row["mal_hizmet_tutari"], CultureInfo.InvariantCulture);
+                decimal malHizmetTutari = Convert.ToDecimal(row["mal_hizmet_bedeli"], CultureInfo.InvariantCulture);
                 string malHizmetTutariStr = malHizmetTutari.ToString("N2", new CultureInfo("tr-TR"));
 
                 decimal iskontoOrani = Convert.ToDecimal(row["iskonto_orani"], CultureInfo.InvariantCulture);

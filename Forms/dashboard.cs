@@ -4,10 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Forms.Editor;
+
 
 namespace Teklif_Hazırlayıcı.Forms
 {
@@ -16,6 +18,18 @@ namespace Teklif_Hazırlayıcı.Forms
         public dashboard()
         {
             InitializeComponent();
+            ConfigureDashboard();
+
+
+            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            label2.Text = "Versiyon: " + version;
+        }
+
+        private void ConfigureDashboard()
+        {
+            Width = Screen.PrimaryScreen.WorkingArea.Width;
+            Height = Screen.PrimaryScreen.WorkingArea.Height;
+            CenterToScreen();
         }
 
         private void LoadForm(Form formToLoad)
@@ -53,7 +67,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnAuth_Click(object sender, EventArgs e)
         {
-            LoadForm(new auth(new Business.CompanyManager(), new Business.AuthManager()));
+            LoadForm(new auth(new Business.CompanyManager(), new Business.AuthManager(), new ColumnForm(new Business.AuthManager())));
         }
 
         private void dashboard_Resize(object sender, EventArgs e)
@@ -74,6 +88,16 @@ namespace Teklif_Hazırlayıcı.Forms
         private void btnLogout_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
         }
     }
 }

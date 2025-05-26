@@ -131,6 +131,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     txtBoy.Visible = true;
                     lblYuzey.Visible = true;
                     chkYuzey.Visible = true;
+                    label3.Visible = false;
+                    txtBirimFiyat.Visible = false;
                 }
                 else
                 {
@@ -140,6 +142,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     chkYuzey.Visible = false;
                     lblYuzeyKodu.Visible = false;
                     txtYuzeyKodu.Visible = false;
+                    label3.Visible = true;
+                    txtBirimFiyat.Visible = true;
                 }
             }
         }
@@ -166,6 +170,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     txtYuzeyKodu.Text = "";
                 }
             }
+
             else if (editor_mode == "Edit")
             {
                 // ürün güncellemesi
@@ -206,6 +211,21 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     yuzey_kodu = null;
                 }
 
+                // Aksesuar ise birim fiyatı manuel olarak gir (veya sabit bir değerden çek)
+                if (kategori == "Aksesuar")
+                {
+                    // Basit bir örnek: Birim fiyat textbox'ı eklenebilir, burada 100 varsayılan gibi.
+                    if (!decimal.TryParse(txtBirimFiyat.Text.Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out birimFiyat))
+                    {
+                        MessageHelper.ShowError("Birim fiyat geçersiz.");
+                        return;
+                    }
+
+                    // Toplam tutarı da buna göre güncelle
+                    toplamKg = adet; // Aksesuarlar kg yerine adet bazlı olabilir
+                    toplamTutar = adet * birimFiyat;
+                }
+
 
                 if (_itemManager.UpdateProductByKalemId(kalem_id.Value, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar))
                 {
@@ -222,28 +242,33 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void InitializeOfferManager(out OfferManager offerManager)
         {
+            offerManager = null;
+
             if (chkUrunler.SelectedValue == null || chkUrunler.SelectedValue is DataRowView)
             {
                 MessageHelper.ShowError("Lütfen bir ürün seçiniz.");
-                offerManager = null;
                 return;
             }
 
             if (!int.TryParse(chkUrunler.SelectedValue.ToString(), out int urun_id))
             {
                 MessageHelper.ShowError("Ürün ID geçersiz.");
-                offerManager = null;
                 return;
             }
 
             if (!int.TryParse(txtAdet.Text, out int adet))
             {
                 MessageHelper.ShowError("Adet değeri geçersiz.");
-                offerManager = null;
                 return;
             }
 
             decimal boy_mm = 0;
+            decimal birimFiyat = 0;
+            decimal toplamTutar = 0;
+            decimal toplamKg = 0;
+            decimal gramaj = 0;
+            string yuzey = null;
+            string yuzey_kodu = null;
 
             if (kategori == "Alüminyum")
             {
@@ -251,41 +276,54 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 if (!decimal.TryParse(boyText, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out boy_mm))
                 {
                     MessageHelper.ShowError("Boy değeri geçersiz.");
-                    offerManager = null;
                     return;
                 }
+
+                decimal lmeTon = _itemManager.GetLMEFromTeklif(teklif_id.Value);
+                if (lmeTon <= 0)
+                {
+                    MessageHelper.ShowError("Teklif için geçerli bir LME değeri bulunamadı.");
+                    return;
+                }
+
+                decimal iscilikTon = _itemManager.Getİscilik(teklif_id.Value);
+                if (iscilikTon <= 0)
+                {
+                    MessageHelper.ShowError("Teklif için geçerli bir işçilik değeri bulunamadı.");
+                    return;
+                }
+
+                birimFiyat = (lmeTon / 1000m) + (iscilikTon / 1000m);
+
+                gramaj = _itemManager.GetGramaj(urun_id);
+                decimal boy_m = boy_mm / 1000m;
+                toplamKg = Math.Round(gramaj * boy_m * adet * 1.1m, 3);
+                toplamTutar = Math.Round(toplamKg * birimFiyat, 2);
+
+                yuzey = chkYuzey.Text;
+                yuzey_kodu = txtYuzeyKodu.Text;
             }
-
-
-            decimal lmeTon = _itemManager.GetLMEFromTeklif(teklif_id.Value);
-            if (lmeTon <= 0)
+            else if (kategori == "Aksesuar")
             {
-                MessageHelper.ShowError("Teklif için geçerli bir LME değeri bulunamadı.");
-                offerManager = null;
-                return;
+                boy_mm = 0;
+                yuzey = null;
+                yuzey_kodu = null;
+
+                if (!decimal.TryParse(txtBirimFiyat.Text.Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out birimFiyat))
+                {
+                    MessageHelper.ShowError("Birim fiyat geçersiz.");
+                    return;
+                }
+
+                toplamKg = adet;
+                toplamTutar = adet * birimFiyat;
             }
-
-            decimal iscilikTon = _itemManager.Getİscilik(teklif_id.Value);
-            if (iscilikTon <= 0)
-            {
-                MessageHelper.ShowError("Teklif için geçerli bir işçilik değeri bulunamadı.");
-                offerManager = null;
-                return;
-            }
-
-            decimal birimFiyat = (lmeTon / 1000m) + (iscilikTon / 1000m);
-
-            decimal gramaj = _itemManager.GetGramaj(urun_id);
-            decimal boy_m = boy_mm / 1000m;
-            decimal toplamKg = Math.Round(gramaj * boy_m * adet * 1.1m, 3);
-            decimal toplamTutar = Math.Round(toplamKg * birimFiyat, 2);
-
-            string yuzey = chkYuzey.Text;
-            string yuzey_kodu = txtYuzeyKodu.Text;
 
             _itemManager.AddProduct(teklif_id, urun_id, yuzey, yuzey_kodu, adet, (int)boy_mm, toplamKg, birimFiyat, toplamTutar);
             offerManager = new OfferManager();
         }
+
+
 
         private void chkYuzey_SelectedIndexChanged(object sender, EventArgs e)
         {
