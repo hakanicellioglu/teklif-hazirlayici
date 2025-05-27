@@ -227,8 +227,8 @@
             this.chkDovizBirimi.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.chkDovizBirimi.FormattingEnabled = true;
             this.chkDovizBirimi.Items.AddRange(new object[] {
-            "₺",
-            "$"});
+            "$",
+            "₺"});
             this.chkDovizBirimi.Location = new System.Drawing.Point(63, 219);
             this.chkDovizBirimi.Name = "chkDovizBirimi";
             this.chkDovizBirimi.Size = new System.Drawing.Size(75, 25);
