@@ -105,6 +105,7 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "Yetkili Ekle";
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.btnAddAuth_Click);
             // 
             // label1
             // 
@@ -156,6 +157,7 @@
             this.btnSearch.Size = new System.Drawing.Size(30, 28);
             this.btnSearch.TabIndex = 0;
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // imgBtn
             // 

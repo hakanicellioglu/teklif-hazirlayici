@@ -121,26 +121,13 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void AddAuth(int company_id, string name, string surname, string honorific, string address, string phone_number, string email)
         {
-            /*
-             *
-             * Yeni bir yetkili kaydını "yetkililer" tablosuna ekler.
-             * Parametreler ile gelen bilgiler sorguya eklenir ve veritabanına kaydedilir.
-             * Kayıt başarılı olursa bilgilendirme mesajı gösterilir, aksi durumda hata mesajı verilir.
-             *
-             */
             string query = "INSERT INTO yetkililer(firma_id, isim, soyisim, hitap, adres, telefon, eposta) VALUES(@CompanyId, @Name, @Surname, @Honorific, @Address, @PhoneNumber, @Email)";
             using (SqlConnection conn = _connection.GetConnection())
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@CompanyId", company_id);
-                    cmd.Parameters.AddWithValue("@Name", name);
-                    cmd.Parameters.AddWithValue("@Surname", surname);
-                    cmd.Parameters.AddWithValue("@Honorific", honorific);
-                    cmd.Parameters.AddWithValue("@Address", address);
-                    cmd.Parameters.AddWithValue("@PhoneNumber", phone_number);
-                    cmd.Parameters.AddWithValue("@Email", email);
+                    AddAuthParameters(cmd, company_id, name, surname, honorific, address, phone_number, email);
                     int result = cmd.ExecuteNonQuery();
 
                     if (result > 0)
@@ -156,15 +143,6 @@ namespace Teklif_Hazırlayıcı.Business
         }
         public void UpdateAuth(int? auth_id, int? company_id, string name, string surname, string honorific, string address, string phone_number, string email)
         {
-            /*
-             *
-             * Belirtilen `auth_id` değerine sahip yetkilinin bilgilerini günceller.
-             * İlk olarak veritabanından mevcut bilgiler alınır ve parametreler ile gelen bilgiler karşılaştırılır.
-             * Eğer herhangi bir değişiklik yoksa güncelleme yapılmaz, kullanıcı bilgilendirilir.
-             * Değişiklik varsa veritabanında ilgili kayıt güncellenir.
-             * İşlem sonucuna göre kullanıcıya bilgi veya hata mesajı gösterilir.
-             *
-             */
             if (!auth_id.HasValue)
             {
                 MessageHelper.ShowError("Geçersiz yetkili kimlik numarası.");
@@ -218,15 +196,8 @@ namespace Teklif_Hazırlayıcı.Business
                 string updateQuery = "UPDATE yetkililer SET firma_id = @CompanyId, isim = @Name, soyisim = @Surname, hitap = @Honorific, adres = @Address, telefon = @PhoneNumber, eposta = @Email WHERE yetkili_id = @AuthId";
                 using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
                 {
-                    updateCmd.Parameters.AddWithValue("@CompanyId", company_id);
-                    updateCmd.Parameters.AddWithValue("@Name", name);
-                    updateCmd.Parameters.AddWithValue("@Surname", surname);
-                    updateCmd.Parameters.AddWithValue("@Honorific", honorific);
-                    updateCmd.Parameters.AddWithValue("@Address", address);
-                    updateCmd.Parameters.AddWithValue("@PhoneNumber", phone_number);
-                    updateCmd.Parameters.AddWithValue("@Email", email);
+                    AddAuthParameters(updateCmd, company_id, name, surname, honorific, address, phone_number, email);
                     updateCmd.Parameters.AddWithValue("@AuthId", auth_id);
-
 
                     int result = updateCmd.ExecuteNonQuery();
                     if (result > 0)
@@ -386,6 +357,15 @@ namespace Teklif_Hazırlayıcı.Business
             return list;
         }
 
-
+        private void AddAuthParameters(SqlCommand cmd, int? company_id, string name, string surname, string honorific, string address, string phone_number, string email)
+        {
+            cmd.Parameters.AddWithValue("@CompanyId", company_id ?? (object)DBNull.Value);
+            cmd.Parameters.AddWithValue("@Name", name);
+            cmd.Parameters.AddWithValue("@Surname", surname);
+            cmd.Parameters.AddWithValue("@Honorific", honorific);
+            cmd.Parameters.AddWithValue("@Address", address);
+            cmd.Parameters.AddWithValue("@PhoneNumber", phone_number);
+            cmd.Parameters.AddWithValue("@Email", email);
+        }
     }
 }
