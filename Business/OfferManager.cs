@@ -423,34 +423,43 @@ namespace Teklif_Hazırlayıcı.Business
                 decimal toplamAdet = 0, toplamKg = 0, toplamTutar = 0;
                 string toplamAdetStr = "0", toplamKgStr = "0", toplamTutarStr = "0";
 
-                // 2. Toplamları hesapla
-                string selectQuery = @"
+                // 2.1. Toplam Adet ve Kg - aksesuar hariç
+                string selectAdetKgQuery = @"
                 SELECT 
                     ISNULL(SUM(k.adet), 0) AS ToplamAdet,
-                    ISNULL(SUM(k.kg), 0) AS ToplamKg,
-                    ISNULL(SUM(k.toplam_tutar), 0) AS ToplamTutar
+                    ISNULL(SUM(k.kg), 0) AS ToplamKg
                 FROM kalemler k
                 INNER JOIN urunler u ON k.urun_id = u.urun_id
                 WHERE k.teklif_id = @teklifId AND (u.kategori IS NULL OR u.kategori <> 'aksesuar')";
 
-                using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
+                using (SqlCommand cmd = new SqlCommand(selectAdetKgQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@teklifId", teklifId);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-
                             toplamAdetStr = reader["ToplamAdet"] != DBNull.Value ? reader["ToplamAdet"].ToString().Replace(".", ",") : "0";
                             toplamAdet = Convert.ToDecimal(reader["ToplamAdet"].ToString());
 
                             toplamKgStr = reader["ToplamKg"] != DBNull.Value ? reader["ToplamKg"].ToString().Replace(".", ",") : "0";
                             toplamKg = Convert.ToDecimal(reader["ToplamKg"].ToString());
-
-                            toplamTutarStr = reader["ToplamTutar"] != DBNull.Value ? reader["ToplamTutar"].ToString().Replace(".", ",") : "0";
-                            toplamTutar = Convert.ToDecimal(reader["ToplamTutar"].ToString());
                         }
                     }
+                }
+
+                // 2.2. Toplam Tutar - aksesuar dahil
+                string selectTutarQuery = @"
+                SELECT 
+                    ISNULL(SUM(k.toplam_tutar), 0) AS ToplamTutar
+                FROM kalemler k
+                WHERE k.teklif_id = @teklifId";
+
+                using (SqlCommand cmd = new SqlCommand(selectTutarQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@teklifId", teklifId);
+                    toplamTutar = Convert.ToDecimal(cmd.ExecuteScalar());
+                    toplamTutarStr = toplamTutar.ToString().Replace(".", ",");
                 }
 
                 // 3. Finansal hesaplamalar
@@ -462,15 +471,7 @@ namespace Teklif_Hazırlayıcı.Business
                 decimal genelToplam = iskontoSonrasi + kdv;
                 decimal odenecek = genelToplam - tevkifat;
 
-                //string iskontoTutarStr = iskontoTutar.ToString().Replace(".", ",");
-                //string kdvStr = kdv.ToString().Replace(".", ",");
-                //string tevkifatStr = tevkifat.ToString().Replace(".", ",");
-                //string genelToplamStr = genelToplam.ToString().Replace(".", ",");
-                //string odenecekStr = odenecek.ToString().Replace(".", ",");
-
-
-
-                // 4. Güncelleme - türler decimal kalıyor
+                // 4. Güncelleme
                 string updateQuery = @"
                 UPDATE teklifler SET 
                     toplam_adet = @toplamAdet,
@@ -611,8 +612,6 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
 
-
-
         /*
          * 
          * PDF Çıktısı
@@ -709,9 +708,5 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
         #endregion
-
-
-
-
     }
 }

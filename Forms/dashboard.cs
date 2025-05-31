@@ -87,7 +87,6 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.OK;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -98,6 +97,11 @@ namespace Teklif_Hazırlayıcı.Forms
         private void button2_Click(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Minimized;
+        }
+
+        private void btnLogout_Click_1(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
         }
     }
 }

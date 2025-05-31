@@ -369,3 +369,5 @@ namespace Teklif_Hazırlayıcı.Business
         }
     }
 }
+
+
