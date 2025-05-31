@@ -347,7 +347,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 return false;
             }
 
-            
+
 
             // Sütun adı doğruysa devam et
             chkFirmalar.DataSource = dt;
@@ -689,13 +689,13 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 decimal kdvaluminyum = toplamAluminyumTutari * 0.20m;
                 string kdvaluminyumStr = kdvaluminyum.ToString("N2", new CultureInfo("tr-TR"));
 
-                decimal tevkifat = kdv * 0.70m;
+                decimal tevkifat = kdvaluminyum * 0.70m;
                 string tevkifatStr = tevkifat.ToString("N2", new CultureInfo("tr-TR"));
 
                 decimal vergiliToplam = iskontoSonrasiTutar + kdv;
                 string vergiliToplamStr = vergiliToplam.ToString("N2", new CultureInfo("tr-TR"));
 
-                decimal odenecekTutar = iskontoSonrasiTutar + tevkifat;
+                decimal odenecekTutar = vergiliToplam - tevkifat;
                 string odenecekTutarStr = odenecekTutar.ToString("N2", new CultureInfo("tr-TR"));
 
                 char doviz_birimi = row["doviz_birimi"] != DBNull.Value ? Convert.ToChar(row["doviz_birimi"]) : '₺';
