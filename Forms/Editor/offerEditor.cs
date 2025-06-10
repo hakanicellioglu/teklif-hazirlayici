@@ -887,11 +887,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 {
                     table.AddCell(CreateCell(sira.ToString(), smallFont, Element.ALIGN_RIGHT));
                     table.AddCell(CreateCell(kalem["kalip_no"].ToString(), smallFont, Element.ALIGN_RIGHT));
-                    table.AddCell(CreateCell(kalem["urun"].ToString(), smallFont, Element.ALIGN_RIGHT));
-                    table.AddCell(CreateCell(kalem["yuzey"].ToString(), smallFont, Element.ALIGN_RIGHT));
-                    table.AddCell(CreateCell(kalem["yuzey_kodu"].ToString(), smallFont, Element.ALIGN_RIGHT));
-                    table.AddCell(CreateCell(kalem["boy"].ToString(), smallFont, Element.ALIGN_RIGHT));
-                    table.AddCell(CreateCell(kalem["adet"].ToString(), smallFont, Element.ALIGN_RIGHT));
+                    table.AddCell(CreateCell(kalem["urun"].ToString(), smallFont, Element.ALIGN_LEFT));
+                    table.AddCell(CreateCell(kalem["yuzey"].ToString(), smallFont, Element.ALIGN_CENTER));
+                    table.AddCell(CreateCell(kalem["yuzey_kodu"].ToString(), smallFont, Element.ALIGN_CENTER));
+                    table.AddCell(CreateCell(kalem["boy"].ToString(), smallFont, Element.ALIGN_CENTER));
+                    table.AddCell(CreateCell(kalem["adet"].ToString(), smallFont, Element.ALIGN_CENTER));
                     table.AddCell(CreateCell(Math.Round(Convert.ToDecimal(kalem["kg"]), 3).ToString("N3", new CultureInfo("tr-TR")), smallFont, Element.ALIGN_RIGHT));
                     table.AddCell(CreateCell(FormatDecimalTr(ParseDecimalTr(kalem["birim_fiyat"].ToString())) + " " + doviz_birimi, smallFont, Element.ALIGN_RIGHT));
                     table.AddCell(CreateCell(Math.Round(Convert.ToDecimal(kalem["toplam_tutar"]), 2).ToString("N2", new CultureInfo("tr-TR")) + " " + doviz_birimi, smallFont, Element.ALIGN_RIGHT));
