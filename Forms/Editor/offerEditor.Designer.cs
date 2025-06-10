@@ -54,7 +54,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.txtLME = new System.Windows.Forms.TextBox();
             this.txtIskonto = new System.Windows.Forms.TextBox();
-            this.txtTevkifat = new System.Windows.Forms.TextBox();
             this.chkTevkifat = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
             this.chkDurum = new System.Windows.Forms.ComboBox();
@@ -294,15 +293,6 @@
             this.txtIskonto.TabIndex = 26;
             this.txtIskonto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtIskonto_KeyPress);
             // 
-            // txtTevkifat
-            // 
-            this.txtTevkifat.Enabled = false;
-            this.txtTevkifat.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.txtTevkifat.Location = new System.Drawing.Point(373, 322);
-            this.txtTevkifat.Name = "txtTevkifat";
-            this.txtTevkifat.Size = new System.Drawing.Size(150, 24);
-            this.txtTevkifat.TabIndex = 28;
-            // 
             // chkTevkifat
             // 
             this.chkTevkifat.AutoSize = true;
@@ -313,7 +303,6 @@
             this.chkTevkifat.TabIndex = 27;
             this.chkTevkifat.Text = "Tevkifat(0.##)";
             this.chkTevkifat.UseVisualStyleBackColor = true;
-            this.chkTevkifat.CheckedChanged += new System.EventHandler(this.chkTevkifat_CheckedChanged);
             // 
             // label13
             // 
@@ -558,7 +547,6 @@
             this.Controls.Add(this.chkDurum);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.chkTevkifat);
-            this.Controls.Add(this.txtTevkifat);
             this.Controls.Add(this.txtIskonto);
             this.Controls.Add(this.txtLME);
             this.Controls.Add(this.label11);
@@ -617,7 +605,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox txtLME;
         private System.Windows.Forms.TextBox txtIskonto;
-        private System.Windows.Forms.TextBox txtTevkifat;
         private System.Windows.Forms.CheckBox chkTevkifat;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ComboBox chkDurum;

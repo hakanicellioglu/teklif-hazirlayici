@@ -49,7 +49,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 button1.Text = "Ekle";
 
                 txtIskonto.Text = "0";
-                txtTevkifat.Text = "0";
 
                 btnCancel.Visible = false;
                 btnEdit.Visible = false;
@@ -115,21 +114,17 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     }
 
                     // Tevkifat alanı
-                    txtTevkifat.Text = offer["tevkifat_orani"].ToString();
 
                     decimal oran = 0;
-                    decimal.TryParse(txtTevkifat.Text, out oran);
 
                     // Checkbox işaretleniyor mu?
                     chkTevkifat.Checked = oran > 0;
 
                     // TextBox aktif/pasif ayarlanıyor
-                    txtTevkifat.Enabled = chkTevkifat.Checked;
 
                     // Eğer sıfırsa görünür olarak da "0" yazabiliriz, garantiye almak için
                     if (!chkTevkifat.Checked)
                     {
-                        txtTevkifat.Text = "0";
                     }
 
 
@@ -237,34 +232,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 MessageHelper.ShowError("İskonto oranı 0 ile 100 arasında olmalıdır.");
                 return false;
             }
-
-
-
-            // CheckBox kontrolü
-            if (chkTevkifat.Checked)
-            {
-                if (!IsValidInt(txtTevkifat, "Tevkifat"))
-                    return false;
-
-                if (!decimal.TryParse(txtTevkifat.Text.Trim(), out decimal oran))
-                {
-                    MessageHelper.ShowError("Tevkifat oranı geçerli bir sayı olmalıdır.");
-                    return false;
-                }
-
-                if (oran <= 0 || oran > 100)
-                {
-                    MessageHelper.ShowError("Tevkifat oranı 0'dan büyük ve 100'e eşit veya daha küçük olmalıdır.");
-                    return false;
-                }
-            }
-            else
-            {
-                if (MessageHelper.ShowQuestion("Tevkifat seçilmedi. Devam etmek istiyor musunuz?") != DialogResult.Yes)
-                    return false;
-            }
-
-
             return true;
         }
 
@@ -392,27 +359,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
         }
 
-        string exTevkifatValue;
-        private void chkTevkifat_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkTevkifat.Checked)
-            {
-                txtTevkifat.Enabled = true;
-
-                if (!string.IsNullOrEmpty(exTevkifatValue))
-                    txtTevkifat.Text = exTevkifatValue; // saklanan değeri geri getir
-            }
-            else
-            {
-                exTevkifatValue = txtTevkifat.Text;
-
-                txtTevkifat.Enabled = false;
-
-                // Eğer tevkifat değeri zaten 0 değilse ve sıfırlamak istiyorsan
-                if (string.IsNullOrEmpty(txtTevkifat.Text) || txtTevkifat.Text != "0")
-                    txtTevkifat.Text = "0";
-            }
-        }
+        
         private void button1_Click(object sender, EventArgs e)
         {
             if (editor_mode == "Add")
@@ -421,7 +368,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 {
 
                     OfferManager offerManager = new OfferManager();
-                    string tevkifat = string.IsNullOrWhiteSpace(txtTevkifat.Text) ? "0" : txtTevkifat.Text;
                     int yetkiliId;
 
                     if (chkYetkililer.SelectedItem is KeyValuePair<string, string> selectedAuth)
@@ -467,7 +413,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         txtIskonto.Text,
                         kdvStr,
                         chkTevkifat.Checked,
-                        tevkifat,
                         chkDurum.Text
                     );
 
@@ -505,7 +450,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
 
-                _offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtİscilik.Text, txtIskonto.Text, "20", chkTevkifat.Checked, txtTevkifat.Text, chkDurum.Text);
+                _offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtİscilik.Text, txtIskonto.Text, "20", chkTevkifat.Checked, chkDurum.Text);
                 Close();
             }
         }
@@ -689,7 +634,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 decimal kdvaluminyum = toplamAluminyumTutari * 0.20m;
                 string kdvaluminyumStr = kdvaluminyum.ToString("N2", new CultureInfo("tr-TR"));
 
-                decimal tevkifat = kdvaluminyum * 0.70m;
+                decimal tevkifat = 0;
+                if(chkTevkifat.Checked)
+                {
+                    tevkifat = kdvaluminyum * 0.70m;
+                }
                 string tevkifatStr = tevkifat.ToString("N2", new CultureInfo("tr-TR"));
 
                 decimal vergiliToplam = iskontoSonrasiTutar + kdv;

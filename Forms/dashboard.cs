@@ -19,10 +19,6 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             InitializeComponent();
             ConfigureDashboard();
-
-
-            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            label2.Text = "Versiyon: " + version;
         }
 
         private void ConfigureDashboard()

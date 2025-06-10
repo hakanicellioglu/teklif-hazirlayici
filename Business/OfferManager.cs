@@ -157,7 +157,7 @@ namespace Teklif_Hazırlayıcı.Business
         #endregion
 
         #region Teklif Ekleme
-        public int AddOffer(int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
+        public int AddOffer(int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
         {
             /*
              *
@@ -180,11 +180,7 @@ namespace Teklif_Hazırlayıcı.Business
                 kdvDecimal = 20;
             string kdvStr = kdvDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
-            // Tevkifat
-            decimal tevkifatDecimal = 0;
-            if (!decimal.TryParse(tevkifat_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out tevkifatDecimal))
-                tevkifatDecimal = 0;
-            string tevkifatStr = tevkifatDecimal.ToString("0.##", new CultureInfo("tr-TR"));
+            
 
             // LME
             decimal lmeDecimal = 0;
@@ -226,7 +222,6 @@ namespace Teklif_Hazırlayıcı.Business
                     cmd.Parameters.Add("@DiscountRate", SqlDbType.Decimal).Value = Convert.ToDecimal(iskontoStr);
                     cmd.Parameters.Add("@VatRate", SqlDbType.Decimal).Value = Convert.ToDecimal(kdvStr);
                     cmd.Parameters.Add("@Withholding", SqlDbType.Bit).Value = tevkifat;
-                    cmd.Parameters.Add("@WithholdingRate", SqlDbType.Decimal).Value = Convert.ToDecimal(tevkifatStr);
                     cmd.Parameters.Add("@Status", SqlDbType.NVarChar).Value = durum;
 
 
@@ -248,7 +243,7 @@ namespace Teklif_Hazırlayıcı.Business
 
         #region Teklif Güncelleme
 
-        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string tevkifat_orani, string durum)
+        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
         {
             // İskonto
             decimal iskontoDecimal = 0;
@@ -261,12 +256,6 @@ namespace Teklif_Hazırlayıcı.Business
             if (!decimal.TryParse(kdv_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out kdvDecimal))
                 kdvDecimal = 0;
             string kdvStr = kdvDecimal.ToString("0.##", new CultureInfo("tr-TR"));
-
-            // Tevkifat
-            decimal tevkifatDecimal = 0;
-            if (!decimal.TryParse(tevkifat_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out tevkifatDecimal))
-                tevkifatDecimal = 0;
-            string tevkifatStr = tevkifatDecimal.ToString("0.##", new CultureInfo("tr-TR"));
 
             // LME
             decimal lmeDecimal = 0;
@@ -315,7 +304,6 @@ namespace Teklif_Hazırlayıcı.Business
                                 reader["iskonto_orani"].ToString() != iskonto_orani ||
                                 reader["kdv_orani"].ToString() != kdv_orani ||
                                 Convert.ToBoolean(reader["tevkifat"]) != tevkifat ||
-                                reader["tevkifat_orani"].ToString() != tevkifat_orani ||
                                 reader["durum"].ToString() != durum;
 
                             if (!isDifferent)
@@ -371,7 +359,7 @@ namespace Teklif_Hazırlayıcı.Business
                             updateCmd.Parameters.AddWithValue("@IskontoOrani", iskontoStr);
                             updateCmd.Parameters.AddWithValue("@KdvOrani", kdvStr);
                             updateCmd.Parameters.Add(new SqlParameter("@Tevkifat", SqlDbType.Bit) { Value = tevkifat });
-                            updateCmd.Parameters.AddWithValue("@TevkifatOrani", tevkifatStr);
+                            updateCmd.Parameters.AddWithValue("@TevkifatOrani", teklif_id.HasValue ? 70 : 0);
                             updateCmd.Parameters.Add(new SqlParameter("@Durum", SqlDbType.VarChar) { Value = durum });
                             updateCmd.Parameters.Add(new SqlParameter("@TeklifId", SqlDbType.Int) { Value = teklif_id });
 
@@ -403,8 +391,10 @@ namespace Teklif_Hazırlayıcı.Business
              * 
              */
             decimal iskontoOrani = 0;
+            bool tevkifatUygulanacak = false;
 
-            string offerQuery = "SELECT iskonto_orani FROM teklifler WHERE teklif_id = @teklifId";
+
+            string offerQuery = "SELECT iskonto_orani, tevkifat FROM teklifler WHERE teklif_id = @teklifId";
 
             using (SqlConnection conn = _connection.GetConnection())
             {
@@ -412,21 +402,24 @@ namespace Teklif_Hazırlayıcı.Business
                 using (SqlCommand cmd = new SqlCommand(offerQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@teklifId", teklifId);
-                    var result = cmd.ExecuteScalar();
-                    if (result != null)
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        string oranStr = result.ToString();
-                        iskontoOrani = Convert.ToDecimal(oranStr);
+                        if (reader.Read())
+                        {
+                            string oranStr = reader["iskonto_orani"]?.ToString();
+                            iskontoOrani = !string.IsNullOrEmpty(oranStr) ? Convert.ToDecimal(oranStr) : 0;
+
+                            tevkifatUygulanacak = reader["tevkifat"] != DBNull.Value && Convert.ToBoolean(reader["tevkifat"]);
+                        }
                     }
                 }
 
                 decimal toplamAdet = 0, toplamKg = 0, toplamTutar = 0;
                 string toplamAdetStr = "0", toplamKgStr = "0", toplamTutarStr = "0";
 
-                // 2.1. Toplam Adet ve Kg - aksesuar hariç
+                // 2.1.  Kg - aksesuar hariç
                 string selectAdetKgQuery = @"
-                SELECT 
-                    ISNULL(SUM(k.adet), 0) AS ToplamAdet,
+                SELECT                    
                     ISNULL(SUM(k.kg), 0) AS ToplamKg
                 FROM kalemler k
                 INNER JOIN urunler u ON k.urun_id = u.urun_id
@@ -439,8 +432,6 @@ namespace Teklif_Hazırlayıcı.Business
                     {
                         if (reader.Read())
                         {
-                            toplamAdetStr = reader["ToplamAdet"] != DBNull.Value ? reader["ToplamAdet"].ToString().Replace(".", ",") : "0";
-                            toplamAdet = Convert.ToDecimal(reader["ToplamAdet"].ToString());
 
                             toplamKgStr = reader["ToplamKg"] != DBNull.Value ? reader["ToplamKg"].ToString().Replace(".", ",") : "0";
                             toplamKg = Convert.ToDecimal(reader["ToplamKg"].ToString());
@@ -448,19 +439,29 @@ namespace Teklif_Hazırlayıcı.Business
                     }
                 }
 
-                // 2.2. Toplam Tutar - aksesuar dahil
                 string selectTutarQuery = @"
                 SELECT 
-                    ISNULL(SUM(k.toplam_tutar), 0) AS ToplamTutar
+                    ISNULL(SUM(k.toplam_tutar), 0) AS ToplamTutar,
+                    ISNULL(SUM(k.adet), 0) AS ToplamAdet
                 FROM kalemler k
                 WHERE k.teklif_id = @teklifId";
 
                 using (SqlCommand cmd = new SqlCommand(selectTutarQuery, conn))
                 {
                     cmd.Parameters.AddWithValue("@teklifId", teklifId);
-                    toplamTutar = Convert.ToDecimal(cmd.ExecuteScalar());
-                    toplamTutarStr = toplamTutar.ToString().Replace(".", ",");
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            toplamAdet = reader["ToplamAdet"] != DBNull.Value ? Convert.ToDecimal(reader["ToplamAdet"]) : 0;
+                            toplamTutar = reader["ToplamTutar"] != DBNull.Value ? Convert.ToDecimal(reader["ToplamTutar"]) : 0;
+
+                            toplamAdetStr = toplamAdet.ToString().Replace(".", ",");
+                            toplamTutarStr = toplamTutar.ToString().Replace(".", ",");
+                        }
+                    }
                 }
+
 
                 // 3. Finansal hesaplamalar
                 decimal iskontoTutar = ((toplamTutar * (iskontoOrani / 100)));

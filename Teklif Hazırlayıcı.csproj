@@ -98,6 +98,10 @@
     <Compile Include="Business\UserManager.cs" />
     <Compile Include="DataAccess\DatabaseInitializer.cs" />
     <Compile Include="DataAccess\SqlDbConnection.cs" />
+    <Compile Include="Entity\Firmalar.cs" />
+    <Compile Include="Entity\Kalemler.cs" />
+    <Compile Include="Entity\Kullanicilar.cs" />
+    <Compile Include="Entity\Teklifler.cs" />
     <Compile Include="Forms\auth.cs">
       <SubType>Form</SubType>
     </Compile>
