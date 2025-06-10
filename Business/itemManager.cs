@@ -324,7 +324,48 @@ WHERE kalem_id = @KalemId";
             }
         }
 
+        internal decimal GetVadeliFiyat(int value)
+        {
+            /*
+             *
+             * Belirtilen `value` değerine göre vadeli fiyatı getirir.
+             * "vadeli_fiyat" tablosundan alınan fiyat değeri decimal türüne çevrilerek döndürülür.
+             * Eğer değer bulunamazsa varsayılan olarak 0 döndürülür.
+             *
+             */
+            string query = "SELECT vade_farki FROM teklifler WHERE teklif_id = @Id";
+            using (SqlConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Id", value);
+                    var result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToDecimal(result) : 0m;
+                }
+            }
+        }
 
-
+        internal int GetVadeAy(int value)
+        {
+            /*
+             *
+             * Belirtilen `value` değerine göre vade ayını getirir.
+             * "vadeli_fiyat" tablosundan alınan vade ayı değeri int türüne çevrilerek döndürülür.
+             * Eğer değer bulunamazsa varsayılan olarak 0 döndürülür.
+             *
+             */
+            string query = "SELECT odeme_vade FROM teklifler WHERE teklif_id = @Id";
+            using (SqlConnection conn = _connection.GetConnection())
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Id", value);
+                    var result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result)/30 : 0;
+                }
+            }
+        }
     }
 }

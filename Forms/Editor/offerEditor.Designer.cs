@@ -73,6 +73,8 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.txtVadeFarki = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -95,7 +97,7 @@
             this.label2.Location = new System.Drawing.Point(59, 95);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 19);
-            this.label2.TabIndex = 1;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Firma";
             // 
             // chkFirmalar
@@ -109,7 +111,7 @@
             this.chkFirmalar.Location = new System.Drawing.Point(63, 117);
             this.chkFirmalar.Name = "chkFirmalar";
             this.chkFirmalar.Size = new System.Drawing.Size(150, 25);
-            this.chkFirmalar.TabIndex = 2;
+            this.chkFirmalar.TabIndex = 1;
             this.chkFirmalar.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label3
@@ -119,7 +121,7 @@
             this.label3.Location = new System.Drawing.Point(215, 95);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 19);
-            this.label3.TabIndex = 3;
+            this.label3.TabIndex = 2;
             this.label3.Text = "Yetkili";
             // 
             // chkYetkililer
@@ -134,7 +136,7 @@
             this.chkYetkililer.Location = new System.Drawing.Point(219, 117);
             this.chkYetkililer.Name = "chkYetkililer";
             this.chkYetkililer.Size = new System.Drawing.Size(150, 25);
-            this.chkYetkililer.TabIndex = 4;
+            this.chkYetkililer.TabIndex = 3;
             // 
             // label4
             // 
@@ -143,7 +145,7 @@
             this.label4.Location = new System.Drawing.Point(371, 95);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(40, 19);
-            this.label4.TabIndex = 5;
+            this.label4.TabIndex = 4;
             this.label4.Text = "Tarih";
             // 
             // dateTimePicker1
@@ -152,7 +154,7 @@
             this.dateTimePicker1.Location = new System.Drawing.Point(375, 118);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(150, 24);
-            this.dateTimePicker1.TabIndex = 6;
+            this.dateTimePicker1.TabIndex = 5;
             // 
             // label5
             // 
@@ -161,7 +163,7 @@
             this.label5.Location = new System.Drawing.Point(59, 145);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(80, 19);
-            this.label5.TabIndex = 7;
+            this.label5.TabIndex = 6;
             this.label5.Text = "Teslim Şekli";
             // 
             // chkTeslimSekli
@@ -175,7 +177,7 @@
             this.chkTeslimSekli.Location = new System.Drawing.Point(63, 169);
             this.chkTeslimSekli.Name = "chkTeslimSekli";
             this.chkTeslimSekli.Size = new System.Drawing.Size(150, 25);
-            this.chkTeslimSekli.TabIndex = 8;
+            this.chkTeslimSekli.TabIndex = 7;
             // 
             // label6
             // 
@@ -184,7 +186,7 @@
             this.label6.Location = new System.Drawing.Point(213, 145);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(95, 19);
-            this.label6.TabIndex = 9;
+            this.label6.TabIndex = 8;
             this.label6.Text = "Ödeme Şekli";
             // 
             // chkOdemeSekli
@@ -199,7 +201,7 @@
             this.chkOdemeSekli.Location = new System.Drawing.Point(217, 169);
             this.chkOdemeSekli.Name = "chkOdemeSekli";
             this.chkOdemeSekli.Size = new System.Drawing.Size(150, 25);
-            this.chkOdemeSekli.TabIndex = 10;
+            this.chkOdemeSekli.TabIndex = 9;
             this.chkOdemeSekli.SelectedIndexChanged += new System.EventHandler(this.chkOdemeSekli_SelectedIndexChanged);
             // 
             // label7
@@ -209,7 +211,7 @@
             this.label7.Location = new System.Drawing.Point(215, 246);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(81, 19);
-            this.label7.TabIndex = 19;
+            this.label7.TabIndex = 18;
             this.label7.Text = "Teklif Süresi";
             // 
             // txtTeklifSuresi
@@ -218,7 +220,7 @@
             this.txtTeklifSuresi.Location = new System.Drawing.Point(217, 268);
             this.txtTeklifSuresi.Name = "txtTeklifSuresi";
             this.txtTeklifSuresi.Size = new System.Drawing.Size(150, 24);
-            this.txtTeklifSuresi.TabIndex = 20;
+            this.txtTeklifSuresi.TabIndex = 19;
             // 
             // chkDovizBirimi
             // 
@@ -231,7 +233,7 @@
             this.chkDovizBirimi.Location = new System.Drawing.Point(63, 219);
             this.chkDovizBirimi.Name = "chkDovizBirimi";
             this.chkDovizBirimi.Size = new System.Drawing.Size(75, 25);
-            this.chkDovizBirimi.TabIndex = 14;
+            this.chkDovizBirimi.TabIndex = 13;
             this.chkDovizBirimi.SelectedIndexChanged += new System.EventHandler(this.chkDovizBirimi_SelectedIndexChanged);
             // 
             // label8
@@ -241,7 +243,7 @@
             this.label8.Location = new System.Drawing.Point(59, 197);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(83, 19);
-            this.label8.TabIndex = 13;
+            this.label8.TabIndex = 12;
             this.label8.Text = "Döviz Birimi";
             // 
             // label9
@@ -251,7 +253,7 @@
             this.label9.Location = new System.Drawing.Point(148, 197);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(79, 19);
-            this.label9.TabIndex = 15;
+            this.label9.TabIndex = 14;
             this.label9.Text = "Döviz Kuru";
             // 
             // label10
@@ -261,7 +263,7 @@
             this.label10.Location = new System.Drawing.Point(371, 145);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(47, 19);
-            this.label10.TabIndex = 11;
+            this.label10.TabIndex = 10;
             this.label10.Text = "Vade";
             // 
             // label11
@@ -270,9 +272,9 @@
             this.label11.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label11.Location = new System.Drawing.Point(57, 295);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(78, 19);
-            this.label11.TabIndex = 23;
-            this.label11.Text = "LME(0.##)";
+            this.label11.Size = new System.Drawing.Size(87, 19);
+            this.label11.TabIndex = 22;
+            this.label11.Text = "LME (₺/ton)";
             // 
             // txtLME
             // 
@@ -280,7 +282,7 @@
             this.txtLME.Location = new System.Drawing.Point(61, 322);
             this.txtLME.Name = "txtLME";
             this.txtLME.Size = new System.Drawing.Size(150, 24);
-            this.txtLME.TabIndex = 24;
+            this.txtLME.TabIndex = 23;
             this.txtLME.TextChanged += new System.EventHandler(this.txtLME_TextChanged);
             // 
             // txtIskonto
@@ -290,7 +292,7 @@
             this.txtIskonto.Location = new System.Drawing.Point(217, 322);
             this.txtIskonto.Name = "txtIskonto";
             this.txtIskonto.Size = new System.Drawing.Size(150, 24);
-            this.txtIskonto.TabIndex = 26;
+            this.txtIskonto.TabIndex = 25;
             this.txtIskonto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtIskonto_KeyPress);
             // 
             // chkTevkifat
@@ -299,9 +301,9 @@
             this.chkTevkifat.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.chkTevkifat.Location = new System.Drawing.Point(373, 293);
             this.chkTevkifat.Name = "chkTevkifat";
-            this.chkTevkifat.Size = new System.Drawing.Size(121, 23);
-            this.chkTevkifat.TabIndex = 27;
-            this.chkTevkifat.Text = "Tevkifat(0.##)";
+            this.chkTevkifat.Size = new System.Drawing.Size(79, 23);
+            this.chkTevkifat.TabIndex = 26;
+            this.chkTevkifat.Text = "Tevkifat";
             this.chkTevkifat.UseVisualStyleBackColor = true;
             // 
             // label13
@@ -311,7 +313,7 @@
             this.label13.Location = new System.Drawing.Point(57, 349);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(54, 19);
-            this.label13.TabIndex = 29;
+            this.label13.TabIndex = 27;
             this.label13.Text = "Durum";
             // 
             // chkDurum
@@ -327,7 +329,7 @@
             this.chkDurum.Location = new System.Drawing.Point(61, 371);
             this.chkDurum.Name = "chkDurum";
             this.chkDurum.Size = new System.Drawing.Size(150, 25);
-            this.chkDurum.TabIndex = 30;
+            this.chkDurum.TabIndex = 28;
             // 
             // button1
             // 
@@ -335,7 +337,7 @@
             this.button1.Location = new System.Drawing.Point(217, 402);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(150, 30);
-            this.button1.TabIndex = 32;
+            this.button1.TabIndex = 30;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -346,7 +348,7 @@
             this.btnCancel.Location = new System.Drawing.Point(61, 402);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(150, 30);
-            this.btnCancel.TabIndex = 33;
+            this.btnCancel.TabIndex = 29;
             this.btnCancel.Text = "İptal";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -357,7 +359,7 @@
             this.txtDovizKuru.Location = new System.Drawing.Point(152, 219);
             this.txtDovizKuru.Name = "txtDovizKuru";
             this.txtDovizKuru.Size = new System.Drawing.Size(150, 24);
-            this.txtDovizKuru.TabIndex = 16;
+            this.txtDovizKuru.TabIndex = 15;
             // 
             // label14
             // 
@@ -366,7 +368,7 @@
             this.label14.Location = new System.Drawing.Point(57, 246);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(112, 19);
-            this.label14.TabIndex = 17;
+            this.label14.TabIndex = 16;
             this.label14.Text = "Ödeme Vadesi";
             // 
             // txtOdemeVadesi
@@ -375,7 +377,7 @@
             this.txtOdemeVadesi.Location = new System.Drawing.Point(61, 268);
             this.txtOdemeVadesi.Name = "txtOdemeVadesi";
             this.txtOdemeVadesi.Size = new System.Drawing.Size(150, 24);
-            this.txtOdemeVadesi.TabIndex = 18;
+            this.txtOdemeVadesi.TabIndex = 17;
             // 
             // chkVade
             // 
@@ -385,7 +387,7 @@
             this.chkVade.Location = new System.Drawing.Point(373, 169);
             this.chkVade.Name = "chkVade";
             this.chkVade.Size = new System.Drawing.Size(150, 25);
-            this.chkVade.TabIndex = 12;
+            this.chkVade.TabIndex = 11;
             this.chkVade.SelectedIndexChanged += new System.EventHandler(this.chkVade_SelectedIndexChanged);
             // 
             // dataGridView1
@@ -434,7 +436,7 @@
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(466, 193);
-            this.dataGridView1.TabIndex = 34;
+            this.dataGridView1.TabIndex = 33;
             this.dataGridView1.Visible = false;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             // 
@@ -444,9 +446,9 @@
             this.label16.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label16.Location = new System.Drawing.Point(371, 246);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(42, 19);
-            this.label16.TabIndex = 21;
-            this.label16.Text = "İşçilik";
+            this.label16.Size = new System.Drawing.Size(93, 19);
+            this.label16.TabIndex = 20;
+            this.label16.Text = "İşçilik (₺/ton)";
             // 
             // txtİscilik
             // 
@@ -454,7 +456,7 @@
             this.txtİscilik.Location = new System.Drawing.Point(373, 268);
             this.txtİscilik.Name = "txtİscilik";
             this.txtİscilik.Size = new System.Drawing.Size(150, 24);
-            this.txtİscilik.TabIndex = 22;
+            this.txtİscilik.TabIndex = 21;
             this.txtİscilik.TextChanged += new System.EventHandler(this.txtİscilik_TextChanged);
             // 
             // chkİskonto
@@ -464,7 +466,7 @@
             this.chkİskonto.Location = new System.Drawing.Point(217, 293);
             this.chkİskonto.Name = "chkİskonto";
             this.chkİskonto.Size = new System.Drawing.Size(117, 23);
-            this.chkİskonto.TabIndex = 25;
+            this.chkİskonto.TabIndex = 24;
             this.chkİskonto.Text = "İskonto(0.##)";
             this.chkİskonto.UseVisualStyleBackColor = true;
             this.chkİskonto.CheckedChanged += new System.EventHandler(this.chkİskonto_CheckedChanged);
@@ -491,7 +493,7 @@
             this.button2.Location = new System.Drawing.Point(436, 0);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(30, 30);
-            this.button2.TabIndex = 35;
+            this.button2.TabIndex = 1;
             this.toolTip1.SetToolTip(this.button2, "PDF olarak kaydet");
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Visible = false;
@@ -521,17 +523,38 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(377, 355);
+            this.label12.Location = new System.Drawing.Point(372, 322);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(41, 13);
-            this.label12.TabIndex = 37;
-            this.label12.Text = "label12";
+            this.label12.Size = new System.Drawing.Size(86, 13);
+            this.label12.TabIndex = 32;
+            this.label12.Text = "Birim Fiyat (₺/kg)";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.label15.Location = new System.Drawing.Point(215, 349);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(82, 19);
+            this.label15.TabIndex = 37;
+            this.label15.Text = "Vade Farkı";
+            // 
+            // txtVadeFarki
+            // 
+            this.txtVadeFarki.Enabled = false;
+            this.txtVadeFarki.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.txtVadeFarki.Location = new System.Drawing.Point(219, 372);
+            this.txtVadeFarki.Name = "txtVadeFarki";
+            this.txtVadeFarki.Size = new System.Drawing.Size(150, 24);
+            this.txtVadeFarki.TabIndex = 38;
             // 
             // offerEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(566, 681);
+            this.Controls.Add(this.txtVadeFarki);
+            this.Controls.Add(this.label15);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnEdit);
@@ -575,7 +598,6 @@
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";
-            this.Load += new System.EventHandler(this.offerEditor_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -624,5 +646,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox txtVadeFarki;
     }
 }

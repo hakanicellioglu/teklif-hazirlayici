@@ -214,9 +214,9 @@
             this.label3.Location = new System.Drawing.Point(249, 195);
             this.label3.Margin = new System.Windows.Forms.Padding(5);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(77, 19);
+            this.label3.Size = new System.Drawing.Size(121, 19);
             this.label3.TabIndex = 14;
-            this.label3.Text = "Birim Fiyat";
+            this.label3.Text = "Birim Fiyat (₺/kg)";
             this.label3.Visible = false;
             // 
             // txtBirimFiyat

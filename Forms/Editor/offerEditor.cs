@@ -113,19 +113,22 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         chkİskonto.Checked = false;
                     }
 
-                    // Tevkifat alanı
-
-                    decimal oran = 0;
-
-                    // Checkbox işaretleniyor mu?
-                    chkTevkifat.Checked = oran > 0;
-
-                    // TextBox aktif/pasif ayarlanıyor
-
-                    // Eğer sıfırsa görünür olarak da "0" yazabiliriz, garantiye almak için
-                    if (!chkTevkifat.Checked)
+                    // Tevkifat alanı - veritabanından gelen değere göre işaretlenmeli
+                    if (offer.Table.Columns.Contains("tevkifat"))
                     {
+                        bool tevkifat = false;
+
+                        if (offer["tevkifat"] != DBNull.Value)
+                            tevkifat = Convert.ToBoolean(offer["tevkifat"]);
+
+                        chkTevkifat.Checked = tevkifat;
                     }
+                    else
+                    {
+                        // Kolon yoksa loglanabilir veya varsayılan olarak kapatılabilir
+                        chkTevkifat.Checked = false;
+                    }
+
 
 
                     // Diğer alanlar
@@ -359,14 +362,13 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
         }
 
-        
+
         private void button1_Click(object sender, EventArgs e)
         {
             if (editor_mode == "Add")
             {
                 if (ValidateForm() == true)
                 {
-
                     OfferManager offerManager = new OfferManager();
                     int yetkiliId;
 
@@ -387,15 +389,55 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     if (!int.TryParse(txtOdemeVadesi.Text.Trim(), out odemeVadesi))
                         odemeVadesi = 0;
 
-                    decimal dovizKuruDecimal = 1.00m;
-                    string dovizKuruStr = "1.00"; // varsayılan
+                    var turkish = new CultureInfo("tr-TR");
 
-                    if (decimal.TryParse(txtDovizKuru.Text.Trim().Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, out dovizKuruDecimal))
+
+                    // Eğer çıktıyı Türkçe formatta göstermek isterseniz bu gerekli olur.
+                    // Sadece giriş için InvariantCulture kullanacağız.
+                    var turkishOutputCulture = new CultureInfo("tr-TR");
+
+                    string input = txtDovizKuru.Text.Trim();
+                    decimal dovizKuruDecimal;
+                    string dovizKuruStr; // Başlangıç değeri atamak yerine sonunda güncelleyeceğiz
+
+                    // Adım 1: Kullanıcının girdiği noktayı virgülle değiştirmemek için
+                    // ve ondalık ayırıcı olarak noktayı kabul etmek için InvariantCulture kullanın.
+                    // Ancak, kullanıcı yanlışlıkla binlik ayırıcı olarak virgül kullanmışsa
+                    // veya ondalık ayırıcı olarak virgül kullanmışsa (Türkçe alışkanlıkla),
+                    // bu durumda input'u temizlememiz gerekebilir.
+
+                    // En güvenli yol: Gelen string'deki tüm virgülleri noktaya çevirip
+                    // (eğer varsa, binlik ayırıcı olarak değil ondalık ayırıcı olarak kullanılmışsa)
+                    // sonra InvariantCulture ile denemek. Bu, kullanıcının "123,45" veya "123.45"
+                    // girmesi durumunda da doğru çalışmasını sağlar.
+                    string cleanedInput = input.Replace(",", ".");
+
+                    // Şimdi, temizlenmiş input'u InvariantCulture kullanarak decimal'e dönüştürmeyi dene.
+                    // NumberStyles.Any, hem binlik ayırıcıları hem de ondalık ayırıcıları esnek bir şekilde yorumlamaya çalışır.
+                    bool parseSuccess = decimal.TryParse(cleanedInput, NumberStyles.Any, CultureInfo.InvariantCulture, out dovizKuruDecimal);
+
+                    // Eğer dönüştürme başarısız olursa (örneğin, "abc" girilirse)
+                    if (!parseSuccess)
                     {
-                        dovizKuruStr = dovizKuruDecimal.ToString("0.##", new CultureInfo("tr-TR"));
+                        // Burada uygun bir varsayılan değer atayabilir veya kullanıcıya hata mesajı gösterebilirsiniz.
+                        dovizKuruDecimal = 1.00m; // Örneğin, varsayılan olarak 1.00
+                                                  // Loglama veya hata bildirimi yapılabilir: Console.WriteLine("Dönüştürme başarısız oldu, varsayılan değer kullanıldı.");
                     }
 
+                    // Adım 2: Elde ettiğiniz decimal değeri, istediğiniz string formatına çevirin.
+                    // Eğer çıktıda ondalık ayırıcının virgül olmasını istiyorsanız, burada "tr-TR" kültürünü kullanın.
+                    // Eğer çıktıda da ondalık ayırıcının nokta olmasını istiyorsanız, burada da InvariantCulture kullanın.
+                    dovizKuruStr = dovizKuruDecimal.ToString("0.##", turkishOutputCulture); // Çıktıyı Türkçe formatta (virgüllü)
 
+                    // Eğer çıktıda da nokta olmasını istiyorsanız:
+                    // dovizKuruStr = dovizKuruDecimal.ToString("0.##", CultureInfo.InvariantCulture);
+
+                    float vadeFarki = 0;
+                    if (!float.TryParse(txtVadeFarki.Text.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out vadeFarki))
+                    {
+                        MessageHelper.ShowError("Vade farkı geçerli bir sayı değil.");
+                        return;
+                    }
 
                     int teklifId = offerManager.AddOffer(
                         Convert.ToInt32(chkFirmalar.SelectedValue),
@@ -408,6 +450,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         dovizKuruStr,
                         Convert.ToChar(chkDovizBirimi.Text.Trim().Substring(0, 1)),
                         chkVade.Text,
+                        vadeFarki,
                         txtLME.Text,
                         txtİscilik.Text,
                         txtIskonto.Text,
@@ -428,7 +471,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                             }
                         }
                         else Close();
-
                     }
                     else
                     {
@@ -449,8 +491,32 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     return;
                 }
 
+                float vadeFarki = 0;
+                if (!float.TryParse(txtVadeFarki.Text.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out vadeFarki))
+                {
+                    MessageHelper.ShowError("Vade farkı geçerli bir sayı değil.");
+                    return;
+                }
 
-                _offerManager.UpdateOffer(offer_id, Convert.ToInt32(chkFirmalar.SelectedValue), yetkiliId, dateTimePicker1.Value, chkTeslimSekli.Text, chkOdemeSekli.Text, Convert.ToInt32(txtOdemeVadesi.Text), Convert.ToInt32(txtTeklifSuresi.Text), txtDovizKuru.Text, Convert.ToChar(chkDovizBirimi.Text), chkVade.Text, txtLME.Text, txtİscilik.Text, txtIskonto.Text, "20", chkTevkifat.Checked, chkDurum.Text);
+                _offerManager.UpdateOffer(
+                    offer_id, 
+                    Convert.ToInt32(chkFirmalar.SelectedValue), 
+                    yetkiliId, 
+                    dateTimePicker1.Value, 
+                    chkTeslimSekli.Text, 
+                    chkOdemeSekli.Text, 
+                    Convert.ToInt32(txtOdemeVadesi.Text), 
+                    Convert.ToInt32(txtTeklifSuresi.Text), 
+                    txtDovizKuru.Text, 
+                    Convert.ToChar(chkDovizBirimi.Text), 
+                    chkVade.Text, 
+                    vadeFarki, 
+                    txtLME.Text, 
+                    txtİscilik.Text, 
+                    txtIskonto.Text, 
+                    "20", 
+                    chkTevkifat.Checked, 
+                    chkDurum.Text);
                 Close();
             }
         }
@@ -504,7 +570,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         private void chkOdemeSekli_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (chkOdemeSekli.SelectedIndex == 0) { chkVade.Items.Clear(); chkVade.Items.Add("Peşin"); chkVade.Items.Add("Vadeli"); }
-            else if (chkOdemeSekli.SelectedIndex == 1) { chkVade.Items.Clear(); chkVade.Items.Add("Vade"); }
+            else if (chkOdemeSekli.SelectedIndex == 1) { chkVade.Items.Clear(); chkVade.Items.Add("Vadeli"); }
             else { chkVade.Items.Clear(); chkVade.Items.Add("Peşin"); chkVade.Items.Add("Taksit"); }
         }
 
@@ -513,9 +579,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             if (chkOdemeSekli.Text == "Nakit" && chkVade.Text == "Peşin")
             {
                 txtOdemeVadesi.Enabled = false;
+                txtVadeFarki.Enabled = false;
             }
             else
+            {
                 txtOdemeVadesi.Enabled = true;
+                txtVadeFarki.Enabled = true;
+            }
+
 
         }
 
@@ -596,6 +667,10 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 var row = teklifDetay.Rows[0];
                 string firmaAdi = row["FirmaIsim"].ToString();
                 string yetkiliAdi = row["YetkiliIsim"].ToString();
+                string yetkiliSoyadi = row["YetkiliSoyisim"].ToString();
+                string firmaAdres = row["FirmaAdres"].ToString();
+                string yetkiliTelefon = row["YetkiliTelefon"].ToString();
+                string yetkiliEmail = row["YetkiliEposta"].ToString();
                 string teklifTarih = Convert.ToDateTime(row["teklif_tarih"]).ToString("dd.MM.yyyy");
 
 
@@ -635,7 +710,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 string kdvaluminyumStr = kdvaluminyum.ToString("N2", new CultureInfo("tr-TR"));
 
                 decimal tevkifat = 0;
-                if(chkTevkifat.Checked)
+                if (chkTevkifat.Checked)
                 {
                     tevkifat = kdvaluminyum * 0.70m;
                 }
@@ -721,7 +796,10 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 // SOL içerik: Firma Bilgileri
                 Paragraph solParagraf = new Paragraph();
                 solParagraf.Add(new Chunk($"Firma Adı  : {firmaAdi}\n", normalFont));
-                solParagraf.Add(new Chunk($"Yetkili    : {yetkiliAdi}\n", normalFont));
+                solParagraf.Add(new Chunk($"Yetkili    : {yetkiliAdi + " " + yetkiliSoyadi}\n", normalFont));
+                solParagraf.Add(new Chunk($"Telefon    : {yetkiliTelefon}\n", normalFont));
+                solParagraf.Add(new Chunk($"E-Mail     : {yetkiliEmail}\n", normalFont));
+                solParagraf.Add(new Chunk($"Adres      : {firmaAdres}\n", normalFont));
 
                 PdfPCell solCell2 = new PdfPCell(solParagraf)
                 {
@@ -858,6 +936,20 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
                 teslimBilgiTable.AddCell(CreateCell("VADE", smallFont));
                 teslimBilgiTable.AddCell(CreateCell(vade, smallFont));
+
+                try
+                {
+                    decimal lmeExport = 0;
+                    decimal.TryParse(txtLME.Text, NumberStyles.Any, new CultureInfo("tr-TR"), out lmeExport);
+
+                    teslimBilgiTable.AddCell(CreateCell("LME", smallFont));
+                    teslimBilgiTable.AddCell(CreateCell(lmeExport.ToString("N2", new CultureInfo("tr-TR")), smallFont));
+                }
+                catch (Exception ex)
+                {
+                    MessageHelper.ShowError("LME değeri geçersiz: " + ex.Message);
+                }
+
                 teslimBilgiTable.HorizontalAlignment = Element.ALIGN_LEFT;
                 //doc.Add(teslimBilgiTable);
 
@@ -1055,12 +1147,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             decimal.TryParse(txtLME.Text, NumberStyles.Any, new CultureInfo("tr-TR"), out lme);
 
             sonuc = (iscilik / 1000) + (lme / 1000);
-            label12.Text = sonuc.ToString("N3", new CultureInfo("tr-TR"));
-        }
-
-        private void offerEditor_Load(object sender, EventArgs e)
-        {
-
+            label12.Text = "Birim Fiyat (₺/kg): " + sonuc.ToString("N2", new CultureInfo("tr-TR"));
         }
     }
 }

@@ -108,12 +108,23 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 return false;
             }
 
+            // Yeni sütun oluştur: "kalıp no - ürün"
+            dt.Columns.Add("urun_adi_gosterim", typeof(string));
+            foreach (DataRow row in dt.Rows)
+            {
+                string kalipNo = row["kalip_no"].ToString();
+                string urun = row["urun"].ToString();
+                row["urun_adi_gosterim"] = $"{kalipNo} - {urun}";
+            }
+
             chkUrunler.DataSource = dt;
-            chkUrunler.DisplayMember = "urun"; // Görünen
-            chkUrunler.ValueMember = "urun_id";    // Firma ID (veritabanı ID'si)
+            chkUrunler.DisplayMember = "urun_adi_gosterim"; // Görüntülenen alan
+            chkUrunler.ValueMember = "urun_id";             // Değer alanı
             chkUrunler.SelectedIndex = -1;
+
             return true;
         }
+
 
         private void chkUrunler_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -293,7 +304,12 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     return;
                 }
 
-                birimFiyat = (lmeTon / 1000m) + (iscilikTon / 1000m);
+                decimal sonuc = (lmeTon / 1000) + (iscilikTon / 1000);
+                decimal vade = _itemManager.GetVadeliFiyat(teklif_id.Value);
+                int ay = _itemManager.GetVadeAy(teklif_id.Value);
+                decimal vadeliFiyat = vade == 0 ? birimFiyat = sonuc : birimFiyat = sonuc * (1 + (vade / 100) * ay);
+
+                MessageBox.Show(ay.ToString());
 
                 gramaj = _itemManager.GetGramaj(urun_id);
                 decimal boy_m = boy_mm / 1000m;

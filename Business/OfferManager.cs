@@ -157,7 +157,7 @@ namespace Teklif_Hazırlayıcı.Business
         #endregion
 
         #region Teklif Ekleme
-        public int AddOffer(int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
+        public int AddOffer(int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, float vadefarki, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
         {
             /*
              *
@@ -197,8 +197,8 @@ namespace Teklif_Hazırlayıcı.Business
 
             int teklifId = -1;
 
-            string query = "INSERT INTO teklifler (firma_id, yetkili_id, teklif_tarih, teslim_sekli, odeme_sekli, odeme_vade, teklif_sure, doviz_kuru, doviz_birimi, vade, lme, iscilik, iskonto_orani, kdv_orani, tevkifat, tevkifat_orani, durum) " +
-                           "VALUES (@CompanyId, @AuthorizedPersonId, @OfferDate, @DeliveryMethod, @PaymentMethod, @PaymentDue, @OfferValidity, @ExchangeRate, @CurrencyUnit, @Term, @Lme, @Workmanship, @DiscountRate, @VatRate, @Withholding, @WithholdingRate, @Status);";
+            string query = "INSERT INTO teklifler (firma_id, yetkili_id, teklif_tarih, teslim_sekli, odeme_sekli, odeme_vade, teklif_sure, doviz_kuru, doviz_birimi, vade, vade_farki, lme, iscilik, iskonto_orani, kdv_orani, tevkifat, tevkifat_orani, durum) " +
+                           "VALUES (@CompanyId, @AuthorizedPersonId, @OfferDate, @DeliveryMethod, @PaymentMethod, @PaymentDue, @OfferValidity, @ExchangeRate, @CurrencyUnit, @Term, @TermRate, @Lme, @Workmanship, @DiscountRate, @VatRate, @Withholding, @WithholdingRate, @Status);";
 
             string getIdQuery = "SELECT @@IDENTITY;";
 
@@ -214,14 +214,16 @@ namespace Teklif_Hazırlayıcı.Business
                     cmd.Parameters.Add("@PaymentMethod", SqlDbType.NVarChar).Value = odeme_sekli;
                     cmd.Parameters.Add("@PaymentDue", SqlDbType.Int).Value = odeme_vadesi;
                     cmd.Parameters.Add("@OfferValidity", SqlDbType.Int).Value = teklif_suresi;
-                    cmd.Parameters.Add("@ExchangeRate", SqlDbType.NVarChar).Value = doviz_kuru;
+                    cmd.Parameters.Add("@ExchangeRate", SqlDbType.Float).Value = doviz_kuru;
                     cmd.Parameters.Add("@CurrencyUnit", SqlDbType.NVarChar).Value = doviz_birimi.ToString();
                     cmd.Parameters.Add("@Term", SqlDbType.NVarChar).Value = vade;
+                    cmd.Parameters.Add("@TermRate", SqlDbType.Float).Value = vadefarki;
                     cmd.Parameters.Add("@Lme", SqlDbType.Decimal).Value = Convert.ToDecimal(lmeStr);
                     cmd.Parameters.Add("@Workmanship", SqlDbType.Decimal).Value = Convert.ToDecimal(iscilikStr);
                     cmd.Parameters.Add("@DiscountRate", SqlDbType.Decimal).Value = Convert.ToDecimal(iskontoStr);
                     cmd.Parameters.Add("@VatRate", SqlDbType.Decimal).Value = Convert.ToDecimal(kdvStr);
                     cmd.Parameters.Add("@Withholding", SqlDbType.Bit).Value = tevkifat;
+                    cmd.Parameters.AddWithValue("@WithholdingRate", tevkifat ? 70 : 0);
                     cmd.Parameters.Add("@Status", SqlDbType.NVarChar).Value = durum;
 
 
@@ -243,7 +245,7 @@ namespace Teklif_Hazırlayıcı.Business
 
         #region Teklif Güncelleme
 
-        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
+        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, float vade_farki, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
         {
             // İskonto
             decimal iskontoDecimal = 0;
@@ -299,13 +301,13 @@ namespace Teklif_Hazırlayıcı.Business
                                 reader["doviz_kuru"].ToString() != doviz_kuru ||
                                 Convert.ToChar(reader["doviz_birimi"]) != doviz_birimi ||
                                 reader["vade"].ToString() != vade ||
+                                reader["vade_farki"].ToString() != vade_farki.ToString() ||
                                 reader["lme"].ToString() != lme ||
                                 reader["iscilik"].ToString() != iscilik ||
                                 reader["iskonto_orani"].ToString() != iskonto_orani ||
                                 reader["kdv_orani"].ToString() != kdv_orani ||
                                 Convert.ToBoolean(reader["tevkifat"]) != tevkifat ||
                                 reader["durum"].ToString() != durum;
-
                             if (!isDifferent)
                             {
                                 MessageHelper.ShowInfo("Hiçbir değişiklik yapılmadı.");
@@ -438,28 +440,37 @@ namespace Teklif_Hazırlayıcı.Business
                         }
                     }
                 }
+                try
+                {
 
-                string selectTutarQuery = @"
+
+                    string selectTutarQuery = @"
                 SELECT 
                     ISNULL(SUM(k.toplam_tutar), 0) AS ToplamTutar,
                     ISNULL(SUM(k.adet), 0) AS ToplamAdet
                 FROM kalemler k
                 WHERE k.teklif_id = @teklifId";
 
-                using (SqlCommand cmd = new SqlCommand(selectTutarQuery, conn))
-                {
-                    cmd.Parameters.AddWithValue("@teklifId", teklifId);
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlCommand cmd = new SqlCommand(selectTutarQuery, conn))
                     {
-                        if (reader.Read())
+                        cmd.Parameters.AddWithValue("@teklifId", teklifId);
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            toplamAdet = reader["ToplamAdet"] != DBNull.Value ? Convert.ToDecimal(reader["ToplamAdet"]) : 0;
-                            toplamTutar = reader["ToplamTutar"] != DBNull.Value ? Convert.ToDecimal(reader["ToplamTutar"]) : 0;
+                            if (reader.Read())
+                            {
+                                toplamAdet = reader["ToplamAdet"] != DBNull.Value ? Convert.ToDecimal(reader["ToplamAdet"]) : 0;
+                                toplamTutar = reader["ToplamTutar"] != DBNull.Value ? Convert.ToDecimal(reader["ToplamTutar"]) : 0;
 
-                            toplamAdetStr = toplamAdet.ToString().Replace(".", ",");
-                            toplamTutarStr = toplamTutar.ToString().Replace(".", ",");
+                                toplamAdetStr = toplamAdet.ToString().Replace(".", ",");
+                                toplamTutarStr = toplamTutar.ToString().Replace(".", ",");
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageHelper.ShowError("Toplam tutar hesaplanırken bir hata oluştu: " + ex.Message);
+                    return false;
                 }
 
 
@@ -627,7 +638,11 @@ namespace Teklif_Hazırlayıcı.Business
                 var cmd = new SqlCommand(@"
                 SELECT 
                     f.isim AS FirmaIsim, 
-                    y.isim AS YetkiliIsim, 
+                    y.isim AS YetkiliIsim,
+                    y.soyisim AS YetkiliSoyisim,
+                    f.adres AS FirmaAdres,
+                    y.telefon AS YetkiliTelefon,    
+                    y.eposta AS YetkiliEposta,
                     t.teklif_tarih, 
                     t.toplam_adet, 
                     t.toplam_kg, 
