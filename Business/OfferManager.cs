@@ -361,7 +361,9 @@ namespace Teklif_Hazırlayıcı.Business
                             updateCmd.Parameters.AddWithValue("@IskontoOrani", iskontoStr);
                             updateCmd.Parameters.AddWithValue("@KdvOrani", kdvStr);
                             updateCmd.Parameters.Add(new SqlParameter("@Tevkifat", SqlDbType.Bit) { Value = tevkifat });
-                            updateCmd.Parameters.AddWithValue("@TevkifatOrani", teklif_id.HasValue ? 70 : 0);
+                            // "tevkifat" parametresi teklif üzerinde tevkifat uygulandığını belirtir.
+                            // Tevkifat oranı sadece bu parametre true ise 70 olarak ayarlanmalıdır.
+                            updateCmd.Parameters.AddWithValue("@TevkifatOrani", tevkifat ? 70 : 0);
                             updateCmd.Parameters.Add(new SqlParameter("@Durum", SqlDbType.VarChar) { Value = durum });
                             updateCmd.Parameters.Add(new SqlParameter("@TeklifId", SqlDbType.Int) { Value = teklif_id });
 
