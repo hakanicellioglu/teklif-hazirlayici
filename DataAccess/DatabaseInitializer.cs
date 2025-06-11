@@ -65,7 +65,6 @@ namespace Teklif_Hazırlayıcı.DataAccess
 
         /// <summary>
         /// Veritabanı içinde gerekli tabloları oluşturur.
-        /// Bu örnekte temel bir Kullanici tablosu yer almakta.
         /// </summary>
         private static void CreateTables()
         {
