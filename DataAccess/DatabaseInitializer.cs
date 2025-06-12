@@ -14,7 +14,7 @@ namespace Teklif_Hazırlayıcı.DataAccess
         private static readonly string masterConnectionString = "Server=(localdb)\\MSSQLLocalDB;Database=master;Trusted_Connection=True;";
         // Uygulamanın çalışacağı veritabanı adı
         private static readonly string targetDatabaseName = "TeklifHazirlayiciDB";
-        private static readonly string targetDbConnectionString = $"Server=(localdb)\\MSSQLLocalDB;Database={targetDatabaseName};Trusted_Connection=True;";
+        private static readonly string targetDbConnectionString = $"Server=192.168.1.200;Database={targetDatabaseName};User Id=sa;Password=sapass;";
 
         // Hedef veritabanına bağlanmak için bağlantı dizesi
 
