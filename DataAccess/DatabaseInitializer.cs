@@ -11,10 +11,11 @@ namespace Teklif_Hazırlayıcı.DataAccess
     public static class DatabaseInitializer
     {
         // SQL Server'daki "master" veritabanına bağlanmak için bağlantı dizesi
-        private static readonly string masterConnectionString = "Server=(localdb)\\MSSQLLocalDB;Database=master;Trusted_Connection=True;";
+        private static readonly string masterConnectionString = "Server=192.168.1.200;Database=master;User Id=sa;Password=sapass;";
         // Uygulamanın çalışacağı veritabanı adı
         private static readonly string targetDatabaseName = "TeklifHazirlayiciDB";
         private static readonly string targetDbConnectionString = $"Server=192.168.1.200;Database={targetDatabaseName};User Id=sa;Password=sapass;";
+
 
         // Hedef veritabanına bağlanmak için bağlantı dizesi
 
