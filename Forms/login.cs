@@ -25,6 +25,8 @@ namespace Teklif_Hazırlayıcı
         {
             InitializeComponent();
             //ThemeManager.ToggleTheme(this);
+            CenterToScreen();
+            WindowState = FormWindowState.Maximized;
         }
 
         private void btnLogin_Click(object sender, EventArgs e)

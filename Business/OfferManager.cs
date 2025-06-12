@@ -97,7 +97,7 @@ namespace Teklif_Hazırlayıcı.Business
         t.tevkifat_orani,
         t.tevkifat_tutari,
         t.genel_toplam,
-        t.odencek,
+        t.odenecek,
         t.durum
     FROM 
         (teklifler AS t
@@ -537,7 +537,7 @@ namespace Teklif_Hazırlayıcı.Business
                     kdv_tutari = @kdv,
                     tevkifat_tutari = @tevkifat,
                     genel_toplam = @genelToplam,
-                    odencek = @odenecek
+                    odenecek = @odenecek
                 WHERE teklif_id = @teklifId";
 
                     using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
@@ -620,7 +620,7 @@ namespace Teklif_Hazırlayıcı.Business
                     t.kdv_tutari, 
                     t.tevkifat_tutari, 
                     t.genel_toplam, 
-                    t.odencek, 
+                    t.odenecek, 
                     t.doviz_birimi,
                     t.teslim_sekli,
                     t.odeme_sekli,

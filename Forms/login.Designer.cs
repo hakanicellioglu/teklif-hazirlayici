@@ -44,6 +44,7 @@
             // 
             // lblUsername
             // 
+            this.lblUsername.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblUsername.AutoSize = true;
             this.lblUsername.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.lblUsername.Location = new System.Drawing.Point(276, 104);
@@ -55,6 +56,7 @@
             // 
             // txtUsername
             // 
+            this.txtUsername.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtUsername.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
             this.txtUsername.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(162)));
             this.txtUsername.Location = new System.Drawing.Point(276, 126);
@@ -67,6 +69,7 @@
             // 
             // lblPassword
             // 
+            this.lblPassword.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblPassword.AutoSize = true;
             this.lblPassword.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.lblPassword.Location = new System.Drawing.Point(276, 164);
@@ -78,6 +81,7 @@
             // 
             // txtPassword
             // 
+            this.txtPassword.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtPassword.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txtPassword.Location = new System.Drawing.Point(276, 186);
             this.txtPassword.Name = "txtPassword";
@@ -89,6 +93,7 @@
             // 
             // btnTogglePassword
             // 
+            this.btnTogglePassword.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnTogglePassword.FlatAppearance.BorderSize = 0;
             this.btnTogglePassword.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnTogglePassword.ImageIndex = 1;
@@ -110,6 +115,7 @@
             // 
             // chkRememberMe
             // 
+            this.chkRememberMe.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkRememberMe.AutoSize = true;
             this.chkRememberMe.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.chkRememberMe.Location = new System.Drawing.Point(276, 224);
@@ -122,6 +128,7 @@
             // 
             // btnLogin
             // 
+            this.btnLogin.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnLogin.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnLogin.Location = new System.Drawing.Point(276, 254);
             this.btnLogin.Name = "btnLogin";
@@ -134,6 +141,7 @@
             // 
             // lnkForgotPassword
             // 
+            this.lnkForgotPassword.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lnkForgotPassword.AutoSize = true;
             this.lnkForgotPassword.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.lnkForgotPassword.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
@@ -147,6 +155,7 @@
             // 
             // lnkRegister
             // 
+            this.lnkRegister.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lnkRegister.AutoSize = true;
             this.lnkRegister.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.lnkRegister.Location = new System.Drawing.Point(227, 317);
@@ -174,9 +183,6 @@
             this.Controls.Add(this.txtUsername);
             this.Controls.Add(this.lblUsername);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(720, 480);
-            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(720, 480);
             this.Name = "login";
             this.Padding = new System.Windows.Forms.Padding(50);

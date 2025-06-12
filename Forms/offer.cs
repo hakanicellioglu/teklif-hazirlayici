@@ -135,8 +135,8 @@ namespace Teklif_Hazırlayıcı.Forms
                     Parent.Parent.Hide();
                     using (var editor = new offerEditor(teklifId, "Edit", new AuthManager(), new CompanyManager(), new OfferManager()))
                     {
-                        editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
-                        editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
+                        //editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
+                        //editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
                         editor.ShowDialog();
                     }
                     Parent.Parent.Show();

@@ -18,29 +18,17 @@ namespace Teklif_Hazırlayıcı.Forms
         public dashboard()
         {
             InitializeComponent();
-            ConfigureDashboard();
-        }
-
-        private void ConfigureDashboard()
-        {
-            Width = Screen.PrimaryScreen.WorkingArea.Width;
-            Height = Screen.PrimaryScreen.WorkingArea.Height;
-            CenterToScreen();
+            LoadForm(new home());
         }
 
         private void LoadForm(Form formToLoad)
         {
-            panel1.Visible = false;
-            panel1.Enabled = false;
-            btnHome.Visible = true;
-
             if (pnlForm.Controls.Count > 0)
             {
                 var oldForm = pnlForm.Controls[0] as Form;
                 oldForm?.Dispose();
                 pnlForm.Controls.Clear();
             }
-
             formToLoad.TopLevel = false;
             formToLoad.Dock = DockStyle.Fill;
             pnlForm.Controls.Add(formToLoad);
@@ -50,10 +38,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnHome_Click(object sender, EventArgs e)
         {
-            panel1.Visible = true;
-            panel1.Enabled = true;
-            btnHome.Visible = false;
-            pnlForm.Controls.Clear();
+            LoadForm(new home());
         }
 
         private void btnCompany_Click(object sender, EventArgs e)

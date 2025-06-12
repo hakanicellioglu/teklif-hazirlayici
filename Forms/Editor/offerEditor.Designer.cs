@@ -85,7 +85,7 @@
             this.label1.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(436, 30);
+            this.label1.Size = new System.Drawing.Size(1134, 30);
             this.label1.TabIndex = 0;
             this.label1.Text = "Teklif Editörü";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -435,7 +435,7 @@
             this.dataGridView1.RowTemplate.Height = 40;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(466, 193);
+            this.dataGridView1.Size = new System.Drawing.Size(1164, 193);
             this.dataGridView1.TabIndex = 33;
             this.dataGridView1.Visible = false;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
@@ -490,7 +490,7 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.ImageIndex = 0;
             this.button2.ImageList = this.imgButton;
-            this.button2.Location = new System.Drawing.Point(436, 0);
+            this.button2.Location = new System.Drawing.Point(1134, 0);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(30, 30);
             this.button2.TabIndex = 1;
@@ -517,7 +517,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(50, 50);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(466, 30);
+            this.panel1.Size = new System.Drawing.Size(1164, 30);
             this.panel1.TabIndex = 36;
             // 
             // label12
@@ -552,7 +552,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(566, 681);
+            this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.txtVadeFarki);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label12);
@@ -594,6 +594,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "offerEditor";
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

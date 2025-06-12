@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(dashboard));
             this.pnlMenu = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlLink = new System.Windows.Forms.Panel();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnOffer = new System.Windows.Forms.Button();
             this.btnProduct = new System.Windows.Forms.Button();
@@ -42,40 +42,35 @@
             this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.pnlForm = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.pnlMenu.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.pnlLink.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMenu
             // 
             this.pnlMenu.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.pnlMenu.Controls.Add(this.panel1);
+            this.pnlMenu.Controls.Add(this.pnlLink);
             this.pnlMenu.Controls.Add(this.btnLogout);
             this.pnlMenu.Controls.Add(this.btnHome);
             this.pnlMenu.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlMenu.Location = new System.Drawing.Point(0, 50);
+            this.pnlMenu.Location = new System.Drawing.Point(0, 0);
             this.pnlMenu.Name = "pnlMenu";
             this.pnlMenu.Padding = new System.Windows.Forms.Padding(25);
-            this.pnlMenu.Size = new System.Drawing.Size(200, 670);
+            this.pnlMenu.Size = new System.Drawing.Size(200, 720);
             this.pnlMenu.TabIndex = 0;
             // 
-            // panel1
+            // pnlLink
             // 
-            this.panel1.Controls.Add(this.btnSettings);
-            this.panel1.Controls.Add(this.btnOffer);
-            this.panel1.Controls.Add(this.btnProduct);
-            this.panel1.Controls.Add(this.btnAuth);
-            this.panel1.Controls.Add(this.btnCompany);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(25, 75);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(150, 520);
-            this.panel1.TabIndex = 0;
+            this.pnlLink.Controls.Add(this.btnSettings);
+            this.pnlLink.Controls.Add(this.btnOffer);
+            this.pnlLink.Controls.Add(this.btnProduct);
+            this.pnlLink.Controls.Add(this.btnAuth);
+            this.pnlLink.Controls.Add(this.btnCompany);
+            this.pnlLink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlLink.Location = new System.Drawing.Point(25, 75);
+            this.pnlLink.Name = "pnlLink";
+            this.pnlLink.Size = new System.Drawing.Size(150, 570);
+            this.pnlLink.TabIndex = 0;
             // 
             // btnSettings
             // 
@@ -84,7 +79,7 @@
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSettings.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnSettings.ImageIndex = 5;
-            this.btnSettings.Location = new System.Drawing.Point(0, 470);
+            this.btnSettings.Location = new System.Drawing.Point(0, 520);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(150, 50);
             this.btnSettings.TabIndex = 4;
@@ -168,7 +163,7 @@
             this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogout.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnLogout.ImageIndex = 6;
-            this.btnLogout.Location = new System.Drawing.Point(25, 595);
+            this.btnLogout.Location = new System.Drawing.Point(25, 645);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Size = new System.Drawing.Size(150, 50);
             this.btnLogout.TabIndex = 6;
@@ -184,15 +179,13 @@
             this.btnHome.FlatAppearance.BorderSize = 0;
             this.btnHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHome.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.btnHome.ImageIndex = 0;
-            this.btnHome.ImageList = this.imgButton;
             this.btnHome.Location = new System.Drawing.Point(25, 25);
             this.btnHome.Name = "btnHome";
             this.btnHome.Size = new System.Drawing.Size(150, 50);
             this.btnHome.TabIndex = 1;
+            this.btnHome.Text = "Anasayfa";
             this.btnHome.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnHome.UseVisualStyleBackColor = true;
-            this.btnHome.Visible = false;
             this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
             // 
             // imgButton
@@ -209,59 +202,10 @@
             // 
             this.pnlForm.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.pnlForm.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlForm.Location = new System.Drawing.Point(200, 50);
+            this.pnlForm.Location = new System.Drawing.Point(200, 0);
             this.pnlForm.Name = "pnlForm";
-            this.pnlForm.Size = new System.Drawing.Size(1080, 670);
+            this.pnlForm.Size = new System.Drawing.Size(1080, 720);
             this.pnlForm.TabIndex = 1;
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.panel2.Controls.Add(this.label1);
-            this.panel2.Controls.Add(this.button2);
-            this.panel2.Controls.Add(this.button1);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1280, 50);
-            this.panel2.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.label1.Font = new System.Drawing.Font("Century Gothic", 10F);
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(125, 50);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Teklif Hazırlayıcı";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // button2
-            // 
-            this.button2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button2.FlatAppearance.BorderSize = 0;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Location = new System.Drawing.Point(1180, 0);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(50, 50);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "-";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button1
-            // 
-            this.button1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(1230, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(50, 50);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "x";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // dashboard
             // 
@@ -270,16 +214,13 @@
             this.ClientSize = new System.Drawing.Size(1280, 720);
             this.Controls.Add(this.pnlForm);
             this.Controls.Add(this.pnlMenu);
-            this.Controls.Add(this.panel2);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "dashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";
             this.pnlMenu.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
+            this.pnlLink.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -296,11 +237,7 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel pnlForm;
         private System.Windows.Forms.ImageList imgButton;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pnlLink;
         private System.Windows.Forms.Button btnLogout;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
     }
 }
