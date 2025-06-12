@@ -433,11 +433,15 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     // dovizKuruStr = dovizKuruDecimal.ToString("0.##", CultureInfo.InvariantCulture);
 
                     float vadeFarki = 0;
-                    if (!float.TryParse(txtVadeFarki.Text.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out vadeFarki))
+                    if (chkVade.Text.Contains("Vade"))
                     {
-                        MessageHelper.ShowError("Vade farkı geçerli bir sayı değil.");
-                        return;
+                        if (!float.TryParse(txtVadeFarki.Text.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out vadeFarki))
+                        {
+                            MessageHelper.ShowError("Vade farkı geçerli bir sayı değil.");
+                            return;
+                        }
                     }
+
 
                     int teklifId = offerManager.AddOffer(
                         Convert.ToInt32(chkFirmalar.SelectedValue),
@@ -492,30 +496,33 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 }
 
                 float vadeFarki = 0;
-                if (!float.TryParse(txtVadeFarki.Text.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out vadeFarki))
+                if (chkVade.Text.Contains("Vade"))
                 {
-                    MessageHelper.ShowError("Vade farkı geçerli bir sayı değil.");
-                    return;
+                    if (!float.TryParse(txtVadeFarki.Text.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out vadeFarki))
+                    {
+                        MessageHelper.ShowError("Vade farkı geçerli bir sayı değil.");
+                        return;
+                    }
                 }
 
                 _offerManager.UpdateOffer(
-                    offer_id, 
-                    Convert.ToInt32(chkFirmalar.SelectedValue), 
-                    yetkiliId, 
-                    dateTimePicker1.Value, 
-                    chkTeslimSekli.Text, 
-                    chkOdemeSekli.Text, 
-                    Convert.ToInt32(txtOdemeVadesi.Text), 
-                    Convert.ToInt32(txtTeklifSuresi.Text), 
-                    txtDovizKuru.Text, 
-                    Convert.ToChar(chkDovizBirimi.Text), 
-                    chkVade.Text, 
-                    vadeFarki, 
-                    txtLME.Text, 
-                    txtİscilik.Text, 
-                    txtIskonto.Text, 
-                    "20", 
-                    chkTevkifat.Checked, 
+                    offer_id,
+                    Convert.ToInt32(chkFirmalar.SelectedValue),
+                    yetkiliId,
+                    dateTimePicker1.Value,
+                    chkTeslimSekli.Text,
+                    chkOdemeSekli.Text,
+                    Convert.ToInt32(txtOdemeVadesi.Text),
+                    Convert.ToInt32(txtTeklifSuresi.Text),
+                    txtDovizKuru.Text,
+                    Convert.ToChar(chkDovizBirimi.Text),
+                    chkVade.Text,
+                    vadeFarki,
+                    txtLME.Text,
+                    txtİscilik.Text,
+                    txtIskonto.Text,
+                    "20",
+                    chkTevkifat.Checked,
                     chkDurum.Text);
                 Close();
             }

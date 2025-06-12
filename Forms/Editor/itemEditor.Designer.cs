@@ -49,6 +49,7 @@
             // 
             // label1
             // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.label1.Location = new System.Drawing.Point(109, 128);
@@ -59,6 +60,7 @@
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.label2.Location = new System.Drawing.Point(90, 150);
@@ -70,6 +72,7 @@
             // 
             // chkUrunler
             // 
+            this.chkUrunler.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkUrunler.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.chkUrunler.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.chkUrunler.Font = new System.Drawing.Font("Century Gothic", 10F);
@@ -83,6 +86,7 @@
             // 
             // lblBoy
             // 
+            this.lblBoy.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblBoy.AutoSize = true;
             this.lblBoy.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.lblBoy.Location = new System.Drawing.Point(90, 258);
@@ -95,6 +99,7 @@
             // 
             // txtBoy
             // 
+            this.txtBoy.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtBoy.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.txtBoy.Location = new System.Drawing.Point(90, 280);
             this.txtBoy.Margin = new System.Windows.Forms.Padding(5);
@@ -105,6 +110,7 @@
             // 
             // label4
             // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.label4.Location = new System.Drawing.Point(90, 202);
@@ -116,6 +122,7 @@
             // 
             // txtAdet
             // 
+            this.txtAdet.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtAdet.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.txtAdet.Location = new System.Drawing.Point(90, 224);
             this.txtAdet.Margin = new System.Windows.Forms.Padding(5);
@@ -125,6 +132,7 @@
             // 
             // lblYuzey
             // 
+            this.lblYuzey.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblYuzey.AutoSize = true;
             this.lblYuzey.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.lblYuzey.Location = new System.Drawing.Point(86, 314);
@@ -137,6 +145,7 @@
             // 
             // chkYuzey
             // 
+            this.chkYuzey.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkYuzey.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.chkYuzey.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.chkYuzey.Font = new System.Drawing.Font("Century Gothic", 10F);
@@ -154,6 +163,7 @@
             // 
             // lblYuzeyKodu
             // 
+            this.lblYuzeyKodu.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblYuzeyKodu.AutoSize = true;
             this.lblYuzeyKodu.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.lblYuzeyKodu.Location = new System.Drawing.Point(249, 314);
@@ -166,6 +176,7 @@
             // 
             // txtYuzeyKodu
             // 
+            this.txtYuzeyKodu.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtYuzeyKodu.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.txtYuzeyKodu.Location = new System.Drawing.Point(249, 336);
             this.txtYuzeyKodu.Margin = new System.Windows.Forms.Padding(5);
@@ -176,6 +187,7 @@
             // 
             // button1
             // 
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button1.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.button1.Location = new System.Drawing.Point(249, 368);
             this.button1.Name = "button1";
@@ -187,6 +199,7 @@
             // 
             // button2
             // 
+            this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button2.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.button2.Location = new System.Drawing.Point(249, 400);
             this.button2.Name = "button2";
@@ -199,6 +212,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnCancel.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnCancel.Location = new System.Drawing.Point(249, 432);
             this.btnCancel.Name = "btnCancel";
@@ -209,6 +223,7 @@
             // 
             // label3
             // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.label3.Location = new System.Drawing.Point(249, 195);
@@ -221,6 +236,7 @@
             // 
             // txtBirimFiyat
             // 
+            this.txtBirimFiyat.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtBirimFiyat.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.txtBirimFiyat.Location = new System.Drawing.Point(249, 224);
             this.txtBirimFiyat.Margin = new System.Windows.Forms.Padding(5);
@@ -251,8 +267,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(500, 630);
             this.Name = "itemEditor";
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

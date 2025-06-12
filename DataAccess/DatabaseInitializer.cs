@@ -4,31 +4,49 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Teklif_Hazırlayıcı.Helpers;
 
 namespace Teklif_Hazırlayıcı.DataAccess
 {
     public static class DatabaseInitializer
     {
         // SQL Server'daki "master" veritabanına bağlanmak için bağlantı dizesi
-        private static readonly string masterConnectionString = "Server=.;Database=master;Trusted_Connection=True;";
-
+        private static readonly string masterConnectionString = "Server=(localdb)\\MSSQLLocalDB;Database=master;Trusted_Connection=True;";
         // Uygulamanın çalışacağı veritabanı adı
         private static readonly string targetDatabaseName = "TeklifHazirlayiciDB";
+        private static readonly string targetDbConnectionString = $"Server=(localdb)\\MSSQLLocalDB;Database={targetDatabaseName};Trusted_Connection=True;";
 
         // Hedef veritabanına bağlanmak için bağlantı dizesi
-        private static readonly string targetDbConnectionString = $"Server=.;Database={targetDatabaseName};Trusted_Connection=True;";
 
         /// <summary>
         /// Veritabanı yoksa oluşturur ve gerekli tabloları kurar.
         /// </summary>
         public static void Initialize()
         {
-            if (!DatabaseExists())
+            try
             {
-                CreateDatabase();
-                CreateTables();
+                MessageHelper.ShowInfo("[BAŞLATILIYOR] Veritabanı kontrol ediliyor...");
+
+                if (!DatabaseExists())
+                {
+                    MessageHelper.ShowInfo("[OLUŞTURULUYOR] Veritabanı bulunamadı. Yeni veritabanı oluşturuluyor...");
+                    CreateDatabase();
+                    MessageHelper.ShowInfo("[BAŞARILI] Veritabanı oluşturuldu.");
+
+                    CreateTables();
+                    MessageHelper.ShowInfo("[BAŞARILI] Gerekli tablolar oluşturuldu.");
+                }
+                else
+                {
+                    MessageHelper.ShowInfo("[BİLGİ] Veritabanı zaten mevcut. Tablolar tekrar oluşturulmadı.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError($"[HATA] Veritabanı başlatılırken sorun oluştu: {ex.Message}");
             }
         }
+
 
         /// <summary>
         /// SQL Server'da veritabanı var mı kontrol eder.
