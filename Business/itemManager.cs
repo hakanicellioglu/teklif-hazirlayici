@@ -250,7 +250,7 @@ WHERE kalem_id = @KalemId";
             }
         }
 
-        public decimal GetLMEFromTeklif(int teklif_id)
+        public decimal GetLMEFromTeklif(int? teklif_id)
         {
             try
             {
@@ -285,7 +285,7 @@ WHERE kalem_id = @KalemId";
             }
         }
 
-        public decimal Getİscilik(int teklif_id)
+        public decimal Getİscilik(int? teklif_id)
         {
             try
             {
@@ -404,7 +404,7 @@ WHERE kalem_id = @KalemId";
             }
         }
 
-        internal decimal GetVadeliFiyat(int value)
+        internal decimal GetVadeliFiyat(int? value)
         {
             try
             {
@@ -434,7 +434,7 @@ WHERE kalem_id = @KalemId";
             }
         }
 
-        internal int GetVadeAy(int value)
+        internal int GetVadeAy(int? value)
         {
             try
             {
@@ -464,7 +464,7 @@ WHERE kalem_id = @KalemId";
             }
         }
 
-        public void UpdateItemPricesByOffer(int teklifId)
+        public void UpdateItemPricesByOffer(int? teklifId)
         {
             try
             {
