@@ -335,28 +335,32 @@ namespace Teklif_Hazırlayıcı.Business
              */
             try
             {
-                string query = "SELECT firma_id, isim, adres, telefon, eposta FROM firmalar WHERE firma_id = @CompanyId";
+                List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+
+                string query = "SELECT isim,adres,telefon,eposta FROM firmalar WHERE firma_id = @CompanyId";
                 using (SqlConnection conn = _connection.GetConnection())
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     conn.Open();
-                    cmd.Parameters.AddWithValue("@CompanyId", companyId ?? (object)DBNull.Value);
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        if (reader.Read())
+                        cmd.Parameters.AddWithValue("@CompanyId", companyId ?? (object)DBNull.Value);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            return new Company
+                            while (reader.Read())
                             {
-                                FirmaId = reader.GetInt32(reader.GetOrdinal("firma_id")),
-                                Isim = reader["isim"].ToString(),
-                                Adres = reader["adres"].ToString(),
-                                Telefon = reader["telefon"].ToString(),
-                                Eposta = reader["eposta"].ToString()
-                            };
+                                Dictionary<string, string> row = new Dictionary<string, string>();
+                                row["isim"] = reader["isim"].ToString();
+                                row["adres"] = reader["adres"].ToString();
+                                row["telefon"] = reader["telefon"].ToString();
+                                row["eposta"] = reader["eposta"].ToString();
+                                result.Add(row);
+                            }
                         }
                     }
                 }
-                return null;
+                return result;
             }
             catch (Exception ex)
             {
