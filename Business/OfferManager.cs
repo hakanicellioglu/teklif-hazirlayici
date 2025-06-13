@@ -84,6 +84,7 @@ namespace Teklif_Hazırlayıcı.Business
         t.doviz_kuru,
         t.doviz_birimi,
         t.vade,
+        t.vade_farki,
         t.lme,
         t.iscilik,
         t.toplam_adet,
@@ -369,6 +370,7 @@ namespace Teklif_Hazırlayıcı.Business
                             doviz_kuru = @DovizKuru,
                             doviz_birimi = @DovizBirimi,
                             vade = @Vade,
+                            vade_farki = @TermRate,
                             lme = @Lme,
                             iscilik = @Workmanship,
                             iskonto_orani = @IskontoOrani,
@@ -390,6 +392,7 @@ namespace Teklif_Hazırlayıcı.Business
                                 updateCmd.Parameters.Add(new SqlParameter("@DovizKuru", SqlDbType.VarChar) { Value = doviz_kuru });
                                 updateCmd.Parameters.Add(new SqlParameter("@DovizBirimi", SqlDbType.VarChar) { Value = doviz_birimi.ToString() });
                                 updateCmd.Parameters.Add(new SqlParameter("@Vade", SqlDbType.VarChar) { Value = vade });
+                                updateCmd.Parameters.Add(new SqlParameter("@TermRate", SqlDbType.Float) { Value = vade_farki });
                                 updateCmd.Parameters.AddWithValue("@Lme", lmeStr);
                                 updateCmd.Parameters.AddWithValue("@Workmanship", iscilikStr);
                                 updateCmd.Parameters.AddWithValue("@IskontoOrani", iskontoStr);
@@ -627,7 +630,8 @@ namespace Teklif_Hazırlayıcı.Business
                     t.odeme_vade,
                     t.teklif_sure,
                     t.doviz_kuru,
-                    t.vade
+                    t.vade,
+                    t.vade_farki
                 FROM ((teklifler t
                 LEFT JOIN firmalar f ON f.firma_id = t.firma_id)
                 LEFT JOIN yetkililer y ON y.yetkili_id = t.yetkili_id)
