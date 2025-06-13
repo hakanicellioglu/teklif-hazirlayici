@@ -46,12 +46,41 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void GetColumns()
         {
-            var columns = _authManager.GetColumnDisplayNames("yetkililer");
+            var table = _authManager.GetAuthWithCompanyName();
             checkedListBox1.Items.Clear();
 
-            foreach (var col in columns)
+            if (table == null)
+                return;
+
+            foreach (DataColumn col in table.Columns)
             {
-                checkedListBox1.Items.Add(new ColumnItem(col.Name, col.DisplayName), true);
+                string display = col.ColumnName;
+                switch (col.ColumnName)
+                {
+                    case "Firma":
+                        display = "Firma Adı";
+                        break;
+                    case "isim":
+                        display = "İsim";
+                        break;
+                    case "soyisim":
+                        display = "Soyisim";
+                        break;
+                    case "hitap":
+                        display = "Hitap";
+                        break;
+                    case "adres":
+                        display = "Adres";
+                        break;
+                    case "telefon":
+                        display = "Telefon";
+                        break;
+                    case "eposta":
+                        display = "E-posta";
+                        break;
+                }
+
+                checkedListBox1.Items.Add(new ColumnItem(col.ColumnName, display), true);
             }
         }
         public void SetColumnList(List<(string Name, string DisplayName)> columns)
