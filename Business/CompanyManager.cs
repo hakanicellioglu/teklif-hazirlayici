@@ -329,38 +329,35 @@ namespace Teklif_Hazırlayıcı.Business
              *
              * Belirtilen `companyId` değerine sahip firmanın bilgilerini getirir.
              * Sorgu sonucunda firma adı, adres, telefon ve e-posta bilgileri çekilir.
-             * Her kayıt bir sözlük (Dictionary) olarak oluşturulup listeye eklenir.
-             * Elde edilen sözlük listesi döndürülür.
+             * Elde edilen firma bilgisi bir `Company` nesnesi olarak döndürülür.
              *
              */
             try
             {
-                List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+                Company company = null;
 
-                string query = "SELECT isim,adres,telefon,eposta FROM firmalar WHERE firma_id = @CompanyId";
+                string query = "SELECT isim, adres, telefon, eposta FROM firmalar WHERE firma_id = @CompanyId";
                 using (SqlConnection conn = _connection.GetConnection())
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@CompanyId", companyId ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@CompanyId", companyId ?? (object)DBNull.Value);
 
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
                         {
-                            while (reader.Read())
+                            company = new Company
                             {
-                                Dictionary<string, string> row = new Dictionary<string, string>();
-                                row["isim"] = reader["isim"].ToString();
-                                row["adres"] = reader["adres"].ToString();
-                                row["telefon"] = reader["telefon"].ToString();
-                                row["eposta"] = reader["eposta"].ToString();
-                                result.Add(row);
-                            }
+                                Isim = reader["isim"].ToString(),
+                                Adres = reader["adres"].ToString(),
+                                Telefon = reader["telefon"].ToString(),
+                                Eposta = reader["eposta"].ToString()
+                            };
                         }
                     }
                 }
-                return result;
+                return company;
             }
             catch (Exception ex)
             {

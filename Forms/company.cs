@@ -84,7 +84,7 @@ namespace Teklif_Hazırlayıcı.Forms
             {
                 var result = _companyManager.Search(txtSearch.Text);
 
-                if (result != null && result.Rows.Count > 0)
+                if (result != null && result.Count > 0)
                 {
                     dataGridView1.DataSource = result;
                     SetupGridColumnProperties();

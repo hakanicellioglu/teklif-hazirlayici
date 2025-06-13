@@ -37,18 +37,20 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void LoadCompany()
         {
-            var dt = _companyManager.GetCompany(); // DataTable
+            var companyList = _companyManager.GetCompany();
 
-            if (dt == null || dt.Rows.Count == 0)
+            if (companyList == null || companyList.Count == 0)
             {
                 MessageHelper.ShowError("Şirket verileri yüklenemedi.");
                 return;
             }
 
-            comboBox1.DataSource = dt;
-            comboBox1.DisplayMember = "isim"; // Görünen
-            comboBox1.ValueMember = "firma_id";    // Firma ID (veritabanı ID'si)
+            comboBox1.DataSource = null;
+            comboBox1.DisplayMember = "Isim";        // Company sınıfındaki property
+            comboBox1.ValueMember = "FirmaId";       // Company sınıfındaki property
+            comboBox1.DataSource = companyList;
         }
+
 
         private void SelectionMode()
         {
