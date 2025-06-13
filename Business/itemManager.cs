@@ -488,6 +488,9 @@ WHERE kalem_id = @KalemId";
                     using (SqlCommand selectCmd = new SqlCommand(selectQuery, conn))
                     {
                         selectCmd.Parameters.AddWithValue("@TeklifId", teklifId);
+
+                        List<(int KalemId, decimal Kg)> kalemler = new List<(int, decimal)>();
+
                         using (SqlDataReader reader = selectCmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -497,19 +500,24 @@ WHERE kalem_id = @KalemId";
                                 {
                                     int kalemId = Convert.ToInt32(reader["kalem_id"]);
                                     decimal kg = reader["kg"] != DBNull.Value ? Convert.ToDecimal(reader["kg"]) : 0m;
-                                    decimal yeniFiyat = Math.Round(basePrice * factor, 2);
-                                    decimal yeniTutar = Math.Round(yeniFiyat * kg, 2);
-
-                                    string updateQuery = @"UPDATE kalemler SET birim_fiyat = @BirimFiyat, toplam_tutar = @ToplamTutar WHERE kalem_id = @KalemId";
-
-                                    using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
-                                    {
-                                        updateCmd.Parameters.AddWithValue("@BirimFiyat", yeniFiyat);
-                                        updateCmd.Parameters.AddWithValue("@ToplamTutar", yeniTutar);
-                                        updateCmd.Parameters.AddWithValue("@KalemId", kalemId);
-                                        updateCmd.ExecuteNonQuery();
-                                    }
+                                    kalemler.Add((kalemId, kg));
                                 }
+                            }
+                        }
+
+                        foreach (var k in kalemler)
+                        {
+                            decimal yeniFiyat = Math.Round(basePrice * factor, 2);
+                            decimal yeniTutar = Math.Round(yeniFiyat * k.Kg, 2);
+
+                            string updateQuery = @"UPDATE kalemler SET birim_fiyat = @BirimFiyat, toplam_tutar = @ToplamTutar WHERE kalem_id = @KalemId";
+
+                            using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
+                            {
+                                updateCmd.Parameters.AddWithValue("@BirimFiyat", yeniFiyat);
+                                updateCmd.Parameters.AddWithValue("@ToplamTutar", yeniTutar);
+                                updateCmd.Parameters.AddWithValue("@KalemId", k.KalemId);
+                                updateCmd.ExecuteNonQuery();
                             }
                         }
                     }
