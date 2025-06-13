@@ -320,9 +320,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
 
             // Sütun adı doğruysa devam et
+            // List<Company> kullanıldığı için DisplayMember ve ValueMember
+            // Company sınıfındaki property adları ile eşleşmeli
             chkFirmalar.DataSource = dt;
-            chkFirmalar.DisplayMember = "isim";  // ← isim yerine firma_adi olabilir
-            chkFirmalar.ValueMember = "firma_id";
+            chkFirmalar.DisplayMember = "Isim";
+            chkFirmalar.ValueMember = "FirmaId";
 
             return true;
 
