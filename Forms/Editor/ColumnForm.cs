@@ -55,6 +55,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             foreach (DataColumn col in table.Columns)
             {
                 string display = col.ColumnName;
+                if (col.ColumnName == "yetkili_id" || col.ColumnName == "firma_id")
+                    continue;
                 switch (col.ColumnName)
                 {
                     case "Firma":
