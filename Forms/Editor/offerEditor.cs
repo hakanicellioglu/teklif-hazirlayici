@@ -954,7 +954,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     decimal lmeExport = 0;
                     decimal.TryParse(txtLME.Text, NumberStyles.Any, new CultureInfo("tr-TR"), out lmeExport);
 
-                    teslimBilgiTable.AddCell(CreateCell("LME", smallFont));
+                    teslimBilgiTable.AddCell(CreateCell("LME"+doviz_birimi+"/ton", smallFont));
                     teslimBilgiTable.AddCell(CreateCell(lmeExport.ToString("N2", new CultureInfo("tr-TR")), smallFont));
                 }
                 catch (Exception ex)
