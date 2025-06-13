@@ -22,7 +22,11 @@
 3. **Bağımlılıkları Yükleyin**:
    - Gerekli NuGet paketlerini yükleyin. (Örneğin, `packages.config` dosyasını kullanarak.)
 
-4. **Projeyi Derleyin ve Çalıştırın**:
+4. **Bağlantı Dizesini Tanımlayın**:
+   - `SQL_CONN_STRING` ortam değişkenini kendi veritabanı bilgilerinizle ayarlayın **veya**
+     `App.config` ile aynı klasörde `App.config.user` dosyası oluşturarak `SqlConnectionString` değerini burada belirtin.
+
+5. **Projeyi Derleyin ve Çalıştırın**:
    - Projeyi derleyin ve uygulamayı başlatın.
 
 ## Kullanım

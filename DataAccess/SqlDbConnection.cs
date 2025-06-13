@@ -18,7 +18,8 @@ namespace Teklif_Hazırlayıcı.DataAccess
 
         public SqlDbConnection()
         {
-            _connectionString = ConfigurationManager.ConnectionStrings["SqlConnectionString"].ConnectionString;
+            _connectionString = Environment.GetEnvironmentVariable("SQL_CONN_STRING") ??
+                               ConfigurationManager.ConnectionStrings["SqlConnectionString"].ConnectionString;
         }
 
         /// <summary>

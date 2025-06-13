@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,11 +11,25 @@ namespace Teklif_Hazırlayıcı.DataAccess
 {
     public static class DatabaseInitializer
     {
-        // SQL Server'daki "master" veritabanına bağlanmak için bağlantı dizesi
-        private static readonly string masterConnectionString = "Server=192.168.1.200;Database=master;User Id=sa;Password=sapass;";
-        // Uygulamanın çalışacağı veritabanı adı
-        private static readonly string targetDatabaseName = "TeklifHazirlayiciDB";
-        private static readonly string targetDbConnectionString = $"Server=192.168.1.200;Database={targetDatabaseName};User Id=sa;Password=sapass;";
+        private static readonly string masterConnectionString;
+        private static readonly string targetDatabaseName;
+        private static readonly string targetDbConnectionString;
+
+        static DatabaseInitializer()
+        {
+            // Bağlantı dizesini ortam değişkeninden veya App.config'ten al
+            var baseConnection = Environment.GetEnvironmentVariable("SQL_CONN_STRING") ??
+                                 ConfigurationManager.ConnectionStrings["SqlConnectionString"].ConnectionString;
+
+            var builder = new SqlConnectionStringBuilder(baseConnection);
+
+            targetDatabaseName = builder.InitialCatalog;
+            targetDbConnectionString = builder.ConnectionString;
+
+            // master veritabanı için bağlantı dizesi oluştur
+            builder.InitialCatalog = "master";
+            masterConnectionString = builder.ConnectionString;
+        }
 
 
         // Hedef veritabanına bağlanmak için bağlantı dizesi
