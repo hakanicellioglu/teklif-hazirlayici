@@ -13,6 +13,7 @@ using Teklif_Hazırlayıcı.Forms.Custom_Item;
 using Teklif_Hazırlayıcı.Forms.Editor;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
+using Teklif_Hazırlayıcı.Models;
 
 namespace Teklif_Hazırlayıcı.Forms
 {
@@ -40,24 +41,25 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void SetupCompanyGridColumns()
         {
-            if (dataGridView1.Columns["firma_id"] != null)
+            if (dataGridView1.Columns["FirmaId"] != null)
             {
-                dataGridView1.Columns["firma_id"].HeaderText = "Firma No";
-                dataGridView1.Columns["firma_id"].Visible = false; // gizlemek istiyorsan
+                dataGridView1.Columns["FirmaId"].HeaderText = "Firma No";
+                dataGridView1.Columns["FirmaId"].Visible = false;
             }
 
-            if (dataGridView1.Columns["adi"] != null)
-                dataGridView1.Columns["adi"].HeaderText = "Firma Adı";
+            if (dataGridView1.Columns["Isim"] != null)
+                dataGridView1.Columns["Isim"].HeaderText = "Firma Adı";
 
-            if (dataGridView1.Columns["adres"] != null)
-                dataGridView1.Columns["adres"].HeaderText = "Adres";
+            if (dataGridView1.Columns["Adres"] != null)
+                dataGridView1.Columns["Adres"].HeaderText = "Adres";
 
-            if (dataGridView1.Columns["telefon"] != null)
-                dataGridView1.Columns["telefon"].HeaderText = "Telefon";
+            if (dataGridView1.Columns["Telefon"] != null)
+                dataGridView1.Columns["Telefon"].HeaderText = "Telefon";
 
-            if (dataGridView1.Columns["eposta"] != null)
-                dataGridView1.Columns["eposta"].HeaderText = "E-posta";
+            if (dataGridView1.Columns["Eposta"] != null)
+                dataGridView1.Columns["Eposta"].HeaderText = "E-posta";
         }
+        
 
         private void btnAddCompany_Click(object sender, EventArgs e)
         {
@@ -83,7 +85,6 @@ namespace Teklif_Hazırlayıcı.Forms
                 var result = _companyManager.Search(txtSearch.Text);
 
                 if (result != null && result.Rows.Count > 0)
-                if (result != null)
                 {
                     dataGridView1.DataSource = result;
                     SetupGridColumnProperties();
@@ -111,7 +112,7 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                int? value = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[0].Value?.ToString());
+                int? value = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["FirmaId"].Value?.ToString());
                 var result = CustomMessageBox.Show("Bu şirketi düzenlemek veya silmek istiyor musunuz?");
 
                 if (result == CustomMessageBox.CustomResult.Duzenle)

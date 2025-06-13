@@ -190,6 +190,10 @@
     <Compile Include="Helpers\PlaceHolder.cs" />
     <Compile Include="Helpers\ThemeManager.cs" />
     <Compile Include="Helpers\TogglePassword.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\Offer.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Forms\register.cs">

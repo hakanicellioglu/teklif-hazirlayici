@@ -300,7 +300,7 @@ namespace Teklif_Hazırlayıcı.Business
                         {
                             if (reader.Read())
                             {
-                                string company_name = reader["adi"].ToString().ToLower();
+                                string company_name = reader["isim"].ToString().ToLower();
                                 return company_name == parameter.ToLower();
                             }
                             else
