@@ -135,6 +135,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     // Diğer alanlar
                     chkDurum.SelectedItem = offer["durum"].ToString();
                     chkVade.SelectedItem = offer["vade"].ToString();
+                    if (offer.Table.Columns.Contains("vade_farki"))
+                        txtVadeFarki.Text = offer["vade_farki"].ToString();
                     LoadProducts();
 
                 }
