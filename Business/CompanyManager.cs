@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Teklif_Hazırlayıcı.Helpers;
+using Teklif_Hazırlayıcı.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Teklif_Hazırlayıcı.Business
@@ -35,25 +36,35 @@ namespace Teklif_Hazırlayıcı.Business
             _connection = new DataAccess.SqlDbConnection();
         }
 
-        public DataTable GetCompany()
+        public List<Company> GetCompany()
         {
             /*
-             *
-             * Veritabanındaki "firmalar" tablosundaki tüm kayıtları getirir.
-             * OleDbCommand ile sorgu hazırlanır ve OleDbDataAdapter ile DataTable nesnesine doldurulur.
-             * Doldurulmuş DataTable nesnesi döndürülür.
-             *
+             * Veritabanındaki "firmalar" tablosundaki tüm kayıtları getirir ve Company model listesi olarak döndürür.
              */
             try
             {
-                string query = "SELECT * FROM firmalar";
-                using (SqlCommand cmd = new SqlCommand(query, _connection.GetConnection()))
+                var list = new List<Company>();
+                string query = "SELECT firma_id, isim, adres, telefon, eposta FROM firmalar";
+                using (SqlConnection conn = _connection.GetConnection())
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    return dt;
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new Company
+                            {
+                                FirmaId = reader.GetInt32(reader.GetOrdinal("firma_id")),
+                                Isim = reader["isim"].ToString(),
+                                Adres = reader["adres"].ToString(),
+                                Telefon = reader["telefon"].ToString(),
+                                Eposta = reader["eposta"].ToString()
+                            });
+                        }
+                    }
                 }
+                return list;
             }
             catch (Exception ex)
             {
@@ -61,7 +72,7 @@ namespace Teklif_Hazırlayıcı.Business
                 return null;
             }
         }
-        public DataTable Search(string search)
+        public List<Company> Search(string search)
         {
             /*
              *
@@ -73,35 +84,30 @@ namespace Teklif_Hazırlayıcı.Business
              */
             try
             {
-                string query = "SELECT * FROM firmalar WHERE isim LIKE @ad";
-                DataTable dt = new DataTable();
-
+                string query = "SELECT firma_id, isim, adres, telefon, eposta FROM firmalar WHERE isim LIKE @ad";
+                var list = new List<Company>();
                 using (SqlConnection conn = _connection.GetConnection())
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, _connection.GetConnection()))
+                    cmd.Parameters.AddWithValue("@ad", $"%{search}%");
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        // Parametreleri ekle
-                        cmd.Parameters.Clear();
-                        cmd.Parameters.AddWithValue("@ad", $"%{search}%");
-                        //cmd.Parameters.AddWithValue("@adres", $"%{search}%");
-                        //cmd.Parameters.AddWithValue("@telefon", $"%{search}%");
-                        //cmd.Parameters.AddWithValue("@eposta", $"%{search}%");
-
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        while (reader.Read())
                         {
-                            adapter.Fill(dt);
+                            list.Add(new Company
+                            {
+                                FirmaId = reader.GetInt32(reader.GetOrdinal("firma_id")),
+                                Isim = reader["isim"].ToString(),
+                                Adres = reader["adres"].ToString(),
+                                Telefon = reader["telefon"].ToString(),
+                                Eposta = reader["eposta"].ToString()
+                            });
                         }
                     }
-                    conn.Close();
                 }
 
-                if (dt.Rows.Count == 0)
-                {
-                    return null;
-                }
-
-                return dt;
+                return list;
             }
             catch (Exception ex)
             {
@@ -317,7 +323,7 @@ namespace Teklif_Hazırlayıcı.Business
                 return false;
             }
         }
-        public List<Dictionary<string, string>> GetCompanyById(int? companyId)
+        public Company GetCompanyById(int? companyId)
         {
             /*
              *
@@ -329,36 +335,33 @@ namespace Teklif_Hazırlayıcı.Business
              */
             try
             {
-                List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
-
-                string query = "SELECT isim,adres,telefon,eposta FROM firmalar WHERE firma_id = @CompanyId";
+                string query = "SELECT firma_id, isim, adres, telefon, eposta FROM firmalar WHERE firma_id = @CompanyId";
                 using (SqlConnection conn = _connection.GetConnection())
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    cmd.Parameters.AddWithValue("@CompanyId", companyId ?? (object)DBNull.Value);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.AddWithValue("@CompanyId", companyId ?? (object)DBNull.Value);
-
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        if (reader.Read())
                         {
-                            while (reader.Read())
+                            return new Company
                             {
-                                Dictionary<string, string> row = new Dictionary<string, string>();
-                                row["isim"] = reader["isim"].ToString();
-                                row["adres"] = reader["adres"].ToString();
-                                row["telefon"] = reader["telefon"].ToString();
-                                row["eposta"] = reader["eposta"].ToString();
-                                result.Add(row);
-                            }
+                                FirmaId = reader.GetInt32(reader.GetOrdinal("firma_id")),
+                                Isim = reader["isim"].ToString(),
+                                Adres = reader["adres"].ToString(),
+                                Telefon = reader["telefon"].ToString(),
+                                Eposta = reader["eposta"].ToString()
+                            };
                         }
                     }
                 }
-                return result;
+                return null;
             }
             catch (Exception ex)
             {
                 MessageHelper.ShowError("Hata oluştu: " + ex.Message);
-                throw;
+                return null;
             }
         }
 
