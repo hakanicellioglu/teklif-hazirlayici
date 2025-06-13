@@ -65,8 +65,8 @@ namespace Teklif_Hazırlayıcı.Forms
         private void LoadAuth()
         {
             dataGridView1.DataSource = _authManager.GetAuthWithCompanyName();
-            //SetupGridColumnProperties();
-            //SetupAuthGridColumns();
+            SetupGridColumnProperties();
+            SetupAuthGridColumns();
         }
 
         private void SetupGridColumnProperties()
@@ -84,10 +84,10 @@ namespace Teklif_Hazırlayıcı.Forms
                 dataGridView1.Columns["firma_id"].Visible = false;
 
             // İstenilen sıraya göre DisplayIndex ayarla
-            if (dataGridView1.Columns["adi"] != null)
+            if (dataGridView1.Columns["Firma"] != null)
             {
-                dataGridView1.Columns["adi"].DisplayIndex = 0;
-                dataGridView1.Columns["adi"].HeaderText = "Deneme";
+                dataGridView1.Columns["Firma"].DisplayIndex = 0;
+                dataGridView1.Columns["Firma"].HeaderText = "Firma Adı";
             }
 
             if (dataGridView1.Columns["isim"] != null)
