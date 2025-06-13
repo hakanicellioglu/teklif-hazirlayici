@@ -38,15 +38,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 button1.Text = "Kaydet";
                 btnCancel.Visible = true;
 
-                var data = _companyManager.GetCompanyById(company_id);
+                var company = _companyManager.GetCompanyById(company_id);
 
-                if (data.Any())
+                if (company != null)
                 {
-                    var company = data.First();
-                    textBox1.Text = company["isim"];
-                    textBox2.Text = company["adres"];
-                    textBox3.Text = company["telefon"];
-                    textBox4.Text = company["eposta"];
+                    textBox1.Text = company.Isim;
+                    textBox2.Text = company.Adres;
+                    textBox3.Text = company.Telefon;
+                    textBox4.Text = company.Eposta;
                 }
                 else
                 {
