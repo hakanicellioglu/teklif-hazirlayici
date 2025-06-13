@@ -1,4 +1,6 @@
-﻿using System;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,11 +13,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Forms.Custom_Item;
 using Teklif_Hazırlayıcı.Helpers;
+using Teklif_Hazırlayıcı.Models;
 using Teklif_Hazırlayıcı.Validation;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -344,11 +345,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
             try
             {
-                var selectedRow = chkFirmalar.SelectedItem as DataRowView;
-                if (selectedRow != null && selectedRow["firma_id"] != DBNull.Value)
+                var selectedCompany = chkFirmalar.SelectedItem as Company;
+
+                if (selectedCompany != null)
                 {
-                    long selectedCompany = Convert.ToInt64(selectedRow["firma_id"]);
-                    LoadAuth(selectedCompany); // aşağıda tanımlı
+                    LoadAuth(selectedCompany.FirmaId);
                     chkYetkililer.Enabled = true;
                 }
                 else
@@ -356,6 +357,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     MessageHelper.ShowError("Firma ID'si alınamadı.");
                     chkYetkililer.Enabled = false;
                 }
+
+
             }
             catch (Exception ex)
             {
