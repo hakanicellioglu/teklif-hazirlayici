@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Teklif_Hazırlayıcı.Helpers;
+using Teklif_Hazırlayıcı.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Teklif_Hazırlayıcı.Business
@@ -317,7 +318,7 @@ namespace Teklif_Hazırlayıcı.Business
                 return false;
             }
         }
-        public List<Dictionary<string, string>> GetCompanyById(int? companyId)
+        public Company GetCompanyById(int? companyId)
         {
             /*
              *
@@ -329,9 +330,8 @@ namespace Teklif_Hazırlayıcı.Business
              */
             try
             {
-                List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+                string query = "SELECT firma_id, isim, adres, telefon, eposta FROM firmalar WHERE firma_id = @CompanyId";
 
-                string query = "SELECT isim,adres,telefon,eposta FROM firmalar WHERE firma_id = @CompanyId";
                 using (SqlConnection conn = _connection.GetConnection())
                 {
                     conn.Open();
@@ -341,24 +341,28 @@ namespace Teklif_Hazırlayıcı.Business
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (reader.Read())
                             {
-                                Dictionary<string, string> row = new Dictionary<string, string>();
-                                row["isim"] = reader["isim"].ToString();
-                                row["adres"] = reader["adres"].ToString();
-                                row["telefon"] = reader["telefon"].ToString();
-                                row["eposta"] = reader["eposta"].ToString();
-                                result.Add(row);
+                                Company company = new Company
+                                {
+                                    FirmaId = Convert.ToInt32(reader["firma_id"]),
+                                    Isim = reader["isim"].ToString(),
+                                    Adres = reader["adres"].ToString(),
+                                    Telefon = reader["telefon"].ToString(),
+                                    Eposta = reader["eposta"].ToString()
+                                };
+                                return company;
                             }
                         }
                     }
                 }
-                return result;
+
+                return null;
             }
             catch (Exception ex)
             {
                 MessageHelper.ShowError("Hata oluştu: " + ex.Message);
-                throw;
+                return null;
             }
         }
 

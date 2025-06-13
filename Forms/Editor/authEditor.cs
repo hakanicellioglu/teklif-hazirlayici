@@ -70,10 +70,10 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 {
                     var auth = data.First();
 
-                    var authList = companyManager.GetCompanyById(Convert.ToInt32(auth["firma_id"]));
-                    if (authList.Count > 0)
+                    var company = companyManager.GetCompanyById(Convert.ToInt32(auth["firma_id"]));
+                    if (company != null)
                     {
-                        string firmaAdi = authList[0]["isim"].ToString();
+                        string firmaAdi = company.Isim;
                         int index = comboBox1.FindStringExact(firmaAdi);
                         if (index >= 0)
                         {
