@@ -531,6 +531,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     "20",
                     chkTevkifat.Checked,
                     chkDurum.Text);
+
+                itemManager itemMgr = new itemManager();
+                itemMgr.UpdateItemPricesByOffer(offer_id);
+                _offerManager.UpdateOfferById(offer_id);
+
                 Close();
             }
         }

@@ -463,5 +463,63 @@ WHERE kalem_id = @KalemId";
                 throw;
             }
         }
+
+        public void UpdateItemPricesByOffer(int teklifId)
+        {
+            try
+            {
+                decimal lme = GetLMEFromTeklif(teklifId);
+                decimal iscilik = Getİscilik(teklifId);
+                decimal vadeFarki = GetVadeliFiyat(teklifId);
+                int ay = GetVadeAy(teklifId);
+
+                decimal basePrice = (lme / 1000m) + (iscilik / 1000m);
+                decimal factor = ay > 0 ? 1 + (vadeFarki / 100m) * ay : 1m;
+
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    conn.Open();
+
+                    string selectQuery = @"SELECT k.kalem_id, k.kg, u.kategori
+                        FROM kalemler k
+                        INNER JOIN urunler u ON k.urun_id = u.urun_id
+                        WHERE k.teklif_id = @TeklifId";
+
+                    using (SqlCommand selectCmd = new SqlCommand(selectQuery, conn))
+                    {
+                        selectCmd.Parameters.AddWithValue("@TeklifId", teklifId);
+                        using (SqlDataReader reader = selectCmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string kategori = reader["kategori"].ToString().Trim().ToLower();
+                                if (kategori == "alüminyum" || kategori == "aluminyum")
+                                {
+                                    int kalemId = Convert.ToInt32(reader["kalem_id"]);
+                                    decimal kg = reader["kg"] != DBNull.Value ? Convert.ToDecimal(reader["kg"]) : 0m;
+                                    decimal yeniFiyat = Math.Round(basePrice * factor, 2);
+                                    decimal yeniTutar = Math.Round(yeniFiyat * kg, 2);
+
+                                    string updateQuery = @"UPDATE kalemler SET birim_fiyat = @BirimFiyat, toplam_tutar = @ToplamTutar WHERE kalem_id = @KalemId";
+
+                                    using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
+                                    {
+                                        updateCmd.Parameters.AddWithValue("@BirimFiyat", yeniFiyat);
+                                        updateCmd.Parameters.AddWithValue("@ToplamTutar", yeniTutar);
+                                        updateCmd.Parameters.AddWithValue("@KalemId", kalemId);
+                                        updateCmd.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
     }
 }
