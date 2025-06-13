@@ -18,6 +18,7 @@ namespace Teklif_Hazırlayıcı.Business
         *
         */
         private readonly DataAccess.SqlDbConnection _connection;
+        private readonly DataAccess.OfferRepository _offerRepository;
         public OfferManager()
         {
             /*
@@ -27,6 +28,7 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             _connection = new DataAccess.SqlDbConnection();
+            _offerRepository = new DataAccess.OfferRepository();
         }
 
 
@@ -182,90 +184,36 @@ namespace Teklif_Hazırlayıcı.Business
         #endregion
 
         #region Teklif Ekleme
+        /// <summary>
+        /// Adds a new offer and returns its identifier.
+        /// </summary>
         public int AddOffer(int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, float vadefarki, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
         {
             try
             {
-                /*
-                     *
-                     * Yeni bir teklif kaydını "teklifler" tablosuna ekler.
-                     * Firma, yetkili, tarih, ödeme ve teslim bilgileri ile birlikte kur, iskonto, KDV, tevkifat ve durum gibi detaylar veritabanına yazılır.
-                     * Ekleme işlemi başarılı olursa, veritabanında oluşturulan teklifin ID'si alınarak döndürülür.
-                     * Aksi durumda -1 değeri döndürülür.
-                     *
-                     */
+                decimal iskontoDecimal = ParseDecimal(iskonto_orani, 0);
+                decimal kdvDecimal = ParseDecimal(kdv_orani, 20);
+                decimal lmeDecimal = ParseDecimal(lme, 0);
+                decimal iscilikDecimal = ParseDecimal(iscilik, 0);
 
-                // İskonto
-                decimal iskontoDecimal = 0;
-                if (!decimal.TryParse(iskonto_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out iskontoDecimal))
-                    iskontoDecimal = 0; // Hatalıysa 0 olarak ayarla
-                string iskontoStr = iskontoDecimal.ToString("0.##", new CultureInfo("tr-TR"));
-
-                // KDV
-                decimal kdvDecimal = 20;
-                if (!decimal.TryParse(kdv_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out kdvDecimal))
-                    kdvDecimal = 20;
-                string kdvStr = kdvDecimal.ToString("0.##", new CultureInfo("tr-TR"));
-
-
-
-                // LME
-                decimal lmeDecimal = 0;
-                if (!decimal.TryParse(lme, NumberStyles.Any, CultureInfo.InvariantCulture, out lmeDecimal))
-                    lmeDecimal = 0;
-                string lmeStr = lmeDecimal.ToString("0.##", new CultureInfo("tr-TR"));
-
-                // İşçilik
-                decimal iscilikDecimal = 0;
-                if (!decimal.TryParse(iscilik, NumberStyles.Any, CultureInfo.InvariantCulture, out iscilikDecimal))
-                    iscilikDecimal = 0;
-                string iscilikStr = iscilikDecimal.ToString("0.##", new CultureInfo("tr-TR"));
-
-
-                int teklifId = -1;
-
-                string query = "INSERT INTO teklifler (firma_id, yetkili_id, teklif_tarih, teslim_sekli, odeme_sekli, odeme_vade, teklif_sure, doviz_kuru, doviz_birimi, vade, vade_farki, lme, iscilik, iskonto_orani, kdv_orani, tevkifat, tevkifat_orani, durum) " +
-                               "VALUES (@CompanyId, @AuthorizedPersonId, @OfferDate, @DeliveryMethod, @PaymentMethod, @PaymentDue, @OfferValidity, @ExchangeRate, @CurrencyUnit, @Term, @TermRate, @Lme, @Workmanship, @DiscountRate, @VatRate, @Withholding, @WithholdingRate, @Status);";
-
-                string getIdQuery = "SELECT @@IDENTITY;";
-
-                using (SqlConnection conn = _connection.GetConnection())
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.Add("@CompanyId", SqlDbType.Int).Value = firma_id;
-                        cmd.Parameters.Add("@AuthorizedPersonId", SqlDbType.Int).Value = yetkili_id;
-                        cmd.Parameters.Add("@OfferDate", SqlDbType.Date).Value = teklif_tarih;
-                        cmd.Parameters.Add("@DeliveryMethod", SqlDbType.NVarChar).Value = teslim_sekli;
-                        cmd.Parameters.Add("@PaymentMethod", SqlDbType.NVarChar).Value = odeme_sekli;
-                        cmd.Parameters.Add("@PaymentDue", SqlDbType.Int).Value = odeme_vadesi;
-                        cmd.Parameters.Add("@OfferValidity", SqlDbType.Int).Value = teklif_suresi;
-                        cmd.Parameters.Add("@ExchangeRate", SqlDbType.Float).Value = doviz_kuru;
-                        cmd.Parameters.Add("@CurrencyUnit", SqlDbType.NVarChar).Value = doviz_birimi.ToString();
-                        cmd.Parameters.Add("@Term", SqlDbType.NVarChar).Value = vade;
-                        cmd.Parameters.Add("@TermRate", SqlDbType.Float).Value = vadefarki;
-                        cmd.Parameters.Add("@Lme", SqlDbType.Decimal).Value = Convert.ToDecimal(lmeStr);
-                        cmd.Parameters.Add("@Workmanship", SqlDbType.Decimal).Value = Convert.ToDecimal(iscilikStr);
-                        cmd.Parameters.Add("@DiscountRate", SqlDbType.Decimal).Value = Convert.ToDecimal(iskontoStr);
-                        cmd.Parameters.Add("@VatRate", SqlDbType.Decimal).Value = Convert.ToDecimal(kdvStr);
-                        cmd.Parameters.Add("@Withholding", SqlDbType.Bit).Value = tevkifat;
-                        cmd.Parameters.AddWithValue("@WithholdingRate", tevkifat ? 70 : 0);
-                        cmd.Parameters.Add("@Status", SqlDbType.NVarChar).Value = durum;
-
-
-                        int result = cmd.ExecuteNonQuery();
-
-                        if (result > 0)
-                        {
-                            // Şimdi ID'yi al
-                            cmd.CommandText = getIdQuery;
-                            teklifId = Convert.ToInt32(cmd.ExecuteScalar());
-                        }
-                    }
-                }
-
-                return teklifId;
+                return _offerRepository.InsertOffer(
+                    firma_id,
+                    yetkili_id,
+                    teklif_tarih,
+                    teslim_sekli,
+                    odeme_sekli,
+                    odeme_vadesi,
+                    teklif_suresi,
+                    doviz_kuru,
+                    doviz_birimi,
+                    vade,
+                    vadefarki,
+                    lmeDecimal,
+                    iscilikDecimal,
+                    iskontoDecimal,
+                    kdvDecimal,
+                    tevkifat,
+                    durum);
             }
             catch (Exception ex)
             {
@@ -277,147 +225,45 @@ namespace Teklif_Hazırlayıcı.Business
         #endregion
 
         #region Teklif Güncelleme
-
+        /// <summary>
+        /// Updates an offer with the provided values.
+        /// </summary>
         public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, float vade_farki, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
         {
             try
             {
-                // İskonto
-                decimal iskontoDecimal = 0;
-                if (!decimal.TryParse(iskonto_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out iskontoDecimal))
-                    iskontoDecimal = 0; // Hatalıysa 0 olarak ayarla
-                string iskontoStr = iskontoDecimal.ToString("0.##", new CultureInfo("tr-TR"));
-
-                // KDV
-                decimal kdvDecimal = 0;
-                if (!decimal.TryParse(kdv_orani, NumberStyles.Any, CultureInfo.InvariantCulture, out kdvDecimal))
-                    kdvDecimal = 0;
-                string kdvStr = kdvDecimal.ToString("0.##", new CultureInfo("tr-TR"));
-
-                // LME
-                decimal lmeDecimal = 0;
-                if (!decimal.TryParse(lme, NumberStyles.Any, CultureInfo.InvariantCulture, out lmeDecimal))
-                    lmeDecimal = 0;
-                string lmeStr = lmeDecimal.ToString("0.##", new CultureInfo("tr-TR"));
-
-                // İşçilik
-                decimal iscilikDecimal = 0;
-                if (!decimal.TryParse(iscilik, NumberStyles.Any, CultureInfo.InvariantCulture, out iscilikDecimal))
-                    iscilikDecimal = 0;
-                string iscilikStr = iscilikDecimal.ToString("0.##", new CultureInfo("tr-TR"));
-
-
-
-
-
-                using (SqlConnection conn = _connection.GetConnection())
+                if (!teklif_id.HasValue)
                 {
-                    conn.Open();
-
-
-                    // Mevcut teklifi çek
-                    string selectQuery = "SELECT * FROM teklifler WHERE teklif_id = @TeklifId";
-                    using (SqlCommand selectCmd = new SqlCommand(selectQuery, conn))
-                    {
-                        selectCmd.Parameters.AddWithValue("@TeklifId", teklif_id);
-                        bool isDifferent = false;
-                        using (SqlDataReader reader = selectCmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                isDifferent =
-                                    (int)reader["firma_id"] != firma_id ||
-                                    (int)reader["yetkili_id"] != yetkili_id ||
-                                    Convert.ToDateTime(reader["teklif_tarih"]) != teklif_tarih ||
-                                    reader["teslim_sekli"].ToString() != teslim_sekli ||
-                                    reader["odeme_sekli"].ToString() != odeme_sekli ||
-                                    Convert.ToInt32(reader["odeme_vade"]) != odeme_vadesi ||
-                                    Convert.ToInt32(reader["teklif_sure"]) != teklif_suresi ||
-                                    reader["doviz_kuru"].ToString() != doviz_kuru ||
-                                    Convert.ToChar(reader["doviz_birimi"]) != doviz_birimi ||
-                                    reader["vade"].ToString() != vade ||
-                                    reader["vade_farki"].ToString() != vade_farki.ToString() ||
-                                    reader["lme"].ToString() != lme ||
-                                    reader["iscilik"].ToString() != iscilik ||
-                                    reader["iskonto_orani"].ToString() != iskonto_orani ||
-                                    reader["kdv_orani"].ToString() != kdv_orani ||
-                                    Convert.ToBoolean(reader["tevkifat"]) != tevkifat ||
-                                    reader["durum"].ToString() != durum;
-                                if (!isDifferent)
-                                {
-                                    MessageHelper.ShowInfo("Hiçbir değişiklik yapılmadı.");
-                                    return;
-                                }
-                            }
-                            else
-                            {
-                                MessageHelper.ShowError("Teklif bulunamadı.");
-                                return;
-                            }
-                        }
-
-                        if (isDifferent)
-                        {
-                            string updateQuery = @"
-                        UPDATE teklifler SET 
-                            firma_id = @FirmaId,
-                            yetkili_id = @YetkiliId,
-                            teklif_tarih = @TeklifTarih,
-                            teslim_sekli = @TeslimSekli,
-                            odeme_sekli = @OdemeSekli,
-                            odeme_vade = @OdemeVadesi,
-                            teklif_sure = @TeklifSuresi,
-                            doviz_kuru = @DovizKuru,
-                            doviz_birimi = @DovizBirimi,
-                            vade = @Vade,
-                            vade_farki = @TermRate,
-                            lme = @Lme,
-                            iscilik = @Workmanship,
-                            iskonto_orani = @IskontoOrani,
-                            kdv_orani = @KdvOrani,
-                            tevkifat = @Tevkifat,
-                            tevkifat_orani = @TevkifatOrani,
-                            durum = @Durum
-                        WHERE teklif_id = @TeklifId";
-
-                            using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
-                            {
-                                updateCmd.Parameters.Add(new SqlParameter("@FirmaId", SqlDbType.Int) { Value = firma_id });
-                                updateCmd.Parameters.Add(new SqlParameter("@YetkiliId", SqlDbType.Int) { Value = yetkili_id });
-                                updateCmd.Parameters.Add(new SqlParameter("@TeklifTarih", SqlDbType.Date) { Value = teklif_tarih });
-                                updateCmd.Parameters.Add(new SqlParameter("@TeslimSekli", SqlDbType.VarChar) { Value = teslim_sekli });
-                                updateCmd.Parameters.Add(new SqlParameter("@OdemeSekli", SqlDbType.VarChar) { Value = odeme_sekli });
-                                updateCmd.Parameters.Add(new SqlParameter("@OdemeVadesi", SqlDbType.Int) { Value = odeme_vadesi });
-                                updateCmd.Parameters.Add(new SqlParameter("@TeklifSuresi", SqlDbType.Int) { Value = teklif_suresi });
-                                updateCmd.Parameters.Add(new SqlParameter("@DovizKuru", SqlDbType.VarChar) { Value = doviz_kuru });
-                                updateCmd.Parameters.Add(new SqlParameter("@DovizBirimi", SqlDbType.VarChar) { Value = doviz_birimi.ToString() });
-                                updateCmd.Parameters.Add(new SqlParameter("@Vade", SqlDbType.VarChar) { Value = vade });
-                                updateCmd.Parameters.Add(new SqlParameter("@TermRate", SqlDbType.Float) { Value = vade_farki });
-                                updateCmd.Parameters.AddWithValue("@Lme", lmeStr);
-                                updateCmd.Parameters.AddWithValue("@Workmanship", iscilikStr);
-                                updateCmd.Parameters.AddWithValue("@IskontoOrani", iskontoStr);
-                                updateCmd.Parameters.AddWithValue("@KdvOrani", kdvStr);
-                                updateCmd.Parameters.Add(new SqlParameter("@Tevkifat", SqlDbType.Bit) { Value = tevkifat });
-                                // "tevkifat" parametresi teklif üzerinde tevkifat uygulandığını belirtir.
-                                // Tevkifat oranı sadece bu parametre true ise 70 olarak ayarlanmalıdır.
-                                updateCmd.Parameters.AddWithValue("@TevkifatOrani", tevkifat ? 70 : 0);
-                                updateCmd.Parameters.Add(new SqlParameter("@Durum", SqlDbType.VarChar) { Value = durum });
-                                updateCmd.Parameters.Add(new SqlParameter("@TeklifId", SqlDbType.Int) { Value = teklif_id });
-
-
-                                int result = updateCmd.ExecuteNonQuery();
-                                if (result > 0)
-                                {
-                                    MessageHelper.ShowSuccess("Teklif başarıyla güncellendi.");
-                                }
-                                else
-                                {
-                                    MessageHelper.ShowError("Teklif güncellenirken bir hata oluştu.");
-                                }
-                            }
-                        }
-                    }
+                    MessageHelper.ShowError("Teklif bulunamadı.");
+                    return;
                 }
+
+                decimal iskontoDecimal = ParseDecimal(iskonto_orani, 0);
+                decimal kdvDecimal = ParseDecimal(kdv_orani, 0);
+                decimal lmeDecimal = ParseDecimal(lme, 0);
+                decimal iscilikDecimal = ParseDecimal(iscilik, 0);
+
+                _offerRepository.UpdateOffer(
+                    teklif_id.Value,
+                    firma_id,
+                    yetkili_id,
+                    teklif_tarih,
+                    teslim_sekli,
+                    odeme_sekli,
+                    odeme_vadesi,
+                    teklif_suresi,
+                    doviz_kuru,
+                    doviz_birimi,
+                    vade,
+                    vade_farki,
+                    lmeDecimal,
+                    iscilikDecimal,
+                    iskontoDecimal,
+                    kdvDecimal,
+                    tevkifat,
+                    durum);
+
+                MessageHelper.ShowSuccess("Teklif başarıyla güncellendi.");
             }
             catch (Exception ex)
             {
@@ -425,6 +271,8 @@ namespace Teklif_Hazırlayıcı.Business
                 throw;
             }
         }
+
+
 
         public bool UpdateOfferById(int? teklifId)
         {
@@ -720,5 +568,17 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
         #endregion
+
+        /// <summary>
+        /// Parses a decimal value from string and falls back to the provided default.
+        /// </summary>
+        private decimal ParseDecimal(string value, decimal defaultValue)
+        {
+            if (!decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result))
+            {
+                result = defaultValue;
+            }
+            return result;
+        }
     }
 }
