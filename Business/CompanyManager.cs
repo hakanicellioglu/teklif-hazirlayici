@@ -24,6 +24,7 @@ namespace Teklif_Hazırlayıcı.Business
         *
         */
         private readonly DataAccess.SqlDbConnection _connection;
+        private readonly DataAccess.CompanyRepository _companyRepository;
 
         public CompanyManager()
         {
@@ -34,6 +35,7 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             _connection = new DataAccess.SqlDbConnection();
+            _companyRepository = new DataAccess.CompanyRepository();
         }
 
         public List<Company> GetCompany()
@@ -129,27 +131,23 @@ namespace Teklif_Hazırlayıcı.Business
             {
                 if (!CompanyExistsName(name))
                 {
-                    string query = "INSERT INTO firmalar(isim, adres, telefon, eposta) VALUES(@Name, @Address, @PhoneNumber, @Email)";
-                    using (SqlConnection conn = _connection.GetConnection())
+                    var company = new Company
                     {
-                        conn.Open();
-                        using (SqlCommand cmd = new SqlCommand(query, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@Name", name);
-                            cmd.Parameters.AddWithValue("@Address", address);
-                            cmd.Parameters.AddWithValue("@PhoneNumber", phone_number);
-                            cmd.Parameters.AddWithValue("@Email", email);
-                            int result = cmd.ExecuteNonQuery();
+                        Isim = name,
+                        Adres = address,
+                        Telefon = phone_number,
+                        Eposta = email
+                    };
 
-                            if (result > 0)
-                            {
-                                MessageHelper.ShowSuccess("Firma başarıyla eklendi");
-                            }
-                            else
-                            {
-                                MessageHelper.ShowError("Firma eklenirken hata oluştu.");
-                            }
-                        }
+                    int id = _companyRepository.Insert(company);
+
+                    if (id > 0)
+                    {
+                        MessageHelper.ShowSuccess("Firma başarıyla eklendi");
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError("Firma eklenirken hata oluştu.");
                     }
                 }
                 else
@@ -218,26 +216,17 @@ namespace Teklif_Hazırlayıcı.Business
                         }
                     }
 
-                    // Güncelleme işlemi
-                    string updateQuery = "UPDATE firmalar SET isim = @Name, adres = @Address, telefon = @PhoneNumber, eposta = @Email WHERE firma_id = @CompanyId";
-                    using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
+                    var company = new Company
                     {
-                        updateCmd.Parameters.AddWithValue("@Name", name);
-                        updateCmd.Parameters.AddWithValue("@Address", address);
-                        updateCmd.Parameters.AddWithValue("@PhoneNumber", phone_number);
-                        updateCmd.Parameters.AddWithValue("@Email", email);
-                        updateCmd.Parameters.AddWithValue("@CompanyId", id);
+                        FirmaId = id.Value,
+                        Isim = name,
+                        Adres = address,
+                        Telefon = phone_number,
+                        Eposta = email
+                    };
 
-                        int result = updateCmd.ExecuteNonQuery();
-                        if (result > 0)
-                        {
-                            MessageHelper.ShowSuccess("Firma başarıyla güncellendi.");
-                        }
-                        else
-                        {
-                            MessageHelper.ShowError("Firma güncellenirken hata oluştu.");
-                        }
-                    }
+                    _companyRepository.Update(company);
+                    MessageHelper.ShowSuccess("Firma başarıyla güncellendi.");
                 }
             }
             catch (Exception ex)
