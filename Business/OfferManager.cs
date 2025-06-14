@@ -304,8 +304,14 @@ namespace Teklif_Hazırlayıcı.Business
                         {
                             if (reader.Read())
                             {
-                                string oranStr = reader["iskonto_orani"]?.ToString();
-                                iskontoOrani = !string.IsNullOrEmpty(oranStr) ? Convert.ToDecimal(oranStr) : 0;
+                                if (reader["iskonto_orani"] != DBNull.Value)
+                                {
+                                    iskontoOrani = Convert.ToDecimal(reader["iskonto_orani"]);
+                                }
+                                else
+                                {
+                                    iskontoOrani = 0;
+                                }
 
                                 tevkifatUygulanacak = reader["tevkifat"] != DBNull.Value && Convert.ToBoolean(reader["tevkifat"]);
                             }
@@ -331,8 +337,15 @@ namespace Teklif_Hazırlayıcı.Business
                             if (reader.Read())
                             {
 
-                                toplamKgStr = reader["ToplamKg"] != DBNull.Value ? reader["ToplamKg"].ToString().Replace(".", ",") : "0";
-                                toplamKg = Convert.ToDecimal(reader["ToplamKg"].ToString());
+                                if (reader["ToplamKg"] != DBNull.Value)
+                                {
+                                    toplamKg = Convert.ToDecimal(reader["ToplamKg"]);
+                                    toplamKgStr = toplamKg.ToString().Replace(".", ",");
+                                }
+                                else
+                                {
+                                    toplamKgStr = "0";
+                                }
                             }
                         }
                     }
@@ -354,11 +367,16 @@ namespace Teklif_Hazırlayıcı.Business
                             {
                                 if (reader.Read())
                                 {
-                                    toplamAdet = reader["ToplamAdet"] != DBNull.Value ? Convert.ToDecimal(reader["ToplamAdet"]) : 0;
-                                    toplamTutar = reader["ToplamTutar"] != DBNull.Value ? Convert.ToDecimal(reader["ToplamTutar"]) : 0;
-
-                                    toplamAdetStr = toplamAdet.ToString().Replace(".", ",");
-                                    toplamTutarStr = toplamTutar.ToString().Replace(".", ",");
+                                    if (reader["ToplamAdet"] != DBNull.Value)
+                                    {
+                                        toplamAdet = Convert.ToDecimal(reader["ToplamAdet"]);
+                                        toplamAdetStr = toplamAdet.ToString().Replace(".", ",");
+                                    }
+                                    if (reader["ToplamTutar"] != DBNull.Value)
+                                    {
+                                        toplamTutar = Convert.ToDecimal(reader["ToplamTutar"]);
+                                        toplamTutarStr = toplamTutar.ToString().Replace(".", ",");
+                                    }
                                 }
                             }
                         }
