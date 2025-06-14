@@ -22,6 +22,7 @@ namespace Teklif_Hazırlayıcı.Business
         *
         */
         private readonly DataAccess.SqlDbConnection _connection;
+        private readonly DataAccess.AuthRepository _authRepository;
 
 
         public AuthManager()
@@ -33,6 +34,7 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             _connection = new DataAccess.SqlDbConnection();
+            _authRepository = new DataAccess.AuthRepository();
 
         }
 
@@ -158,24 +160,14 @@ namespace Teklif_Hazırlayıcı.Business
         {
             try
             {
-                string query = "INSERT INTO yetkililer(firma_id, isim, soyisim, hitap, adres, telefon, eposta) VALUES(@CompanyId, @Name, @Surname, @Honorific, @Address, @PhoneNumber, @Email)";
-                using (SqlConnection conn = _connection.GetConnection())
+                int id = _authRepository.InsertAuth(company_id, name, surname, honorific, address, phone_number, email);
+                if (id > 0)
                 {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        AddAuthParameters(cmd, company_id, name, surname, honorific, address, phone_number, email);
-                        int result = cmd.ExecuteNonQuery();
-
-                        if (result > 0)
-                        {
-                            MessageHelper.ShowSuccess("Yetkili başarıyla eklendi");
-                        }
-                        else
-                        {
-                            MessageHelper.ShowError("Yetkili eklenirken hata oluştu.");
-                        }
-                    }
+                    MessageHelper.ShowSuccess("Yetkili başarıyla eklendi");
+                }
+                else
+                {
+                    MessageHelper.ShowError("Yetkili eklenirken hata oluştu.");
                 }
             }
             catch (Exception ex)
@@ -196,7 +188,6 @@ namespace Teklif_Hazırlayıcı.Business
                 using (SqlConnection conn = _connection.GetConnection())
                 {
                     conn.Open();
-                    // Mevcut veriyi çekiyoruz
                     string selectQuery = "SELECT firma_id, isim, soyisim, hitap, adres, telefon, eposta FROM yetkililer WHERE yetkili_id = @AuthId";
                     using (SqlCommand selectCmd = new SqlCommand(selectQuery, conn))
                     {
@@ -214,7 +205,6 @@ namespace Teklif_Hazırlayıcı.Business
                                 string currentPhone = reader["telefon"].ToString();
                                 string currentEmail = reader["eposta"].ToString();
 
-                                // Farklılık var mı kontrol et
                                 if (currentCompanyId == company_id &&
                                     currentName == name &&
                                     currentSurname == surname &&
@@ -234,25 +224,10 @@ namespace Teklif_Hazırlayıcı.Business
                             }
                         }
                     }
-
-                    // Güncelleme işlemi
-                    string updateQuery = "UPDATE yetkililer SET firma_id = @CompanyId, isim = @Name, soyisim = @Surname, hitap = @Honorific, adres = @Address, telefon = @PhoneNumber, eposta = @Email WHERE yetkili_id = @AuthId";
-                    using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
-                    {
-                        AddAuthParameters(updateCmd, company_id, name, surname, honorific, address, phone_number, email);
-                        updateCmd.Parameters.AddWithValue("@AuthId", auth_id);
-
-                        int result = updateCmd.ExecuteNonQuery();
-                        if (result > 0)
-                        {
-                            MessageHelper.ShowSuccess("Yetkili başarıyla güncellendi.");
-                        }
-                        else
-                        {
-                            MessageHelper.ShowError("Yetkili güncellenirken hata oluştu.");
-                        }
-                    }
                 }
+
+                _authRepository.UpdateAuth(auth_id.Value, company_id, name, surname, honorific, address, phone_number, email);
+                MessageHelper.ShowSuccess("Yetkili başarıyla güncellendi.");
             }
             catch (Exception ex)
             {
@@ -279,20 +254,10 @@ namespace Teklif_Hazırlayıcı.Business
                             return;
                         }
                     }
-
-                    // Silme işlemi
-                    string query = "DELETE FROM yetkililer WHERE yetkili_id = @AuthId";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@AuthId", auth_id);
-                        int result = cmd.ExecuteNonQuery();
-
-                        if (result > 0)
-                            MessageHelper.ShowSuccess("Yetkili başarıyla silindi.");
-                        else
-                            MessageHelper.ShowError("Yetkili silinirken hata oluştu.");
-                    }
                 }
+
+                _authRepository.DeleteAuth(auth_id);
+                MessageHelper.ShowSuccess("Yetkili başarıyla silindi.");
             }
             catch (Exception ex)
             {
