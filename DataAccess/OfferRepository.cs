@@ -1,13 +1,14 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using Teklif_Hazırlayıcı.Models;
 
 namespace Teklif_Hazırlayıcı.DataAccess
 {
     /// <summary>
     /// Provides database operations for offers.
     /// </summary>
-    public class OfferRepository
+    public class OfferRepository : IRepository<Offer>
     {
         private readonly SqlDbConnection _connection;
 
@@ -112,6 +113,51 @@ namespace Teklif_Hazırlayıcı.DataAccess
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public int Insert(Offer offer)
+        {
+            return InsertOffer(
+                offer.FirmaId,
+                offer.YetkiliId,
+                offer.TeklifTarih,
+                offer.TeslimSekli,
+                offer.OdemeSekli,
+                offer.OdemeVade,
+                offer.TeklifSure,
+                offer.DovizKuru.ToString(),
+                string.IsNullOrEmpty(offer.DovizBirimi) ? ' ' : offer.DovizBirimi[0],
+                offer.Vade,
+                offer.VadeFarki,
+                (decimal)offer.Lme,
+                (decimal)offer.Iscilik,
+                (decimal)offer.IskontoOrani,
+                (decimal)offer.KdvOrani,
+                offer.Tevkifat,
+                offer.Durum);
+        }
+
+        public void Update(Offer offer)
+        {
+            UpdateOffer(
+                offer.TeklifId,
+                offer.FirmaId,
+                offer.YetkiliId,
+                offer.TeklifTarih,
+                offer.TeslimSekli,
+                offer.OdemeSekli,
+                offer.OdemeVade,
+                offer.TeklifSure,
+                offer.DovizKuru.ToString(),
+                string.IsNullOrEmpty(offer.DovizBirimi) ? ' ' : offer.DovizBirimi[0],
+                offer.Vade,
+                offer.VadeFarki,
+                (decimal)offer.Lme,
+                (decimal)offer.Iscilik,
+                (decimal)offer.IskontoOrani,
+                (decimal)offer.KdvOrani,
+                offer.Tevkifat,
+                offer.Durum);
         }
     }
 }

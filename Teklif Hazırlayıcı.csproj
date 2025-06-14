@@ -99,7 +99,11 @@
     <Compile Include="Business\ProductManager.cs" />
     <Compile Include="Business\UserManager.cs" />
     <Compile Include="DataAccess\DatabaseInitializer.cs" />
+    <Compile Include="DataAccess\IRepository.cs" />
     <Compile Include="DataAccess\OfferRepository.cs" />
+    <Compile Include="DataAccess\CompanyRepository.cs" />
+    <Compile Include="DataAccess\ProductRepository.cs" />
+    <Compile Include="DataAccess\UserRepository.cs" />
     <Compile Include="DataAccess\SqlDbConnection.cs" />
     <Compile Include="Forms\auth.cs">
       <SubType>Form</SubType>
