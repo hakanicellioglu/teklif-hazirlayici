@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Forms;
 using Teklif_Hazırlayıcı.Helpers;
+using Teklif_Hazırlayıcı.DataAccess; // Assuming DataAccess namespace contains SqlDbConnection and OfferRepository
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -439,7 +440,7 @@ namespace Teklif_Hazırlayıcı.Business
             }
             catch (Exception ex)
             {
-
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
                 throw;
             }
         }
