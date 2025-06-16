@@ -15,7 +15,12 @@ namespace Teklif_Hazırlayıcı.Helpers
 
         public static void ToggleTheme(Form form)
         {
-            _isDarkMode = !_isDarkMode;
+            SetTheme(form, !_isDarkMode);
+        }
+
+        public static void SetTheme(Form form, bool darkMode)
+        {
+            _isDarkMode = darkMode;
 
             Color darkBackground = Color.FromArgb(40, 40, 40);
             Color lightBackground = Color.FromArgb(0, 56, 64);
@@ -26,6 +31,14 @@ namespace Teklif_Hazırlayıcı.Helpers
             StartBackgroundTransition(form, fromColor, toColor);
 
             ApplyTheme(form);
+        }
+
+        public static void ApplyThemeToAllOpenForms(bool darkMode)
+        {
+            foreach (Form form in Application.OpenForms)
+            {
+                SetTheme(form, darkMode);
+            }
         }
 
 

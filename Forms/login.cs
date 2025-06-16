@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Forms;
 using Teklif_Hazırlayıcı.Helpers;
+using Teklif_Hazırlayıcı.Properties;
 using Teklif_Hazırlayıcı.Validation;
 
 namespace Teklif_Hazırlayıcı
@@ -24,7 +25,8 @@ namespace Teklif_Hazırlayıcı
         public login()
         {
             InitializeComponent();
-            //ThemeManager.ToggleTheme(this);
+            bool dark = Properties.Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+            ThemeManager.SetTheme(this, dark);
             CenterToScreen();
             WindowState = FormWindowState.Maximized;
         }
