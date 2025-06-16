@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
+using Teklif_Hazırlayıcı.Helpers;
+using Teklif_Hazırlayıcı.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms
 {
@@ -20,6 +22,8 @@ namespace Teklif_Hazırlayıcı.Forms
         public home()
         {
             InitializeComponent();
+            bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+            ThemeManager.SetTheme(this, dark);
             _offerManager = new OfferManager();
             _productManager = new ProductManager();
             _companyManager = new CompanyManager();

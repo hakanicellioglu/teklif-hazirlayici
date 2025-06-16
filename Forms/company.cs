@@ -14,6 +14,7 @@ using Teklif_Hazırlayıcı.Forms.Editor;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
 using Teklif_Hazırlayıcı.Models;
+using Teklif_Hazırlayıcı.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms
 {
@@ -23,6 +24,8 @@ namespace Teklif_Hazırlayıcı.Forms
         public company(CompanyManager companyManager)
         {
             InitializeComponent();
+            bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+            ThemeManager.SetTheme(this, dark);
             _companyManager = companyManager;
             LoadCompany();
         }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Helpers;
+using Teklif_Hazırlayıcı.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {
@@ -21,6 +22,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         public itemEditor(int? teklifId, int? kalemId, string editMode, itemManager itemManager)
         {
             InitializeComponent();
+            bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+            ThemeManager.SetTheme(this, dark);
             teklif_id = teklifId;
             kalem_id = kalemId;
             editor_mode = editMode;
