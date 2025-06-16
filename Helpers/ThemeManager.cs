@@ -115,13 +115,18 @@ namespace Teklif_Hazırlayıcı.Helpers
                         if (tags.Contains("primary"))
                         {
                             ctrl.BackColor = border;
-                            ctrl.ForeColor = textPrimary;
                         }
                         else if (tags.Contains("secondary"))
                         {
                             ctrl.BackColor = secondary;
-                            ctrl.ForeColor = textPrimary;
                         }
+                        else
+                        {
+                            // Apply secondary style by default if no explicit style specified
+                            ctrl.BackColor = secondary;
+                        }
+
+                        ctrl.ForeColor = textPrimary;
                     }
 
                     if (tags.Contains("grid") && ctrl is DataGridView grid)
