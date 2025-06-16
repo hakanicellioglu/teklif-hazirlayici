@@ -45,5 +45,125 @@ namespace Teklif_Hazırlayıcı.Properties {
                 this["kullanici_id"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefaultNote {
+            get {
+                return ((string)(this["DefaultNote"]));
+            }
+            set {
+                this["DefaultNote"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Light")]
+        public string Theme {
+            get {
+                return ((string)(this["Theme"]));
+            }
+            set {
+                this["Theme"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NotifyOnApprovalEmail {
+            get {
+                return ((bool)(this["NotifyOnApprovalEmail"]));
+            }
+            set {
+                this["NotifyOnApprovalEmail"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NotifyOnNewOfferEmail {
+            get {
+                return ((bool)(this["NotifyOnNewOfferEmail"]));
+            }
+            set {
+                this["NotifyOnNewOfferEmail"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NotifyOnApprovalSMS {
+            get {
+                return ((bool)(this["NotifyOnApprovalSMS"]));
+            }
+            set {
+                this["NotifyOnApprovalSMS"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool NotifyOnNewOfferSMS {
+            get {
+                return ((bool)(this["NotifyOnNewOfferSMS"]));
+            }
+            set {
+                this["NotifyOnNewOfferSMS"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CompanyLogoPath {
+            get {
+                return ((string)(this["CompanyLogoPath"]));
+            }
+            set {
+                this["CompanyLogoPath"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DigitalSignature {
+            get {
+                return ((string)(this["DigitalSignature"]));
+            }
+            set {
+                this["DigitalSignature"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DigitalName {
+            get {
+                return ((string)(this["DigitalName"]));
+            }
+            set {
+                this["DigitalName"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DigitalTitle {
+            get {
+                return ((string)(this["DigitalTitle"]));
+            }
+            set {
+                this["DigitalTitle"] = value;
+            }
+        }
     }
 }
