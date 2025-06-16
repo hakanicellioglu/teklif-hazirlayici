@@ -166,6 +166,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "companyEditor";
+            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";

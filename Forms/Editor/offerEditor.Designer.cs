@@ -689,6 +689,7 @@
             this.MaximumSize = new System.Drawing.Size(1280, 1080);
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "offerEditor";
+            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";
