@@ -61,7 +61,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             Settings.Default.DigitalTitle = txtTitle.Text;
             Settings.Default.CompanyLogoPath = picLogo.ImageLocation ?? string.Empty;
 
-            Settings.Default.Save();
+            Properties.Settings.Default.Save();
 
             bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
             ThemeManager.ApplyThemeToAllOpenForms(dark);
