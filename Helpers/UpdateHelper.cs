@@ -13,7 +13,7 @@ namespace Teklif_Hazırlayıcı.Helpers
     public static class UpdateHelper
     {
         private const string VersionInfoUrl = "https://raw.githubusercontent.com/hakanicellioglu/teklif-hazirlayici/main/version.txt";
-        private const string InstallerUrl = "https://github.com/hakanicellioglu/teklif-hazirlayici/setup.exe";
+        private const string InstallerUrl = "https://github.com/hakanicellioglu/teklif-hazirlayici/main/setup.exe";
 
         /// <summary>
         /// Checks for a newer version and downloads it if available.
