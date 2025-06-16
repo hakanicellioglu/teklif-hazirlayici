@@ -640,15 +640,16 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
 
-        public decimal GetTotalAmount()
+        public decimal GetTotalAmount(char currency)
         {
             try
             {
                 using (SqlConnection conn = _connection.GetConnection())
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand("SELECT ISNULL(SUM(odenecek), 0) FROM teklifler", conn))
+                    using (SqlCommand cmd = new SqlCommand("SELECT ISNULL(SUM(odenecek), 0) FROM teklifler WHERE doviz_birimi = @Currency", conn))
                     {
+                        cmd.Parameters.AddWithValue("@Currency", currency.ToString());
                         object result = cmd.ExecuteScalar();
                         return result != DBNull.Value ? Convert.ToDecimal(result) : 0m;
                     }
