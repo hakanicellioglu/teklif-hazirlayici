@@ -24,7 +24,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         {
             bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
             ThemeManager.SetTheme(this, dark);
-
             txtDefaultNote.Text = Settings.Default.DefaultNote;
             cmbTheme.SelectedItem = Settings.Default.Theme;
             chkEmailApproval.Checked = Settings.Default.NotifyOnApprovalEmail;

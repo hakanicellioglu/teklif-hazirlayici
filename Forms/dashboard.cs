@@ -88,5 +88,10 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             DialogResult = DialogResult.OK;
         }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            LoadForm(new settings());
+        }
     }
 }
