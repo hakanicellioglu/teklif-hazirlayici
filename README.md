@@ -36,6 +36,19 @@
 3. Müşteri ve ürün bilgilerini girin.
 4. Teklifi kaydedin ve PDF olarak dışa aktarın.
 
+## Yayımlama Sonrası Otomatik Güncelleme
+
+Uygulama yayımlandıktan sonra oluşan değişikliklerin sürüm kontrolüne
+otomatik olarak eklenmesi için `scripts/post_publish_git_update.sh` betiğini
+çalıştırabilirsiniz:
+
+```bash
+./scripts/post_publish_git_update.sh
+```
+
+Betik, depoda yer alan değişiklikleri commit eder ve bir uzak depo tanımlıysa
+push işlemini de gerçekleştirir.
+
 ## Katkıda Bulunma
 
 Katkılarınızı memnuniyetle karşılıyoruz! Lütfen aşağıdaki adımları izleyerek katkıda bulunabilirsiniz:
