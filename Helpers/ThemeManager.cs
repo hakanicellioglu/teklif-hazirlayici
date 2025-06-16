@@ -106,7 +106,8 @@ namespace Teklif_Hazırlayıcı.Helpers
 
                     if (tags.Contains("input"))
                     {
-                        ctrl.BackColor = panel;
+                        // Make inputs blend with their parent background
+                        ctrl.BackColor = ctrl.Parent?.BackColor ?? background;
                         ctrl.ForeColor = textPrimary;
                     }
 
