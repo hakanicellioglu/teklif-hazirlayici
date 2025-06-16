@@ -249,6 +249,9 @@
     <EmbeddedResource Include="Forms\Editor\productEditor.resx">
       <DependentUpon>productEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editor\settings.resx">
+      <DependentUpon>settings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\home.resx">
       <DependentUpon>home.cs</DependentUpon>
     </EmbeddedResource>
