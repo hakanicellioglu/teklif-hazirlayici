@@ -112,6 +112,12 @@ namespace Teklif_Hazırlayıcı.Helpers
 
                     if (tags.Contains("button"))
                     {
+                        if (ctrl is Button btn)
+                        {
+                            btn.FlatStyle = FlatStyle.Flat;
+                            btn.UseVisualStyleBackColor = false;
+                        }
+
                         if (tags.Contains("primary"))
                         {
                             ctrl.BackColor = border;
