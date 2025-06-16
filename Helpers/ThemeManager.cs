@@ -59,6 +59,8 @@ namespace Teklif_Hazırlayıcı.Helpers
                     parent.Tag = "link";
                 else if (parent is Panel)
                     parent.Tag = "panel";
+                else if (parent is DataGridView)
+                    parent.Tag = "grid";
             }
 
             foreach (Control ctrl in parent.Controls)
@@ -75,6 +77,7 @@ namespace Teklif_Hazırlayıcı.Helpers
             Color darkColor3 = SystemColors.ControlLight;
             Color darkColor4 = SystemColors.ControlLight;
             Color darkColor5 = SystemColors.ControlLight;
+            Color darkSecondary = SystemColors.Control;
 
             Color lightColor1 = SystemColors.ControlLightLight;
             Color lightColor2 = SystemColors.ControlLight;
@@ -85,6 +88,7 @@ namespace Teklif_Hazırlayıcı.Helpers
             Color background = _isDarkMode ? darkColor1 : lightColor1;
             Color panel = _isDarkMode ? darkColor2 : lightColor2;
             Color border = _isDarkMode ? darkColor3 : lightColor3;
+            Color secondary = _isDarkMode ? darkSecondary : lightColor2;
             Color textPrimary = _isDarkMode ? darkColor4 : lightColor5;
             Color textSecondary = _isDarkMode ? darkColor3 : lightColor4;
 
@@ -115,9 +119,23 @@ namespace Teklif_Hazırlayıcı.Helpers
                         }
                         else if (tags.Contains("secondary"))
                         {
-                            ctrl.BackColor = panel;
+                            ctrl.BackColor = secondary;
                             ctrl.ForeColor = textPrimary;
                         }
+                    }
+
+                    if (tags.Contains("grid") && ctrl is DataGridView grid)
+                    {
+                        grid.BackgroundColor = background;
+                        grid.ForeColor = textPrimary;
+                        grid.GridColor = border;
+                        grid.ColumnHeadersDefaultCellStyle.BackColor = panel;
+                        grid.ColumnHeadersDefaultCellStyle.ForeColor = textPrimary;
+                        grid.DefaultCellStyle.BackColor = background;
+                        grid.DefaultCellStyle.ForeColor = textPrimary;
+                        grid.DefaultCellStyle.SelectionBackColor = secondary;
+                        grid.DefaultCellStyle.SelectionForeColor = textPrimary;
+                        grid.EnableHeadersVisualStyles = false;
                     }
 
                     if (tags.Contains("icon"))
