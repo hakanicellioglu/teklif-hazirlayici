@@ -31,9 +31,10 @@ namespace Teklif_Hazırlayıcı.Forms
             label2.Text = $"Teklif Sayısı: {_offerManager.GetOfferCount()}";
             label3.Text = $"Ürün Sayısı: {_productManager.GetProductCount()}";
             label4.Text = $"Müşteri Sayısı: {_companyManager.GetCompanyCount()}";
-            decimal toplamTutar = _offerManager.GetTotalAmount();
+            decimal toplamTl = _offerManager.GetTotalAmount('₺');
+            decimal toplamDolar = _offerManager.GetTotalAmount('$');
             int onaylanan = _offerManager.GetApprovedOfferCount();
-            label5.Text = $"Tutar: {toplamTutar:N2}\nOnaylanan Teklif: {onaylanan}";
+            label5.Text = $"Tutar (₺): {toplamTl:N2}\nTutar ($): {toplamDolar:N2}\nOnaylanan Teklif: {onaylanan}";
         }
     }
 }
