@@ -22,6 +22,8 @@ namespace Teklif_Hazırlayıcı.Helpers
         {
             _isDarkMode = darkMode;
 
+            EnsureTags(form);
+
             Color darkBackground = SystemColors.ControlDarkDark;
             Color lightBackground = SystemColors.ControlLightLight;
 
@@ -38,6 +40,30 @@ namespace Teklif_Hazırlayıcı.Helpers
             foreach (Form form in Application.OpenForms)
             {
                 SetTheme(form, darkMode);
+            }
+        }
+
+        private static void EnsureTags(Control parent)
+        {
+            if (parent.Tag == null)
+            {
+                if (parent is Label)
+                    parent.Tag = "label";
+                else if (parent is Button)
+                    parent.Tag = "button";
+                else if (parent is TextBox || parent is ComboBox || parent is MaskedTextBox || parent is NumericUpDown)
+                    parent.Tag = "input";
+                else if (parent is CheckBox)
+                    parent.Tag = "checkbox";
+                else if (parent is LinkLabel)
+                    parent.Tag = "link";
+                else if (parent is Panel)
+                    parent.Tag = "panel";
+            }
+
+            foreach (Control ctrl in parent.Controls)
+            {
+                EnsureTags(ctrl);
             }
         }
 
