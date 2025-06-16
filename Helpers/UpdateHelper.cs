@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
@@ -11,7 +12,7 @@ namespace Teklif_Hazırlayıcı.Helpers
     /// </summary>
     public static class UpdateHelper
     {
-        private const string VersionInfoUrl = "https://github.com/hakanicellioglu/teklif-hazirlayici/version.txt";
+        private const string VersionInfoUrl = "https://raw.githubusercontent.com/hakanicellioglu/teklif-hazirlayici/main/version.txt";
         private const string InstallerUrl = "https://github.com/hakanicellioglu/teklif-hazirlayici/setup.exe";
 
         /// <summary>
@@ -24,8 +25,19 @@ namespace Teklif_Hazırlayıcı.Helpers
                 using (var client = new WebClient())
                 {
                     string versionString = client.DownloadString(VersionInfoUrl).Trim();
-                    Version latestVersion = new Version(versionString);
-                    Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+
+                    // Güvenli dönüşüm
+                    if (!Version.TryParse(versionString, out Version latestVersion))
+                    {
+                        Debug.WriteLine($"[HATA] Geçersiz sürüm dizesi: '{versionString}'");
+                        MessageHelper.ShowError($"Geçersiz sürüm formatı: {versionString}");
+                        return;
+                    }
+
+                    Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new Version("1.0.0.0");
+
+                    Debug.WriteLine($"[SÜRÜM] Mevcut Sürüm: {currentVersion}");
+                    Debug.WriteLine($"[SÜRÜM] Sunucudaki Sürüm: {latestVersion}");
 
                     if (latestVersion > currentVersion)
                     {
@@ -37,7 +49,7 @@ namespace Teklif_Hazırlayıcı.Helpers
 
                         if (result == DialogResult.Yes)
                         {
-                            string tempFile = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "teklif-hazirlayici-update.exe");
+                            string tempFile = Path.Combine(Path.GetTempPath(), "teklif-hazirlayici-update.exe");
                             client.DownloadFile(InstallerUrl, tempFile);
                             Process.Start(tempFile);
                             Environment.Exit(0);
@@ -47,6 +59,7 @@ namespace Teklif_Hazırlayıcı.Helpers
             }
             catch (Exception ex)
             {
+                Debug.WriteLine($"[HATA] Güncelleme kontrolü başarısız: {ex.Message}");
                 MessageHelper.ShowError($"Güncelleme kontrolü başarısız: {ex.Message}");
             }
         }
