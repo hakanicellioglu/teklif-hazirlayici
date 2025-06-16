@@ -19,6 +19,7 @@ namespace Teklif_Hazırlayıcı.Business
         *
         */
         private readonly DataAccess.SqlDbConnection _connection;
+        private readonly DataAccess.ProductRepository _productRepository;
         public ProductManager()
         {
             /*
@@ -28,6 +29,7 @@ namespace Teklif_Hazırlayıcı.Business
              *
              */
             _connection = new DataAccess.SqlDbConnection();
+            _productRepository = new DataAccess.ProductRepository();
         }
         public DataTable GetProduct()
         {
@@ -107,27 +109,23 @@ namespace Teklif_Hazırlayıcı.Business
                      * Ekleme işlemi sonucunda başarı ya da hata mesajı kullanıcıya gösterilir.
                      *
                      */
-                string query = "INSERT INTO urunler(kalip_no, urun, gramaj, kategori) VALUES(@MoldNumber, @Product, @Weight, @Category)";
-                using (SqlConnection conn = _connection.GetConnection())
+                var newProduct = new Models.Product
                 {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@MoldNumber", mold_number);
-                        cmd.Parameters.AddWithValue("@Product", product);
-                        cmd.Parameters.Add("@Weight", SqlDbType.Decimal).Value = weight;
-                        cmd.Parameters.AddWithValue("@Category", category);
-                        int result = cmd.ExecuteNonQuery();
+                    KalipNo = mold_number,
+                    Urun = product,
+                    Gramaj = weight,
+                    Kategori = category
+                };
 
-                        if (result > 0)
-                        {
-                            MessageHelper.ShowSuccess("Ürün başarıyla eklendi");
-                        }
-                        else
-                        {
-                            MessageHelper.ShowError("Ürün eklenirken hata oluştu.");
-                        }
-                    }
+                int id = _productRepository.Insert(newProduct);
+
+                if (id > 0)
+                {
+                    MessageHelper.ShowSuccess("Ürün başarıyla eklendi");
+                }
+                else
+                {
+                    MessageHelper.ShowError("Ürün eklenirken hata oluştu.");
                 }
             }
             catch (Exception ex)
@@ -193,27 +191,17 @@ namespace Teklif_Hazırlayıcı.Business
                         }
                     }
 
-                    // Güncelleme işlemi
-                    string updateQuery = "UPDATE urunler SET kalip_no = @MoldNumber, urun = @Product, gramaj = @Weight, kategori = @Category WHERE urun_id = @ProductId";
-                    using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
+                    var updatedProduct = new Models.Product
                     {
-                        updateCmd.Parameters.AddWithValue("@MoldNumber", mold_number);
-                        updateCmd.Parameters.AddWithValue("@Product", product);
-                        updateCmd.Parameters.Add("@Weight", SqlDbType.Decimal).Value = weight;
-                        updateCmd.Parameters.AddWithValue("@Category", category);
-                        updateCmd.Parameters.AddWithValue("@ProductId", product_id);
+                        UrunId = product_id.Value,
+                        KalipNo = mold_number,
+                        Urun = product,
+                        Gramaj = weight,
+                        Kategori = category
+                    };
 
-
-                        int result = updateCmd.ExecuteNonQuery();
-                        if (result > 0)
-                        {
-                            MessageHelper.ShowSuccess("Ürün başarıyla güncellendi.");
-                        }
-                        else
-                        {
-                            MessageHelper.ShowError("Ürün güncellenirken hata oluştu.");
-                        }
-                    }
+                    _productRepository.Update(updatedProduct);
+                    MessageHelper.ShowSuccess("Ürün başarıyla güncellendi.");
                 }
             }
             catch (Exception ex)
