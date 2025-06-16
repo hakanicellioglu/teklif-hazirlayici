@@ -118,6 +118,12 @@
     <Compile Include="Forms\Editor\ColumnForm.Designer.cs">
       <DependentUpon>ColumnForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editor\settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editor\settings.Designer.cs">
+      <DependentUpon>settings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\home.cs">
       <SubType>Form</SubType>
     </Compile>

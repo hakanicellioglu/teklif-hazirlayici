@@ -28,13 +28,13 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void LoadStatistics()
         {
-            label2.Text = $"Teklif Sayısı: {_offerManager.GetOfferCount()}";
-            label3.Text = $"Ürün Sayısı: {_productManager.GetProductCount()}";
-            label4.Text = $"Müşteri Sayısı: {_companyManager.GetCompanyCount()}";
+            int onaylanan = _offerManager.GetApprovedOfferCount();
+            label6.Text = $"{_offerManager.GetOfferCount()}";
+            label7.Text = $"{_productManager.GetProductCount()}";
+            label8.Text = $"{_companyManager.GetCompanyCount()}";
             decimal toplamTl = _offerManager.GetTotalAmount('₺');
             decimal toplamDolar = _offerManager.GetTotalAmount('$');
-            int onaylanan = _offerManager.GetApprovedOfferCount();
-            label5.Text = $"Tutar (₺): {toplamTl:N2}\nTutar ($): {toplamDolar:N2}\nOnaylanan Teklif: {onaylanan}";
+            label9.Text = $"{toplamTl:N2} | {toplamDolar:N2}";
         }
     }
 }
