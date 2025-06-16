@@ -121,7 +121,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                         if (tags.Contains("primary"))
                         {
                             ctrl.BackColor = border;
-                            ctrl.ForeColor = textSecondary;
+                            ctrl.ForeColor = textPrimary;
                         }
                         else if (tags.Contains("secondary"))
                         { 
