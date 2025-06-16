@@ -33,10 +33,10 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             this.lblTheme = new System.Windows.Forms.Label();
             this.cmbTheme = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.chkEmailApproval = new System.Windows.Forms.CheckBox();
-            this.chkEmailNewOffer = new System.Windows.Forms.CheckBox();
-            this.chkSmsApproval = new System.Windows.Forms.CheckBox();
             this.chkSmsNewOffer = new System.Windows.Forms.CheckBox();
+            this.chkSmsApproval = new System.Windows.Forms.CheckBox();
+            this.chkEmailNewOffer = new System.Windows.Forms.CheckBox();
+            this.chkEmailApproval = new System.Windows.Forms.CheckBox();
             this.picLogo = new System.Windows.Forms.PictureBox();
             this.btnBrowseLogo = new System.Windows.Forms.Button();
             this.lblSignature = new System.Windows.Forms.Label();
@@ -55,7 +55,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             this.lblDefaultNote.AutoSize = true;
             this.lblDefaultNote.Location = new System.Drawing.Point(12, 15);
             this.lblDefaultNote.Name = "lblDefaultNote";
-            this.lblDefaultNote.Size = new System.Drawing.Size(99, 13);
+            this.lblDefaultNote.Size = new System.Drawing.Size(101, 13);
             this.lblDefaultNote.TabIndex = 0;
             this.lblDefaultNote.Text = "Varsayılan Açıklama";
             // 
@@ -101,45 +101,45 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bildirimler";
             // 
-            // chkEmailApproval
+            // chkSmsNewOffer
             // 
-            this.chkEmailApproval.AutoSize = true;
-            this.chkEmailApproval.Location = new System.Drawing.Point(6, 19);
-            this.chkEmailApproval.Name = "chkEmailApproval";
-            this.chkEmailApproval.Size = new System.Drawing.Size(157, 17);
-            this.chkEmailApproval.TabIndex = 0;
-            this.chkEmailApproval.Text = "Teklif onayında e-posta";
-            this.chkEmailApproval.UseVisualStyleBackColor = true;
-            // 
-            // chkEmailNewOffer
-            // 
-            this.chkEmailNewOffer.AutoSize = true;
-            this.chkEmailNewOffer.Location = new System.Drawing.Point(6, 42);
-            this.chkEmailNewOffer.Name = "chkEmailNewOffer";
-            this.chkEmailNewOffer.Size = new System.Drawing.Size(146, 17);
-            this.chkEmailNewOffer.TabIndex = 1;
-            this.chkEmailNewOffer.Text = "Yeni teklifte e-posta";
-            this.chkEmailNewOffer.UseVisualStyleBackColor = true;
+            this.chkSmsNewOffer.AutoSize = true;
+            this.chkSmsNewOffer.Location = new System.Drawing.Point(215, 42);
+            this.chkSmsNewOffer.Name = "chkSmsNewOffer";
+            this.chkSmsNewOffer.Size = new System.Drawing.Size(107, 17);
+            this.chkSmsNewOffer.TabIndex = 3;
+            this.chkSmsNewOffer.Text = "Yeni teklifte SMS";
+            this.chkSmsNewOffer.UseVisualStyleBackColor = true;
             // 
             // chkSmsApproval
             // 
             this.chkSmsApproval.AutoSize = true;
             this.chkSmsApproval.Location = new System.Drawing.Point(215, 19);
             this.chkSmsApproval.Name = "chkSmsApproval";
-            this.chkSmsApproval.Size = new System.Drawing.Size(136, 17);
+            this.chkSmsApproval.Size = new System.Drawing.Size(124, 17);
             this.chkSmsApproval.TabIndex = 2;
             this.chkSmsApproval.Text = "Teklif onayında SMS";
             this.chkSmsApproval.UseVisualStyleBackColor = true;
             // 
-            // chkSmsNewOffer
+            // chkEmailNewOffer
             // 
-            this.chkSmsNewOffer.AutoSize = true;
-            this.chkSmsNewOffer.Location = new System.Drawing.Point(215, 42);
-            this.chkSmsNewOffer.Name = "chkSmsNewOffer";
-            this.chkSmsNewOffer.Size = new System.Drawing.Size(125, 17);
-            this.chkSmsNewOffer.TabIndex = 3;
-            this.chkSmsNewOffer.Text = "Yeni teklifte SMS";
-            this.chkSmsNewOffer.UseVisualStyleBackColor = true;
+            this.chkEmailNewOffer.AutoSize = true;
+            this.chkEmailNewOffer.Location = new System.Drawing.Point(6, 42);
+            this.chkEmailNewOffer.Name = "chkEmailNewOffer";
+            this.chkEmailNewOffer.Size = new System.Drawing.Size(119, 17);
+            this.chkEmailNewOffer.TabIndex = 1;
+            this.chkEmailNewOffer.Text = "Yeni teklifte e-posta";
+            this.chkEmailNewOffer.UseVisualStyleBackColor = true;
+            // 
+            // chkEmailApproval
+            // 
+            this.chkEmailApproval.AutoSize = true;
+            this.chkEmailApproval.Location = new System.Drawing.Point(6, 19);
+            this.chkEmailApproval.Name = "chkEmailApproval";
+            this.chkEmailApproval.Size = new System.Drawing.Size(136, 17);
+            this.chkEmailApproval.TabIndex = 0;
+            this.chkEmailApproval.Text = "Teklif onayında e-posta";
+            this.chkEmailApproval.UseVisualStyleBackColor = true;
             // 
             // picLogo
             // 
@@ -166,7 +166,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             this.lblSignature.AutoSize = true;
             this.lblSignature.Location = new System.Drawing.Point(12, 298);
             this.lblSignature.Name = "lblSignature";
-            this.lblSignature.Size = new System.Drawing.Size(67, 13);
+            this.lblSignature.Size = new System.Drawing.Size(57, 13);
             this.lblSignature.TabIndex = 7;
             this.lblSignature.Text = "Dijital İmza";
             // 
@@ -198,7 +198,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             this.lblTitle.AutoSize = true;
             this.lblTitle.Location = new System.Drawing.Point(12, 350);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(38, 13);
+            this.lblTitle.Size = new System.Drawing.Size(39, 13);
             this.lblTitle.TabIndex = 11;
             this.lblTitle.Text = "Ünvan";
             // 
@@ -238,6 +238,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             this.Controls.Add(this.lblTheme);
             this.Controls.Add(this.txtDefaultNote);
             this.Controls.Add(this.lblDefaultNote);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "settings";
             this.Text = "Ayarlar";
             this.Load += new System.EventHandler(this.settings_Load);
@@ -246,6 +247,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
