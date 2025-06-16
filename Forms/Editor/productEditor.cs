@@ -13,6 +13,7 @@ using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
 using System.Globalization;
 using System.Threading;
+using Teklif_Hazırlayıcı.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {
@@ -24,6 +25,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         public productEditor(int? productId, string editorMode, ProductManager productManager)
         {
             InitializeComponent();
+            bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+            ThemeManager.SetTheme(this, dark);
             editor_mode = editorMode;
             product_id = productId;
             _productManager = productManager;

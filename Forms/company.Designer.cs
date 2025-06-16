@@ -249,6 +249,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MinimumSize = new System.Drawing.Size(800, 450);
             this.Name = "company";
+            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(50, 0, 50, 50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";

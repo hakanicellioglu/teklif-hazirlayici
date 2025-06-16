@@ -240,6 +240,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             this.Controls.Add(this.lblDefaultNote);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "settings";
+            this.Tag = "form";
             this.Text = "Ayarlar";
             this.Load += new System.EventHandler(this.settings_Load);
             this.groupBox1.ResumeLayout(false);

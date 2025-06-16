@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
+using Teklif_Hazırlayıcı.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {
@@ -21,6 +22,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         public companyEditor(int? companyId, string editorMode, CompanyManager companyManager)
         {
             InitializeComponent();
+            bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+            ThemeManager.SetTheme(this, dark);
             editor_mode = editorMode;
             company_id = companyId;
             _companyManager = companyManager;

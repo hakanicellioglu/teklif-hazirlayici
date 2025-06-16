@@ -228,6 +228,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "auth";
+            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(20);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);

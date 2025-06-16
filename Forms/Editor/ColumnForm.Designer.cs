@@ -121,6 +121,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ColumnForm";
+            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.ShowInTaskbar = false;
             this.Deactivate += new System.EventHandler(this.ColumnForm_Deactivate);

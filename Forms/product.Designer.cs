@@ -251,6 +251,7 @@
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "product";
+            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(50, 0, 50, 50);
             this.Text = "Teklif Hazırlayıcı";
             this.panel1.ResumeLayout(false);

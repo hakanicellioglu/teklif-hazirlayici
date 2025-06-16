@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Helpers;
+using Teklif_Hazırlayıcı.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {
@@ -18,6 +19,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         public ColumnForm(AuthManager authManager)
         {
             InitializeComponent();
+            bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+            ThemeManager.SetTheme(this, dark);
             _authManager = authManager;
             GetColumns();
         }

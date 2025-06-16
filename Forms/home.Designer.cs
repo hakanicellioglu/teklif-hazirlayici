@@ -221,6 +221,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "home";
+            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(20);
             this.Text = "home";
             this.panel1.ResumeLayout(false);

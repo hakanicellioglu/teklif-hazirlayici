@@ -11,6 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
+using Teklif_Hazırlayıcı.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {
@@ -27,6 +28,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         public authEditor(int? authId, string editorMode, CompanyManager companyManager, AuthManager authManager)
         {
             InitializeComponent();
+            bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+            ThemeManager.SetTheme(this, dark);
             auth_id = authId;
             editor_mode = editorMode;
             _companyManager = companyManager;

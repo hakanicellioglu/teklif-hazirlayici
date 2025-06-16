@@ -18,6 +18,7 @@ using Teklif_Hazırlayıcı.Forms.Custom_Item;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Models;
 using Teklif_Hazırlayıcı.Validation;
+using Teklif_Hazırlayıcı.Properties;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
@@ -34,6 +35,8 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         public offerEditor(int? offerId, string editMode, AuthManager authManager, CompanyManager companyManager, OfferManager offerManager)
         {
             InitializeComponent();
+            bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+            ThemeManager.SetTheme(this, dark);
             offer_id = offerId;
             editor_mode = editMode;
             LoadOffer();

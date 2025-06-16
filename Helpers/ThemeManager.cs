@@ -22,8 +22,10 @@ namespace Teklif_Hazırlayıcı.Helpers
         {
             _isDarkMode = darkMode;
 
-            Color darkBackground = Color.FromArgb(40, 40, 40);
-            Color lightBackground = Color.FromArgb(0, 56, 64);
+            EnsureTags(form);
+
+            Color darkBackground = SystemColors.ControlDarkDark;
+            Color lightBackground = SystemColors.ControlLightLight;
 
             Color fromColor = form.BackColor;
             Color toColor = _isDarkMode ? darkBackground : lightBackground;
@@ -41,28 +43,57 @@ namespace Teklif_Hazırlayıcı.Helpers
             }
         }
 
+        private static void EnsureTags(Control parent)
+        {
+            if (parent.Tag == null)
+            {
+                if (parent is Label)
+                    parent.Tag = "label";
+                else if (parent is Button)
+                    parent.Tag = "button";
+                else if (parent is TextBox || parent is ComboBox || parent is MaskedTextBox || parent is NumericUpDown)
+                    parent.Tag = "input";
+                else if (parent is CheckBox)
+                    parent.Tag = "checkbox";
+                else if (parent is LinkLabel)
+                    parent.Tag = "link";
+                else if (parent is Panel)
+                    parent.Tag = "panel";
+                else if (parent is DataGridView)
+                    parent.Tag = "grid";
+            }
+
+            foreach (Control ctrl in parent.Controls)
+            {
+                EnsureTags(ctrl);
+            }
+        }
+
 
         private static void ApplyTheme(Control parent)
         {
-            Color darkColor1 = Color.FromArgb(40, 40, 40);
-            Color darkColor2 = Color.FromArgb(70, 70, 70);
-            Color darkColor3 = Color.FromArgb(125, 125, 125);
-            Color darkColor4 = Color.FromArgb(225, 225, 225);
-            Color darkColor5 = Color.FromArgb(255, 255, 255);
+            Color darkColor1 = SystemColors.ControlDarkDark;
+            Color darkColor2 = SystemColors.ControlDark;
+            Color darkColor3 = SystemColors.ControlLight;
+            Color darkColor4 = SystemColors.ControlLight;
+            Color darkColor5 = SystemColors.ControlLight;
+            Color darkSecondary = SystemColors.Control;
 
-            Color lightColor1 = Color.FromArgb(0, 56, 64);
-            Color lightColor2 = Color.FromArgb(0, 90, 91);
-            Color lightColor3 = Color.FromArgb(0, 115, 105);
-            Color lightColor4 = Color.FromArgb(0, 140, 114);
-            Color lightColor5 = Color.FromArgb(2, 166, 118);
+            Color lightColor1 = SystemColors.ControlLightLight;
+            Color lightColor2 = SystemColors.ControlLight;
+            Color lightColor3 = SystemColors.ControlDark;
+            Color lightColor4 = SystemColors.ControlText;
+            Color lightColor5 = SystemColors.ControlText;
 
             Color background = _isDarkMode ? darkColor1 : lightColor1;
             Color panel = _isDarkMode ? darkColor2 : lightColor2;
             Color border = _isDarkMode ? darkColor3 : lightColor3;
+            Color secondary = _isDarkMode ? darkSecondary : lightColor2;
             Color textPrimary = _isDarkMode ? darkColor4 : lightColor5;
             Color textSecondary = _isDarkMode ? darkColor3 : lightColor4;
 
             parent.BackColor = background;
+            parent.ForeColor = textPrimary;
 
             foreach (Control ctrl in parent.Controls)
             {
@@ -75,7 +106,8 @@ namespace Teklif_Hazırlayıcı.Helpers
 
                     if (tags.Contains("input"))
                     {
-                        ctrl.BackColor = panel;
+                        // Make inputs blend with their parent background
+                        ctrl.BackColor = ctrl.Parent?.BackColor ?? background;
                         ctrl.ForeColor = textPrimary;
                     }
 
@@ -84,13 +116,27 @@ namespace Teklif_Hazırlayıcı.Helpers
                         if (tags.Contains("primary"))
                         {
                             ctrl.BackColor = border;
-                            ctrl.ForeColor = _isDarkMode ? Color.Black : Color.White;
+                            ctrl.ForeColor = textPrimary;
                         }
                         else if (tags.Contains("secondary"))
                         {
-                            ctrl.BackColor = panel;
+                            ctrl.BackColor = secondary;
                             ctrl.ForeColor = textPrimary;
                         }
+                    }
+
+                    if (tags.Contains("grid") && ctrl is DataGridView grid)
+                    {
+                        grid.BackgroundColor = background;
+                        grid.ForeColor = textPrimary;
+                        grid.GridColor = border;
+                        grid.ColumnHeadersDefaultCellStyle.BackColor = panel;
+                        grid.ColumnHeadersDefaultCellStyle.ForeColor = textPrimary;
+                        grid.DefaultCellStyle.BackColor = background;
+                        grid.DefaultCellStyle.ForeColor = textPrimary;
+                        grid.DefaultCellStyle.SelectionBackColor = secondary;
+                        grid.DefaultCellStyle.SelectionForeColor = textPrimary;
+                        grid.EnableHeadersVisualStyles = false;
                     }
 
                     if (tags.Contains("icon"))
