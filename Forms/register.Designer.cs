@@ -146,6 +146,7 @@
             this.btnRegister.Name = "btnRegister";
             this.btnRegister.Size = new System.Drawing.Size(150, 30);
             this.btnRegister.TabIndex = 11;
+            this.btnRegister.Tag = "button primary action\t";
             this.btnRegister.Text = "Kayıt ol";
             this.btnRegister.UseVisualStyleBackColor = true;
             this.btnRegister.Click += new System.EventHandler(this.btnRegister_Click);
@@ -172,6 +173,7 @@
             this.btnTogglePassword.Name = "btnTogglePassword";
             this.btnTogglePassword.Size = new System.Drawing.Size(30, 30);
             this.btnTogglePassword.TabIndex = 10;
+            this.btnTogglePassword.Tag = "button icon secondary\t";
             this.btnTogglePassword.UseVisualStyleBackColor = true;
             this.btnTogglePassword.Click += new System.EventHandler(this.btnTogglePassword_Click);
             // 

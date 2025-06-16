@@ -100,7 +100,7 @@
             this.btnTogglePassword.Name = "btnTogglePassword";
             this.btnTogglePassword.Size = new System.Drawing.Size(30, 30);
             this.btnTogglePassword.TabIndex = 6;
-            this.btnTogglePassword.Tag = "icon secondary\t";
+            this.btnTogglePassword.Tag = "button icon secondary\t";
             this.btnTogglePassword.UseVisualStyleBackColor = true;
             this.btnTogglePassword.Click += new System.EventHandler(this.btnTogglePassword_Click);
             // 
