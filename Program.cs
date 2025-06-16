@@ -25,6 +25,7 @@ namespace Teklif_Hazırlayıcı
                 string projectPath = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\.."));
                 AppDomain.CurrentDomain.SetData("DataDirectory", projectPath);
 
+                UpdateHelper.CheckForUpdates();
 
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
                 System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
