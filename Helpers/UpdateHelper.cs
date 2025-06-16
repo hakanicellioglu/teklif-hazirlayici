@@ -11,8 +11,8 @@ namespace Teklif_Hazırlayıcı.Helpers
     /// </summary>
     public static class UpdateHelper
     {
-        private const string VersionInfoUrl = "https://example.com/teklif-hazirlayici/version.txt";
-        private const string InstallerUrl = "https://example.com/teklif-hazirlayici/latest.exe";
+        private const string VersionInfoUrl = "https://github.com/hakanicellioglu/teklif-hazirlayici/version.txt";
+        private const string InstallerUrl = "https://github.com/hakanicellioglu/teklif-hazirlayici/setup.exe";
 
         /// <summary>
         /// Checks for a newer version and downloads it if available.
