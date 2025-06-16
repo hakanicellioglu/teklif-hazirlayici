@@ -73,8 +73,10 @@ namespace Teklif_Hazırlayıcı.Helpers
         {
             Color darkColor1 = SystemColors.ControlDarkDark;
             Color darkColor2 = SystemColors.ControlDark;
-            Color darkColor3 = SystemColors.ControlLight;
-            Color darkColor4 = SystemColors.ControlLight;
+            // Use a slightly lighter shade for borders and secondary elements
+            Color darkColor3 = SystemColors.ControlDark;
+            // Light text color so it stands out on dark backgrounds
+            Color darkColor4 = SystemColors.ControlLightLight;
             Color darkColor5 = SystemColors.ControlLight;
             Color darkSecondary = SystemColors.Control;
 
