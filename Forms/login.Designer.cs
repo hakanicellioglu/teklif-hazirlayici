@@ -64,8 +64,6 @@
             this.txtUsername.Size = new System.Drawing.Size(150, 27);
             this.txtUsername.TabIndex = 1;
             this.txtUsername.Tag = "input background\t";
-            this.txtUsername.Enter += new System.EventHandler(this.txtUsername_Enter);
-            this.txtUsername.Leave += new System.EventHandler(this.txtUsername_Leave);
             // 
             // lblPassword
             // 
@@ -129,6 +127,8 @@
             // btnLogin
             // 
             this.btnLogin.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnLogin.FlatAppearance.BorderSize = 0;
+            this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogin.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnLogin.Location = new System.Drawing.Point(276, 254);
             this.btnLogin.Name = "btnLogin";
@@ -185,9 +185,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(720, 480);
             this.Name = "login";
-            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Tag = "form";
             this.Text = "Teklif Hazırlayıcı";
             this.ResumeLayout(false);
             this.PerformLayout();

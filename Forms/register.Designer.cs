@@ -139,6 +139,8 @@
             // 
             // btnRegister
             // 
+            this.btnRegister.FlatAppearance.BorderSize = 0;
+            this.btnRegister.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRegister.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnRegister.Location = new System.Drawing.Point(67, 269);
             this.btnRegister.Name = "btnRegister";
@@ -203,9 +205,9 @@
             this.MaximumSize = new System.Drawing.Size(300, 400);
             this.MinimumSize = new System.Drawing.Size(300, 400);
             this.Name = "register";
-            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Tag = "form";
             this.Text = "Teklif Hazırlayıcı";
             this.Load += new System.EventHandler(this.register_Load);
             this.ResumeLayout(false);
