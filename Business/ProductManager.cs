@@ -210,6 +210,26 @@ namespace Teklif_Hazırlayıcı.Business
                 throw;
             }
         }
+
+        public int GetProductCount()
+        {
+            try
+            {
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM urunler", conn))
+                    {
+                        return (int)cmd.ExecuteScalar();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
         public void DeleteProduct(int product_id)
         {
             try

@@ -599,5 +599,66 @@ namespace Teklif_Hazırlayıcı.Business
             }
             return result;
         }
+
+        public int GetOfferCount()
+        {
+            try
+            {
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM teklifler", conn))
+                    {
+                        return (int)cmd.ExecuteScalar();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
+
+        public int GetApprovedOfferCount()
+        {
+            try
+            {
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM teklifler WHERE durum = 'Bitti'", conn))
+                    {
+                        return (int)cmd.ExecuteScalar();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
+
+        public decimal GetTotalAmount()
+        {
+            try
+            {
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand("SELECT ISNULL(SUM(odenecek), 0) FROM teklifler", conn))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        return result != DBNull.Value ? Convert.ToDecimal(result) : 0m;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
     }
 }

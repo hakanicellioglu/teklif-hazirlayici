@@ -355,5 +355,25 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
 
+        public int GetCompanyCount()
+        {
+            try
+            {
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM firmalar", conn))
+                    {
+                        return (int)cmd.ExecuteScalar();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
+
     }
 }
