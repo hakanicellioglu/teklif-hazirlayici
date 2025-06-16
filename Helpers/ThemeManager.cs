@@ -27,10 +27,9 @@ namespace Teklif_Hazırlayıcı.Helpers
             Color darkBackground = SystemColors.ControlDarkDark;
             Color lightBackground = SystemColors.ControlLightLight;
 
-            Color fromColor = form.BackColor;
-            Color toColor = _isDarkMode ? darkBackground : lightBackground;
+            Color backgroundColor = _isDarkMode ? darkBackground : lightBackground;
 
-            StartBackgroundTransition(form, fromColor, toColor);
+            form.BackColor = backgroundColor;
 
             ApplyTheme(form);
         }
@@ -155,49 +154,6 @@ namespace Teklif_Hazırlayıcı.Helpers
                 if (ctrl.HasChildren)
                     ApplyTheme(ctrl);
             }
-        }
-
-        private static Timer transitionTimer;
-        private static Color startColor;
-        private static Color targetColor;
-        private static Form targetForm;
-        private static int transitionStep = 0;
-        private const int MaxSteps = 30; // ne kadar adımda geçecek (hız ayarı)
-
-        private static void StartBackgroundTransition(Form form, Color from, Color to)
-        {
-            startColor = from;
-            targetColor = to;
-            targetForm = form;
-            transitionStep = 0;
-
-            if (transitionTimer == null)
-            {
-                transitionTimer = new Timer();
-                transitionTimer.Interval = 15; // daha hızlı / yavaş için ayarla
-                transitionTimer.Tick += TransitionTimer_Tick;
-            }
-
-            transitionTimer.Start();
-        }
-
-        private static void TransitionTimer_Tick(object sender, EventArgs e)
-        {
-            if (transitionStep >= MaxSteps)
-            {
-                transitionTimer.Stop();
-                targetForm.BackColor = targetColor;
-                return;
-            }
-
-            float percent = (float)transitionStep / MaxSteps;
-            int r = (int)(startColor.R + (targetColor.R - startColor.R) * percent);
-            int g = (int)(startColor.G + (targetColor.G - startColor.G) * percent);
-            int b = (int)(startColor.B + (targetColor.B - startColor.B) * percent);
-
-            targetForm.BackColor = Color.FromArgb(r, g, b);
-
-            transitionStep++;
         }
 
     }
