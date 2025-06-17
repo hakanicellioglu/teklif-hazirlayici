@@ -17,6 +17,7 @@ namespace Teklif_Hazırlayıcı.Helpers
 
         public static void ShowError(string message)
         {
+            Logger.Log(message);
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
