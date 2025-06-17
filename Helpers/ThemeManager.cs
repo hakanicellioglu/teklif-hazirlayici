@@ -139,10 +139,14 @@ namespace Teklif_Hazırlayıcı.Helpers
                         grid.GridColor = border;
                         grid.ColumnHeadersDefaultCellStyle.BackColor = panel;
                         grid.ColumnHeadersDefaultCellStyle.ForeColor = textPrimary;
+                        grid.RowHeadersDefaultCellStyle.BackColor = panel;
+                        grid.RowHeadersDefaultCellStyle.ForeColor = textPrimary;
                         grid.DefaultCellStyle.BackColor = background;
                         grid.DefaultCellStyle.ForeColor = textPrimary;
                         grid.DefaultCellStyle.SelectionBackColor = secondary;
                         grid.DefaultCellStyle.SelectionForeColor = textPrimary;
+                        grid.AlternatingRowsDefaultCellStyle.BackColor = panel;
+                        grid.AlternatingRowsDefaultCellStyle.ForeColor = textPrimary;
                         grid.EnableHeadersVisualStyles = false;
                     }
 
