@@ -1,5 +1,5 @@
 # .github/workflows/update-version.yml
-name: Otomatik version.txt güncelle
+name: Otomatik version.txt gÃ¼ncelle
 
 on:
   release:
@@ -9,26 +9,31 @@ jobs:
   update-version-file:
     runs-on: ubuntu-latest
     steps:
-      - name: Depoyu çek
+      - name: Depoyu Ã§ek
         uses: actions/checkout@v3
 
-      - name: Sürüm numarasýný al
+      - name: SÃ¼rÃ¼m numarasÄ±nÄ± al
         id: get_version
         run: |
           echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
-      - name: version.txt dosyasýný oluþtur
+      - name: version.txt dosyasÄ±nÄ± oluÅŸtur
         run: |
           echo "$RELEASE_VERSION" > version.txt
           echo "https://github.com/${{ github.repository }}/releases/download/$RELEASE_VERSION/publish.zip" >> version.txt
 
-      - name: Git ayarlarý
+      - name: AssemblyInfo.cs sÃ¼rÃ¼mÃ¼nÃ¼ gÃ¼ncelle
+        run: |
+          sed -i -E "s/AssemblyVersion\(\"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\"\)/AssemblyVersion(\"$RELEASE_VERSION\")/" Properties/AssemblyInfo.cs
+          sed -i -E "s/AssemblyFileVersion\(\"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\"\)/AssemblyFileVersion(\"$RELEASE_VERSION\")/" Properties/AssemblyInfo.cs
+
+      - name: Git ayarlarÄ±
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Commit ve push
         run: |
-          git add version.txt
-          git commit -m "version.txt güncellendi -> $RELEASE_VERSION"
+          git add version.txt Properties/AssemblyInfo.cs
+          git commit -m "SÃ¼rÃ¼m gÃ¼ncellendi -> $RELEASE_VERSION"
           git push
