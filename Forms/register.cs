@@ -35,6 +35,18 @@ namespace Teklif_Hazırlayıcı
                 return;
             }
 
+            if (!StringValidator.IsValidUsername(txtUsername.Text))
+            {
+                MessageHelper.ShowError("Kullanıcı adı 3-20 karakter olmalı ve harf, rakam veya alt çizgi içerebilir.");
+                return;
+            }
+
+            if (!StringValidator.IsValidPassword(txtPassword.Text))
+            {
+                MessageHelper.ShowError("Şifre 6-20 karakter olmalı ve geçersiz karakter içermemelidir.");
+                return;
+            }
+
             UserManager userManager = new UserManager();
             userManager.AddUser(txtName.Text, txtSurname.Text, txtUsername.Text, txtEmail.Text, txtPassword.Text);
         }
