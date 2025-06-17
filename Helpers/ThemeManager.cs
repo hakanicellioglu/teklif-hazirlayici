@@ -73,12 +73,9 @@ namespace Teklif_Hazırlayıcı.Helpers
         {
             Color darkColor1 = SystemColors.ControlDarkDark;
             Color darkColor2 = SystemColors.ControlDark;
-            // Use a slightly lighter shade for borders and secondary elements
-            Color darkColor3 = SystemColors.ControlDark;
-            // Light text color so it stands out on dark backgrounds
-            Color darkColor4 = SystemColors.ControlLightLight;
-            Color darkColor5 = SystemColors.ControlLight;
-            Color darkSecondary = SystemColors.Control;
+            Color darkColor3 = SystemColors.Control;
+            Color darkColor4 = SystemColors.ControlLight;
+            Color darkColor5 = SystemColors.ControlLightLight;
 
             Color lightColor1 = SystemColors.ControlLightLight;
             Color lightColor2 = SystemColors.ControlLight;
@@ -88,10 +85,10 @@ namespace Teklif_Hazırlayıcı.Helpers
 
             Color background = _isDarkMode ? darkColor1 : lightColor1;
             Color panel = _isDarkMode ? darkColor2 : lightColor2;
-            Color border = _isDarkMode ? darkColor3 : lightColor3;
-            Color secondary = _isDarkMode ? darkSecondary : lightColor2;
-            Color textPrimary = _isDarkMode ? darkColor4 : lightColor5;
-            Color textSecondary = _isDarkMode ? darkColor3 : lightColor4;
+            Color textSecondary = _isDarkMode ? darkColor2 : lightColor4;
+            Color secondary = _isDarkMode ? darkColor3 : lightColor4;
+            Color border = _isDarkMode ? darkColor4 : lightColor3;
+            Color textPrimary = _isDarkMode ? darkColor5 : lightColor5;
 
             parent.BackColor = background;
             parent.ForeColor = textPrimary;
@@ -135,20 +132,21 @@ namespace Teklif_Hazırlayıcı.Helpers
                     if (tags.Contains("grid") && ctrl is DataGridView grid)
                     {
                         grid.BackgroundColor = background;
-                        grid.ForeColor = textPrimary;
                         grid.GridColor = border;
+                        
                         grid.ColumnHeadersDefaultCellStyle.BackColor = panel;
-                        grid.ColumnHeadersDefaultCellStyle.ForeColor = textPrimary;
-                        grid.RowHeadersDefaultCellStyle.BackColor = panel;
-                        grid.RowHeadersDefaultCellStyle.ForeColor = textPrimary;
-                        grid.DefaultCellStyle.BackColor = background;
-                        grid.DefaultCellStyle.ForeColor = textPrimary;
-                        grid.DefaultCellStyle.SelectionBackColor = secondary;
-                        grid.DefaultCellStyle.SelectionForeColor = textPrimary;
-                        grid.AlternatingRowsDefaultCellStyle.BackColor = panel;
-                        grid.AlternatingRowsDefaultCellStyle.ForeColor = textPrimary;
+                        grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+                        grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = panel;
+                        grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;
+
+                        grid.DefaultCellStyle.BackColor = panel;
+                        grid.DefaultCellStyle.ForeColor = border;
+                        grid.DefaultCellStyle.SelectionBackColor = background;
+                        grid.DefaultCellStyle.SelectionForeColor = secondary;
+                        
                         grid.EnableHeadersVisualStyles = false;
                     }
+
 
                     if (tags.Contains("icon"))
                     {

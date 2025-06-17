@@ -28,7 +28,8 @@ namespace Teklif_Hazırlayıcı.Helpers
                         return;
                     }
 
-                    string versionString = lines[0].Trim();
+                    string versionLine = lines[0].Replace("\uFEFF", "").Trim();
+                    string versionString = versionLine.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)[0];
                     string zipUrl = lines.Length > 1 ? lines[1].Trim() : string.Empty;
 
                     if (!Version.TryParse(versionString, out Version latestVersion))
