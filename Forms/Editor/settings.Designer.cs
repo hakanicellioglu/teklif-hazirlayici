@@ -45,6 +45,9 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             this.txtName = new System.Windows.Forms.TextBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.txtTitle = new System.Windows.Forms.TextBox();
+            this.lblLogDirectory = new System.Windows.Forms.Label();
+            this.txtLogDirectory = new System.Windows.Forms.TextBox();
+            this.btnBrowseLogDir = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
@@ -203,18 +206,44 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             this.lblTitle.Text = "Ünvan";
             // 
             // txtTitle
-            // 
+            //
             this.txtTitle.Location = new System.Drawing.Point(150, 347);
             this.txtTitle.Name = "txtTitle";
             this.txtTitle.Size = new System.Drawing.Size(300, 20);
             this.txtTitle.TabIndex = 12;
-            // 
+            //
+            // lblLogDirectory
+            //
+            this.lblLogDirectory.AutoSize = true;
+            this.lblLogDirectory.Location = new System.Drawing.Point(12, 373);
+            this.lblLogDirectory.Name = "lblLogDirectory";
+            this.lblLogDirectory.Size = new System.Drawing.Size(65, 13);
+            this.lblLogDirectory.TabIndex = 13;
+            this.lblLogDirectory.Text = "Log Klasörü";
+            //
+            // txtLogDirectory
+            //
+            this.txtLogDirectory.Location = new System.Drawing.Point(150, 370);
+            this.txtLogDirectory.Name = "txtLogDirectory";
+            this.txtLogDirectory.Size = new System.Drawing.Size(219, 20);
+            this.txtLogDirectory.TabIndex = 14;
+            //
+            // btnBrowseLogDir
+            //
+            this.btnBrowseLogDir.Location = new System.Drawing.Point(375, 368);
+            this.btnBrowseLogDir.Name = "btnBrowseLogDir";
+            this.btnBrowseLogDir.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowseLogDir.TabIndex = 15;
+            this.btnBrowseLogDir.Text = "Gözat";
+            this.btnBrowseLogDir.UseVisualStyleBackColor = true;
+            this.btnBrowseLogDir.Click += new System.EventHandler(this.btnBrowseLogDir_Click);
+            //
             // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(375, 385);
+            //
+            this.btnSave.Location = new System.Drawing.Point(375, 415);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 13;
+            this.btnSave.TabIndex = 16;
             this.btnSave.Text = "Kaydet";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -223,8 +252,11 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(469, 420);
+            this.ClientSize = new System.Drawing.Size(469, 450);
             this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnBrowseLogDir);
+            this.Controls.Add(this.txtLogDirectory);
+            this.Controls.Add(this.lblLogDirectory);
             this.Controls.Add(this.txtTitle);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.txtName);
@@ -270,6 +302,9 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.TextBox txtTitle;
+        private System.Windows.Forms.Label lblLogDirectory;
+        private System.Windows.Forms.TextBox txtLogDirectory;
+        private System.Windows.Forms.Button btnBrowseLogDir;
         private System.Windows.Forms.Button btnSave;
     }
 }

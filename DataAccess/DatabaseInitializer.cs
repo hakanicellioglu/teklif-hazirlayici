@@ -59,6 +59,7 @@ namespace Teklif_Hazırlayıcı.DataAccess
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageHelper.ShowError($"[HATA] Veritabanı başlatılırken sorun oluştu: {ex.Message}");
             }
         }

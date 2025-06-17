@@ -33,6 +33,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             txtSignature.Text = Settings.Default.DigitalSignature;
             txtName.Text = Settings.Default.DigitalName;
             txtTitle.Text = Settings.Default.DigitalTitle;
+            txtLogDirectory.Text = Settings.Default.LogDirectory;
 
             if (File.Exists(Settings.Default.CompanyLogoPath))
                 picLogo.ImageLocation = Settings.Default.CompanyLogoPath;
@@ -50,6 +51,17 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             }
         }
 
+        private void btnBrowseLogDir_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
+            {
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    txtLogDirectory.Text = fbd.SelectedPath;
+                }
+            }
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             Settings.Default.DefaultNote = txtDefaultNote.Text;
@@ -62,6 +74,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             Settings.Default.DigitalName = txtName.Text;
             Settings.Default.DigitalTitle = txtTitle.Text;
             Settings.Default.CompanyLogoPath = picLogo.ImageLocation ?? string.Empty;
+            Settings.Default.LogDirectory = txtLogDirectory.Text;
 
             TeklifHazirlayici.Properties.Settings.Default.Save();
 

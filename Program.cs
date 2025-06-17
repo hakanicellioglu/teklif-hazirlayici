@@ -36,6 +36,7 @@ namespace Teklif_Hazırlayıcı
             }
             catch (Exception ex)
             {
+                Logger.Log(ex);
                 MessageHelper.ShowError($"Hata oluştu: {ex.Message}");
             }
         }
