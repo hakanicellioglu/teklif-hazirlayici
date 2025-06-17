@@ -217,13 +217,13 @@ namespace Teklif_Hazırlayıcı.Business
                             if (reader.Read())
                             {
                                 kullanici_id = Convert.ToInt32(reader["kullanici_id"].ToString());
-                                Properties.Settings.Default.kullanici_id = kullanici_id;
+                                TeklifHazirlayici.Properties.Settings.Default.kullanici_id = kullanici_id;
                             }
                             else
                             {
-                                Properties.Settings.Default.kullanici_id = kullanici_id;
+                                TeklifHazirlayici.Properties.Settings.Default.kullanici_id = kullanici_id;
                             }
-                            Properties.Settings.Default.Save();
+                            TeklifHazirlayici.Properties.Settings.Default.Save();
                         }
                     }
                 }

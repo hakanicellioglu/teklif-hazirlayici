@@ -11,7 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
-using Teklif_Hazırlayıcı.Properties;
+using TeklifHazirlayici.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {

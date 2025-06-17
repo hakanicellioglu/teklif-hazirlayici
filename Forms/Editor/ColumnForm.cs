@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Helpers;
-using Teklif_Hazırlayıcı.Properties;
+using TeklifHazirlayici.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {

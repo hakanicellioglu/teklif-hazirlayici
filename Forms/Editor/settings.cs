@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using Teklif_Hazırlayıcı.Properties;
+using TeklifHazirlayici.Properties;
 using Teklif_Hazırlayıcı.Helpers;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
@@ -63,7 +63,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             Settings.Default.DigitalTitle = txtTitle.Text;
             Settings.Default.CompanyLogoPath = picLogo.ImageLocation ?? string.Empty;
 
-            Properties.Settings.Default.Save();
+            TeklifHazirlayici.Properties.Settings.Default.Save();
 
             bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
             ThemeManager.ApplyThemeToAllOpenForms(dark);

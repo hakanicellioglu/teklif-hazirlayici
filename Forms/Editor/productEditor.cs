@@ -13,7 +13,7 @@ using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
 using System.Globalization;
 using System.Threading;
-using Teklif_Hazırlayıcı.Properties;
+using TeklifHazirlayici.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
 {

@@ -18,7 +18,7 @@ using Teklif_Hazırlayıcı.Forms.Custom_Item;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Models;
 using Teklif_Hazırlayıcı.Validation;
-using Teklif_Hazırlayıcı.Properties;
+using TeklifHazirlayici.Properties;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Teklif_Hazırlayıcı.Forms.Editor
@@ -808,7 +808,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 });
 
                 UserManager userManager = new UserManager();
-                string hazirlayanAdSoyad = userManager.GetUserFullName(Properties.Settings.Default.kullanici_id);
+                string hazirlayanAdSoyad = userManager.GetUserFullName(TeklifHazirlayici.Properties.Settings.Default.kullanici_id);
 
                 // Ana üst tablo: 2 ana sütun
                 PdfPTable ustBilgiTable = new PdfPTable(2);
