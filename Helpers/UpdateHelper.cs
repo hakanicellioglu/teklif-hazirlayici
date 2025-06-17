@@ -2,7 +2,11 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Security;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using System.IO.Compression;
 
@@ -12,13 +16,29 @@ namespace Teklif_Hazırlayıcı.Helpers
     {
         private const string VersionInfoUrl = "https://raw.githubusercontent.com/hakanicellioglu/teklif-hazirlayici/main/version.txt";
 
+        private static HttpClient CreateSecureClient()
+        {
+            var handler = new HttpClientHandler();
+            handler.ServerCertificateCustomValidationCallback = (request, certificate, chain, sslPolicyErrors) =>
+            {
+                return sslPolicyErrors == SslPolicyErrors.None;
+            };
+            return new HttpClient(handler);
+        }
+
         public static void CheckForUpdates()
         {
             try
             {
-                using (var client = new WebClient())
+                using (var client = CreateSecureClient())
                 {
-                    string versionContent = client.DownloadString(VersionInfoUrl);
+                    if (!VersionInfoUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                    {
+                        MessageHelper.ShowError("Güncelleme adresi güvenli değil. HTTPS kullanılmalıdır.");
+                        return;
+                    }
+
+                    string versionContent = client.GetStringAsync(VersionInfoUrl).Result;
                     string[] lines = versionContent
                         .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -31,6 +51,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                     string versionLine = lines[0].Replace("\uFEFF", "").Trim();
                     string versionString = versionLine.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)[0];
                     string zipUrl = lines.Length > 1 ? lines[1].Trim() : string.Empty;
+                    string expectedHash = lines.Length > 2 ? lines[2].Trim() : null;
 
                     if (!Version.TryParse(versionString, out Version latestVersion))
                     {
@@ -65,8 +86,30 @@ namespace Teklif_Hazırlayıcı.Helpers
                             if (string.IsNullOrEmpty(zipUrl))
                                 zipUrl = $"https://github.com/hakanicellioglu/teklif-hazirlayici/releases/download/{versionString}/publish.zip";
 
+                            if (!zipUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                            {
+                                MessageHelper.ShowError("Güncelleme adresi güvenli değil. HTTPS kullanılmalıdır.");
+                                return;
+                            }
+
                             Debug.WriteLine($"[İNDİRME] Güncelleme arşivi indiriliyor: {zipUrl}");
-                            client.DownloadFile(zipUrl, zipPath);
+                            var zipBytes = client.GetByteArrayAsync(zipUrl).Result;
+                            File.WriteAllBytes(zipPath, zipBytes);
+
+                            if (!string.IsNullOrEmpty(expectedHash))
+                            {
+                                using (var sha256 = SHA256.Create())
+                                using (var fs = File.OpenRead(zipPath))
+                                {
+                                    var actual = sha256.ComputeHash(fs);
+                                    string actualHash = BitConverter.ToString(actual).Replace("-", "").ToLowerInvariant();
+                                    if (!string.Equals(actualHash, expectedHash, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        MessageHelper.ShowError("İndirilen dosyanın bütünlük doğrulaması başarısız. Güncelleme iptal edildi.");
+                                        return;
+                                    }
+                                }
+                            }
 
                             Debug.WriteLine($"[AÇMA] Zip içeriği çıkarılıyor: {tempDir}");
                             ZipFile.ExtractToDirectory(zipPath, tempDir);
