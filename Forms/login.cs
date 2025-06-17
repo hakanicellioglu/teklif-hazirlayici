@@ -34,14 +34,14 @@ namespace Teklif_Hazırlayıcı
         private void btnLogin_Click(object sender, EventArgs e)
         {
 
-            if (!Teklif_Hazırlayıcı.Validation.StringValidator.IsValid(txtUsername.Text))
+            if (!StringValidator.IsValidUsername(txtUsername.Text))
             {
-                MessageHelper.ShowError("Kullanıcı adı geçersiz.");
+                MessageHelper.ShowError("Kullanıcı adı 3-20 karakter olmalı ve harf, rakam veya alt çizgi içerebilir.");
                 return;
             }
-            else if (!Teklif_Hazırlayıcı.Validation.StringValidator.IsValid(txtPassword.Text))
+            else if (!StringValidator.IsValidPassword(txtPassword.Text))
             {
-                MessageHelper.ShowError("Şifre geçersiz.");
+                MessageHelper.ShowError("Şifre 6-20 karakter olmalı ve geçersiz karakter içermemelidir.");
                 return;
             }
 
