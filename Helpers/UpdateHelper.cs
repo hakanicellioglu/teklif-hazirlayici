@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Windows.Forms;
 using System.IO.Compression;
@@ -12,7 +11,6 @@ namespace Teklif_Hazırlayıcı.Helpers
     public static class UpdateHelper
     {
         private const string VersionInfoUrl = "https://raw.githubusercontent.com/hakanicellioglu/teklif-hazirlayici/main/version.txt";
-        private const string ZipUrl = "https://github.com/hakanicellioglu/teklif-hazirlayici/releases/download/1.0.0.17/publish.zip";
 
         public static void CheckForUpdates()
         {
@@ -20,7 +18,18 @@ namespace Teklif_Hazırlayıcı.Helpers
             {
                 using (var client = new WebClient())
                 {
-                    string versionString = client.DownloadString(VersionInfoUrl).Trim();
+                    string versionContent = client.DownloadString(VersionInfoUrl);
+                    string[] lines = versionContent
+                        .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    if (lines.Length == 0)
+                    {
+                        Debug.WriteLine("[HATA] version.txt boş");
+                        return;
+                    }
+
+                    string versionString = lines[0].Trim();
+                    string zipUrl = lines.Length > 1 ? lines[1].Trim() : string.Empty;
 
                     if (!Version.TryParse(versionString, out Version latestVersion))
                     {
@@ -52,8 +61,11 @@ namespace Teklif_Hazırlayıcı.Helpers
 
                             Directory.CreateDirectory(tempDir);
 
-                            Debug.WriteLine($"[İNDİRME] Güncelleme arşivi indiriliyor: {ZipUrl}");
-                            client.DownloadFile(ZipUrl, zipPath);
+                            if (string.IsNullOrEmpty(zipUrl))
+                                zipUrl = $"https://github.com/hakanicellioglu/teklif-hazirlayici/releases/download/{versionString}/publish.zip";
+
+                            Debug.WriteLine($"[İNDİRME] Güncelleme arşivi indiriliyor: {zipUrl}");
+                            client.DownloadFile(zipUrl, zipPath);
 
                             Debug.WriteLine($"[AÇMA] Zip içeriği çıkarılıyor: {tempDir}");
                             ZipFile.ExtractToDirectory(zipPath, tempDir);
