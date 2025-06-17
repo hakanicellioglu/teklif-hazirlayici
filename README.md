@@ -9,6 +9,7 @@
 - **PDF Oluşturma**: Hazırlanan teklifleri PDF formatında dışa aktararak paylaşımı kolaylaştırır.
 - **Şablon Desteği**: Farklı teklif şablonları ile özelleştirilmiş teklifler oluşturabilirsiniz.
 - **Otomatik Güncelleme**: Uygulama açılışta en son sürümü kontrol eder ve gerekirse güncellemeyi indirip yükler.
+- **Otomatik Güncelleme**: Uygulama açılışta en son sürümü kontrol eder ve gerekirse güncellemeyi indirip yükler. İndirilen arşivin SHA256 değeri `version.txt` dosyasında belirtilir ve dosya doğrulaması başarısız olursa güncelleme iptal edilir.
 
 ## Kurulum
 
@@ -25,10 +26,14 @@
 
 4. **Bağlantı Dizesini Tanımlayın**:
    - `SQL_CONN_STRING` ortam değişkenini kendi veritabanı bilgilerinizle ayarlayın **veya**
-     `App.config` ile aynı klasörde `App.config.user` dosyası oluşturarak `SqlConnectionString` değerini burada belirtin.
-
+   `App.config` ile aynı klasörde `App.config.user` dosyası oluşturarak `SqlConnectionString` değerini burada belirtin.
 5. **Projeyi Derleyin ve Çalıştırın**:
    - Projeyi derleyin ve uygulamayı başlatın.
+
+Güncellemelerin kontrol edildiği `version.txt` dosyası üç satırdan oluşur:
+1. Sürüm numarası
+2. Güncelleme paketinin HTTPS adresi
+3. `publish.zip` dosyasının SHA256 özeti
 
 ## Kullanım
 
