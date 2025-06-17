@@ -14,6 +14,7 @@ using Teklif_Hazırlayıcı.Forms;
 using Teklif_Hazırlayıcı.Helpers;
 using TeklifHazirlayici.Properties;
 using Teklif_Hazırlayıcı.Validation;
+using StringValidator = Teklif_Hazırlayıcı.Validation.StringValidator;
 
 namespace Teklif_Hazırlayıcı
 {
