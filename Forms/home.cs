@@ -30,14 +30,14 @@ namespace Teklif_Hazırlayıcı.Forms
             LoadStatistics();
         }
 
-        private void LoadStatistics()
+        private async void LoadStatistics()
         {
-            int onaylanan = _offerManager.GetApprovedOfferCount();
-            label6.Text = $"{_offerManager.GetOfferCount()}";
+            int onaylanan = await _offerManager.GetApprovedOfferCountAsync();
+            label6.Text = $"{await _offerManager.GetOfferCountAsync()}";
             label7.Text = $"{_productManager.GetProductCount()}";
             label8.Text = $"{_companyManager.GetCompanyCount()}";
-            decimal toplamTl = _offerManager.GetTotalAmount('₺');
-            decimal toplamDolar = _offerManager.GetTotalAmount('$');
+            decimal toplamTl = await _offerManager.GetTotalAmountAsync('₺');
+            decimal toplamDolar = await _offerManager.GetTotalAmountAsync('$');
             label9.Text = $"{toplamTl:N2} | {toplamDolar:N2}";
         }
     }
