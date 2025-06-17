@@ -372,3 +372,6 @@ FodyWeavers.xsd
 # Local user configuration
 App.config.user
 *.config.user
+
+# Ignore Visual Studio template cache
+TemplateEngineHost/vs/templatecache.json
