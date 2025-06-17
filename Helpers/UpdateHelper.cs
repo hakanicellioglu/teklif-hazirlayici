@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using System.IO.Compression;
+using System.Threading.Tasks;
 
 namespace Teklif_Hazırlayıcı.Helpers
 {
@@ -26,7 +27,7 @@ namespace Teklif_Hazırlayıcı.Helpers
             return new HttpClient(handler);
         }
 
-        public static void CheckForUpdates()
+        public static async Task CheckForUpdates()
         {
             try
             {
@@ -38,7 +39,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                         return;
                     }
 
-                    string versionContent = client.GetStringAsync(VersionInfoUrl).Result;
+                    string versionContent = await client.GetStringAsync(VersionInfoUrl);
                     string[] lines = versionContent
                         .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -93,7 +94,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                             }
 
                             Debug.WriteLine($"[İNDİRME] Güncelleme arşivi indiriliyor: {zipUrl}");
-                            var zipBytes = client.GetByteArrayAsync(zipUrl).Result;
+                            var zipBytes = await client.GetByteArrayAsync(zipUrl);
                             File.WriteAllBytes(zipPath, zipBytes);
 
                             if (!string.IsNullOrEmpty(expectedHash))
