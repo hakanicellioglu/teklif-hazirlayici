@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Forms;
 using Teklif_Hazırlayıcı.Helpers;
@@ -58,6 +59,34 @@ namespace Teklif_Hazırlayıcı.Business
                     DataTable dt = new DataTable();
                     adapter.Fill(dt);
                     return dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<DataTable> GetOfferAsync()
+        {
+            try
+            {
+                string query = @"            SELECT t.teklif_id, t.yetkili_id, y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
+            FROM (teklifler AS t
+            LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
+            LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id;";
+
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    await conn.OpenAsync();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        DataTable dt = new DataTable();
+                        dt.Load(reader);
+                        return dt;
+                    }
                 }
             }
             catch (Exception ex)
@@ -131,6 +160,70 @@ namespace Teklif_Hazırlayıcı.Business
                 throw;
             }
         }
+
+        public async Task<DataTable> GetOfferByIdAsync(int? offer_id)
+        {
+            try
+            {
+                string query = @"    SELECT
+        t.teklif_id,
+        t.firma_id,
+        t.yetkili_id,
+        f.isim AS isim,
+        y.isim AS yetkili_adi,
+        y.soyisim AS yetkili_soyadi,
+        y.hitap,
+        t.teklif_tarih,
+        t.teslim_sekli,
+        t.odeme_sekli,
+        t.odeme_vade,
+        t.teklif_sure,
+        t.doviz_kuru,
+        t.doviz_birimi,
+        t.vade,
+        t.vade_farki,
+        t.lme,
+        t.iscilik,
+        t.toplam_adet,
+        t.toplam_kg,
+        t.mal_hizmet_bedeli,
+        t.iskonto_orani,
+        t.iskonto_tutari,
+        t.kdv_orani,
+        t.kdv_tutari,
+        t.tevkifat,
+        t.tevkifat_orani,
+        t.tevkifat_tutari,
+        t.genel_toplam,
+        t.odenecek,
+        t.durum
+    FROM
+        (teklifler AS t
+        LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
+        LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id
+    WHERE t.teklif_id = @OfferId";
+
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    await conn.OpenAsync();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@OfferId", offer_id);
+                        using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                        {
+                            DataTable dt = new DataTable();
+                            dt.Load(reader);
+                            return dt.Rows.Count > 0 ? dt : null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
         #endregion
 
         #region Teklif Arama
@@ -178,7 +271,44 @@ namespace Teklif_Hazırlayıcı.Business
             }
             catch (Exception ex)
             {
-                MessageHelper.ShowError("Hata oluştu: " + ex.Message); 
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<DataTable> SearchAsync(string search)
+        {
+            try
+            {
+                string query = @"            SELECT y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
+            FROM (teklifler t
+            LEFT JOIN firmalar f ON t.firma_id = f.firma_id)
+            LEFT JOIN yetkililer y ON y.firma_id = f.firma_id
+            WHERE y.isim LIKE @Name
+               OR y.soyisim LIKE @Surname
+               OR f.isim LIKE @CompanyName";
+
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    await conn.OpenAsync();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        string likeValue = $"%{search}%";
+                        cmd.Parameters.AddWithValue("@Name", likeValue);
+                        cmd.Parameters.AddWithValue("@Surname", likeValue);
+                        cmd.Parameters.AddWithValue("@CompanyName", likeValue);
+                        using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                        {
+                            DataTable dt = new DataTable();
+                            dt.Load(reader);
+                            return dt;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
                 throw;
             }
         }
@@ -517,6 +647,60 @@ namespace Teklif_Hazırlayıcı.Business
                 throw;
             }
         }
+
+        public async Task<DataTable> GetOfferDetailByIdAsync(int teklif_id)
+        {
+            try
+            {
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    await conn.OpenAsync();
+                    var cmd = new SqlCommand(@"                SELECT
+                    f.isim AS FirmaIsim,
+                    y.isim AS YetkiliIsim,
+                    y.soyisim AS YetkiliSoyisim,
+                    f.adres AS FirmaAdres,
+                    y.telefon AS YetkiliTelefon,
+                    y.eposta AS YetkiliEposta,
+                    t.teklif_tarih,
+                    t.toplam_adet,
+                    t.toplam_kg,
+                    t.mal_hizmet_bedeli,
+                    t.iskonto_orani,
+                    t.iskonto_tutari,
+                    t.kdv_tutari,
+                    t.tevkifat_tutari,
+                    t.genel_toplam,
+                    t.odenecek,
+                    t.doviz_birimi,
+                    t.teslim_sekli,
+                    t.odeme_sekli,
+                    t.odeme_vade,
+                    t.teklif_sure,
+                    t.doviz_kuru,
+                    t.vade,
+                    t.vade_farki
+                FROM ((teklifler t
+                LEFT JOIN firmalar f ON f.firma_id = t.firma_id)
+                LEFT JOIN yetkililer y ON y.yetkili_id = t.yetkili_id)
+                WHERE t.teklif_id = @TeklifId", conn);
+
+                    cmd.Parameters.AddWithValue("@TeklifId", teklif_id);
+
+                    DataTable dt = new DataTable();
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        dt.Load(reader);
+                    }
+                    return dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
         #endregion
 
         #region Alüminyum Tutarı Getirme
@@ -620,6 +804,27 @@ namespace Teklif_Hazırlayıcı.Business
             }
         }
 
+        public async Task<int> GetOfferCountAsync()
+        {
+            try
+            {
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    await conn.OpenAsync();
+                    using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM teklifler", conn))
+                    {
+                        object result = await cmd.ExecuteScalarAsync();
+                        return Convert.ToInt32(result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
+
         public int GetApprovedOfferCount()
         {
             try
@@ -630,6 +835,27 @@ namespace Teklif_Hazırlayıcı.Business
                     using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM teklifler WHERE durum = 'Bitti'", conn))
                     {
                         return (int)cmd.ExecuteScalar();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<int> GetApprovedOfferCountAsync()
+        {
+            try
+            {
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    await conn.OpenAsync();
+                    using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM teklifler WHERE durum = 'Bitti'", conn))
+                    {
+                        object result = await cmd.ExecuteScalarAsync();
+                        return Convert.ToInt32(result);
                     }
                 }
             }
@@ -651,6 +877,28 @@ namespace Teklif_Hazırlayıcı.Business
                     {
                         cmd.Parameters.AddWithValue("@Currency", currency.ToString());
                         object result = cmd.ExecuteScalar();
+                        return result != DBNull.Value ? Convert.ToDecimal(result) : 0m;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Hata oluştu: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<decimal> GetTotalAmountAsync(char currency)
+        {
+            try
+            {
+                using (SqlConnection conn = _connection.GetConnection())
+                {
+                    await conn.OpenAsync();
+                    using (SqlCommand cmd = new SqlCommand("SELECT ISNULL(SUM(odenecek), 0) FROM teklifler WHERE doviz_birimi = @Currency", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Currency", currency.ToString());
+                        object result = await cmd.ExecuteScalarAsync();
                         return result != DBNull.Value ? Convert.ToDecimal(result) : 0m;
                     }
                 }

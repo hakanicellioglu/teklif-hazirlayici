@@ -46,7 +46,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             _offerManager = offerManager;
         }
 
-        private void SelectionMode()
+        private async void SelectionMode()
         {
             if (editor_mode == "Add")
             {
@@ -67,7 +67,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 btnEdit.Visible = true;
                 button2.Visible = true;
 
-                var data = _offerManager.GetOfferById(offer_id);
+                var data = await _offerManager.GetOfferByIdAsync(offer_id);
 
                 if (data != null && data.Rows.Count > 0)
                 {
@@ -673,12 +673,12 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         }
 
 
-        private void ExportOfferToPdf()
+        private async void ExportOfferToPdf()
         {
             try
             {
                 OfferManager offerManager = new OfferManager();
-                DataTable teklifDetay = offerManager.GetOfferDetailById(offer_id.Value);
+                DataTable teklifDetay = await offerManager.GetOfferDetailByIdAsync(offer_id.Value);
 
                 if (teklifDetay == null || teklifDetay.Rows.Count == 0)
                 {

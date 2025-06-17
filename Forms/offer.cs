@@ -31,9 +31,9 @@ namespace Teklif_Hazırlayıcı.Forms
             LoadOffer();
         }
 
-        private void LoadOffer()
+        private async void LoadOffer()
         {
-            dataGridView1.DataSource = _offerManager.GetOffer();
+            dataGridView1.DataSource = await _offerManager.GetOfferAsync();
             SetupGridColumnProperties();
             SetupOfferGridColumns();
         }
@@ -91,7 +91,7 @@ namespace Teklif_Hazırlayıcı.Forms
             LoadOffer();
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+        private async void btnSearch_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();
@@ -102,7 +102,7 @@ namespace Teklif_Hazırlayıcı.Forms
             }
             else
             {
-                var result = _offerManager.Search(txtSearch.Text);
+                var result = await _offerManager.SearchAsync(txtSearch.Text);
 
                 if (result != null)
                 {
