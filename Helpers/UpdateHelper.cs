@@ -12,7 +12,7 @@ namespace Teklif_Hazırlayıcı.Helpers
     public static class UpdateHelper
     {
         private const string VersionInfoUrl = "https://raw.githubusercontent.com/hakanicellioglu/teklif-hazirlayici/main/version.txt";
-        private const string ZipUrl = "https://github.com/hakanicellioglu/teklif-hazirlayici/releases/download/2.0.0.0/publish.zip";
+        private const string ZipUrl = "https://github.com/hakanicellioglu/teklif-hazirlayici/releases/download/1.0.0.17/publish.zip";
 
         public static void CheckForUpdates()
         {
