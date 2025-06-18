@@ -16,6 +16,7 @@ namespace Teklif_Hazırlayıcı.Helpers
     public static class UpdateHelper
     {
         private const string VersionInfoUrl = "https://raw.githubusercontent.com/hakanicellioglu/teklif-hazirlayici/main/version.txt";
+        private const string LocalPublishPath = @"\\server\ortak\publish";
 
         private static HttpClient CreateSecureClient()
         {
@@ -31,17 +32,31 @@ namespace Teklif_Hazırlayıcı.Helpers
         {
             try
             {
-                using (var client = CreateSecureClient())
-                {
-                    if (!VersionInfoUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-                    {
-                        MessageHelper.ShowError("Güncelleme adresi güvenli değil. HTTPS kullanılmalıdır.");
-                        return;
-                    }
+                string versionContent = null;
+                bool localSource = false;
+                string localVersionFile = Path.Combine(LocalPublishPath, "version.txt");
 
-                    string versionContent = await client.GetStringAsync(VersionInfoUrl);
-                    string[] lines = versionContent
-                        .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                if (File.Exists(localVersionFile))
+                {
+                    versionContent = await File.ReadAllTextAsync(localVersionFile);
+                    localSource = true;
+                }
+                else
+                {
+                    using (var client = CreateSecureClient())
+                    {
+                        if (!VersionInfoUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                        {
+                            MessageHelper.ShowError("Güncelleme adresi güvenli değil. HTTPS kullanılmalıdır.");
+                            return;
+                        }
+
+                        versionContent = await client.GetStringAsync(VersionInfoUrl);
+                    }
+                }
+
+                string[] lines = versionContent
+                    .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
                     if (lines.Length == 0)
                     {
@@ -85,17 +100,37 @@ namespace Teklif_Hazırlayıcı.Helpers
                             Directory.CreateDirectory(tempDir);
 
                             if (string.IsNullOrEmpty(zipUrl))
-                                zipUrl = $"https://github.com/hakanicellioglu/teklif-hazirlayici/releases/download/{versionString}/publish.zip";
-
-                            if (!zipUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                             {
-                                MessageHelper.ShowError("Güncelleme adresi güvenli değil. HTTPS kullanılmalıdır.");
-                                return;
+                                zipUrl = localSource
+                                    ? "publish.zip"
+                                    : $"https://github.com/hakanicellioglu/teklif-hazirlayici/releases/download/{versionString}/publish.zip";
                             }
 
-                            Debug.WriteLine($"[İNDİRME] Güncelleme arşivi indiriliyor: {zipUrl}");
-                            var zipBytes = await client.GetByteArrayAsync(zipUrl);
-                            File.WriteAllBytes(zipPath, zipBytes);
+                            if (localSource && !zipUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                            {
+                                string localZip = Path.IsPathRooted(zipUrl) ? zipUrl : Path.Combine(LocalPublishPath, zipUrl);
+                                if (!File.Exists(localZip))
+                                {
+                                    MessageHelper.ShowError("Güncelleme arşivi bulunamadı.");
+                                    return;
+                                }
+                                File.Copy(localZip, zipPath, true);
+                            }
+                            else
+                            {
+                                if (!zipUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    MessageHelper.ShowError("Güncelleme adresi güvenli değil. HTTPS kullanılmalıdır.");
+                                    return;
+                                }
+
+                                using (var downloadClient = CreateSecureClient())
+                                {
+                                    Debug.WriteLine($"[İNDİRME] Güncelleme arşivi indiriliyor: {zipUrl}");
+                                    var zipBytes = await downloadClient.GetByteArrayAsync(zipUrl);
+                                    File.WriteAllBytes(zipPath, zipBytes);
+                                }
+                            }
 
                             if (!string.IsNullOrEmpty(expectedHash))
                             {
@@ -129,7 +164,6 @@ namespace Teklif_Hazırlayıcı.Helpers
                             }
                         }
                     }
-                }
             }
             catch (Exception ex)
             {
