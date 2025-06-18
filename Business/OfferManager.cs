@@ -229,25 +229,45 @@ namespace Teklif_Hazırlayıcı.Business
         #region Teklif Arama
         public DataTable Search(string search)
         {
+            return Search(search, null, null, null);
+        }
+
+        public DataTable Search(string search, string status, DateTime? startDate, DateTime? endDate)
+        {
             try
             {
-                /*
-                     *
-                     * Arama terimine göre teklifleri, ilişkili firma ve yetkili bilgileri ile birlikte filtreleyerek getirir.
-                     * Arama; yetkili adı, soyadı veya firma adı üzerinden gerçekleştirilir.
-                     * LEFT JOIN ile "firmalar" ve "yetkililer" tabloları "teklifler" ile birleştirilir.
-                     * Elde edilen sonuçlar DataTable içerisine doldurulur.
-                     * Sonuç yoksa null döndürülür, varsa doldurulmuş DataTable döndürülür.
-                     *
-                     */
                 string query = @"
             SELECT y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
-            FROM (teklifler t 
+            FROM (teklifler t
             LEFT JOIN firmalar f ON t.firma_id = f.firma_id)
-            LEFT JOIN yetkililer y ON y.firma_id = f.firma_id
-            WHERE y.isim LIKE @Name 
-               OR y.soyisim LIKE @Surname
-               OR f.isim LIKE @CompanyName";
+            LEFT JOIN yetkililer y ON t.yetkili_id = y.yetkili_id
+            WHERE 1 = 1";
+
+                var parameters = new List<SqlParameter>();
+
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    query += " AND (y.isim LIKE @Search OR y.soyisim LIKE @Search OR f.isim LIKE @Search)";
+                    parameters.Add(new SqlParameter("@Search", $"%{search}%"));
+                }
+
+                if (!string.IsNullOrWhiteSpace(status) && !status.Equals("Hepsi", StringComparison.OrdinalIgnoreCase))
+                {
+                    query += " AND t.durum = @Status";
+                    parameters.Add(new SqlParameter("@Status", status));
+                }
+
+                if (startDate.HasValue)
+                {
+                    query += " AND t.teklif_tarih >= @StartDate";
+                    parameters.Add(new SqlParameter("@StartDate", startDate.Value));
+                }
+
+                if (endDate.HasValue)
+                {
+                    query += " AND t.teklif_tarih <= @EndDate";
+                    parameters.Add(new SqlParameter("@EndDate", endDate.Value));
+                }
 
                 DataTable dt = new DataTable();
 
@@ -256,10 +276,10 @@ namespace Teklif_Hazırlayıcı.Business
                     conn.Open();
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        string likeValue = $"%{search}%";
-                        cmd.Parameters.AddWithValue("@Name", likeValue);
-                        cmd.Parameters.AddWithValue("@Surname", likeValue);
-                        cmd.Parameters.AddWithValue("@CompanyName", likeValue);
+                        foreach (var p in parameters)
+                        {
+                            cmd.Parameters.Add(p);
+                        }
                         using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                         {
                             adapter.Fill(dt);
@@ -278,25 +298,54 @@ namespace Teklif_Hazırlayıcı.Business
 
         public async Task<DataTable> SearchAsync(string search)
         {
+            return await SearchAsync(search, null, null, null);
+        }
+
+        public async Task<DataTable> SearchAsync(string search, string status, DateTime? startDate, DateTime? endDate)
+        {
             try
             {
                 string query = @"            SELECT y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
             FROM (teklifler t
             LEFT JOIN firmalar f ON t.firma_id = f.firma_id)
-            LEFT JOIN yetkililer y ON y.firma_id = f.firma_id
-            WHERE y.isim LIKE @Name
-               OR y.soyisim LIKE @Surname
-               OR f.isim LIKE @CompanyName";
+            LEFT JOIN yetkililer y ON t.yetkili_id = y.yetkili_id
+            WHERE 1 = 1";
+
+                var parameters = new List<SqlParameter>();
+
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    query += " AND (y.isim LIKE @Search OR y.soyisim LIKE @Search OR f.isim LIKE @Search)";
+                    parameters.Add(new SqlParameter("@Search", $"%{search}%"));
+                }
+
+                if (!string.IsNullOrWhiteSpace(status) && !status.Equals("Hepsi", StringComparison.OrdinalIgnoreCase))
+                {
+                    query += " AND t.durum = @Status";
+                    parameters.Add(new SqlParameter("@Status", status));
+                }
+
+                if (startDate.HasValue)
+                {
+                    query += " AND t.teklif_tarih >= @StartDate";
+                    parameters.Add(new SqlParameter("@StartDate", startDate.Value));
+                }
+
+                if (endDate.HasValue)
+                {
+                    query += " AND t.teklif_tarih <= @EndDate";
+                    parameters.Add(new SqlParameter("@EndDate", endDate.Value));
+                }
 
                 using (SqlConnection conn = _connection.GetConnection())
                 {
                     await conn.OpenAsync();
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        string likeValue = $"%{search}%";
-                        cmd.Parameters.AddWithValue("@Name", likeValue);
-                        cmd.Parameters.AddWithValue("@Surname", likeValue);
-                        cmd.Parameters.AddWithValue("@CompanyName", likeValue);
+                        foreach (var p in parameters)
+                        {
+                            cmd.Parameters.Add(p);
+                        }
                         using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                         {
                             DataTable dt = new DataTable();

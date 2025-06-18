@@ -34,6 +34,9 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.txtSearch = new System.Windows.Forms.TextBox();
+            this.cmbStatus = new System.Windows.Forms.ComboBox();
+            this.dtStartDate = new System.Windows.Forms.DateTimePicker();
+            this.dtEndDate = new System.Windows.Forms.DateTimePicker();
             this.btnClear = new System.Windows.Forms.Button();
             this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.btnSearch = new System.Windows.Forms.Button();
@@ -66,6 +69,37 @@
             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
             this.txtSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyUp);
             this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
+            // 
+            // cmbStatus
+            //
+            this.cmbStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbStatus.FormattingEnabled = true;
+            this.cmbStatus.Items.AddRange(new object[] {
+            "Hepsi",
+            "Taslak",
+            "Devam",
+            "İptal",
+            "Bitti"});
+            this.cmbStatus.Location = new System.Drawing.Point(10, 15);
+            this.cmbStatus.Name = "cmbStatus";
+            this.cmbStatus.Size = new System.Drawing.Size(100, 21);
+            this.cmbStatus.TabIndex = 1;
+            //
+            // dtStartDate
+            //
+            this.dtStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtStartDate.Location = new System.Drawing.Point(120, 15);
+            this.dtStartDate.Name = "dtStartDate";
+            this.dtStartDate.Size = new System.Drawing.Size(100, 20);
+            this.dtStartDate.TabIndex = 2;
+            //
+            // dtEndDate
+            //
+            this.dtEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtEndDate.Location = new System.Drawing.Point(230, 15);
+            this.dtEndDate.Name = "dtEndDate";
+            this.dtEndDate.Size = new System.Drawing.Size(100, 20);
+            this.dtEndDate.TabIndex = 3;
             // 
             // btnClear
             // 
@@ -168,6 +202,9 @@
             // panel3
             // 
             this.panel3.Controls.Add(this.txtSearch);
+            this.panel3.Controls.Add(this.dtEndDate);
+            this.panel3.Controls.Add(this.dtStartDate);
+            this.panel3.Controls.Add(this.cmbStatus);
             this.panel3.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
@@ -276,5 +313,8 @@
         private System.Windows.Forms.ImageList imgButton;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.ComboBox cmbStatus;
+        private System.Windows.Forms.DateTimePicker dtStartDate;
+        private System.Windows.Forms.DateTimePicker dtEndDate;
     }
 }
