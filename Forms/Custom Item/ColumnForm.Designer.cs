@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ColumnForm));
             this.label1 = new System.Windows.Forms.Label();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.btnSave = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -52,13 +53,26 @@
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(304, 538);
             this.checkedListBox1.TabIndex = 1;
-            // 
+            //
+            // btnSave
+            //
+            this.btnSave.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnSave.Font = new System.Drawing.Font("Century Gothic", 10F);
+            this.btnSave.Location = new System.Drawing.Point(20, 551);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(304, 30);
+            this.btnSave.TabIndex = 2;
+            this.btnSave.Text = "Kaydet";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            //
             // ColumnForm
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(344, 601);
             this.Controls.Add(this.checkedListBox1);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -78,5 +92,6 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.Button btnSave;
     }
 }
