@@ -10,6 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace Teklif_Hazırlayıcı.Helpers
 {
@@ -41,7 +42,7 @@ namespace Teklif_Hazırlayıcı.Helpers
 
                     // Replace the problematic line with the following:
                     versionContent = await Task.Run(() => File.ReadAllText(localVersionFile, Encoding.UTF8));
-                    versionContent = await File.ReadAllTextAsync(localVersionFile);
+                    versionContent = File.ReadAllText(localVersionFile);
                     localSource = true;
                 }
                 else
