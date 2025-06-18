@@ -38,6 +38,9 @@ namespace Teklif_Hazırlayıcı.Helpers
 
                 if (File.Exists(localVersionFile))
                 {
+
+                    // Replace the problematic line with the following:
+                    versionContent = await Task.Run(() => File.ReadAllText(localVersionFile, Encoding.UTF8));
                     versionContent = await File.ReadAllTextAsync(localVersionFile);
                     localSource = true;
                 }
