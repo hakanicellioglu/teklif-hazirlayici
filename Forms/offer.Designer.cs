@@ -62,7 +62,7 @@
             this.txtSearch.Dock = System.Windows.Forms.DockStyle.Right;
             this.txtSearch.Font = new System.Drawing.Font("Century Gothic", 11F);
             this.txtSearch.ForeColor = System.Drawing.Color.Silver;
-            this.txtSearch.Location = new System.Drawing.Point(400, 15);
+            this.txtSearch.Location = new System.Drawing.Point(425, 15);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(150, 18);
             this.txtSearch.TabIndex = 0;
@@ -110,7 +110,7 @@
             this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClear.ImageIndex = 0;
             this.btnClear.ImageList = this.imgButton;
-            this.btnClear.Location = new System.Drawing.Point(550, 0);
+            this.btnClear.Location = new System.Drawing.Point(575, 0);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(50, 50);
             this.btnClear.TabIndex = 2;
@@ -134,7 +134,7 @@
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSearch.ImageIndex = 2;
             this.btnSearch.ImageList = this.imgButton;
-            this.btnSearch.Location = new System.Drawing.Point(600, 0);
+            this.btnSearch.Location = new System.Drawing.Point(625, 0);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(50, 50);
             this.btnSearch.TabIndex = 3;
@@ -149,7 +149,7 @@
             this.btnAddOffer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddOffer.ImageIndex = 1;
             this.btnAddOffer.ImageList = this.imgButton;
-            this.btnAddOffer.Location = new System.Drawing.Point(650, 0);
+            this.btnAddOffer.Location = new System.Drawing.Point(675, 0);
             this.btnAddOffer.Name = "btnAddOffer";
             this.btnAddOffer.Size = new System.Drawing.Size(50, 50);
             this.btnAddOffer.TabIndex = 4;
@@ -159,10 +159,9 @@
             // 
             // btnManageColumns
             // 
-            this.btnManageColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnManageColumns.Location = new System.Drawing.Point(370, 10);
+            this.btnManageColumns.Location = new System.Drawing.Point(336, 1);
             this.btnManageColumns.Name = "btnManageColumns";
-            this.btnManageColumns.Size = new System.Drawing.Size(130, 30);
+            this.btnManageColumns.Size = new System.Drawing.Size(58, 47);
             this.btnManageColumns.TabIndex = 5;
             this.btnManageColumns.Text = "Manage Columns";
             this.btnManageColumns.UseVisualStyleBackColor = true;
@@ -180,7 +179,7 @@
             this.btnRefresh.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnRefresh.ImageIndex = 3;
             this.btnRefresh.ImageList = this.imgButton;
-            this.btnRefresh.Location = new System.Drawing.Point(500, 0);
+            this.btnRefresh.Location = new System.Drawing.Point(525, 0);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(50, 50);
             this.btnRefresh.TabIndex = 1;
@@ -196,26 +195,26 @@
             this.panel1.Location = new System.Drawing.Point(50, 0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.panel1.Size = new System.Drawing.Size(700, 100);
+            this.panel1.Size = new System.Drawing.Size(725, 100);
             this.panel1.TabIndex = 0;
             // 
             // panel2
             // 
             this.panel2.Controls.Add(this.btnRefresh);
             this.panel2.Controls.Add(this.panel3);
-            this.panel2.Controls.Add(this.btnManageColumns);
             this.panel2.Controls.Add(this.btnClear);
             this.panel2.Controls.Add(this.btnSearch);
             this.panel2.Controls.Add(this.btnAddOffer);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 33);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(700, 50);
+            this.panel2.Size = new System.Drawing.Size(725, 50);
             this.panel2.TabIndex = 1;
             // 
             // panel3
             // 
             this.panel3.Controls.Add(this.txtSearch);
+            this.panel3.Controls.Add(this.btnManageColumns);
             this.panel3.Controls.Add(this.dtEndDate);
             this.panel3.Controls.Add(this.dtStartDate);
             this.panel3.Controls.Add(this.cmbStatus);
@@ -224,7 +223,7 @@
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
             this.panel3.Padding = new System.Windows.Forms.Padding(0, 15, 0, 0);
-            this.panel3.Size = new System.Drawing.Size(550, 50);
+            this.panel3.Size = new System.Drawing.Size(575, 50);
             this.panel3.TabIndex = 0;
             this.panel3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel3_MouseClick);
             // 
@@ -287,7 +286,7 @@
             this.dataGridView1.RowTemplate.Height = 30;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(700, 300);
+            this.dataGridView1.Size = new System.Drawing.Size(725, 300);
             this.dataGridView1.TabIndex = 6;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             // 
@@ -296,7 +295,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(825, 450);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

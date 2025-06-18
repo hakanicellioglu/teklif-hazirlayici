@@ -62,7 +62,6 @@ namespace Teklif_Hazırlayıcı.Forms
             if (dataGridView1.Columns["teklif_id"] != null)
             {
                 dataGridView1.Columns["teklif_id"].HeaderText = "Teklif No";
-                dataGridView1.Columns["teklif_id"].Visible = false;
             }
 
             if (dataGridView1.Columns["yetkili_id"] != null)
