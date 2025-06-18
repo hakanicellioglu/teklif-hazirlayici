@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
 using Teklif_Hazırlayıcı.Forms;
 
-namespace Teklif_Hazırlayıcı.Forms.Custom_Item
+namespace TeklifHazirlayici.Forms.Custom_Item
 {
     public partial class ColumnForm : Form
     {
