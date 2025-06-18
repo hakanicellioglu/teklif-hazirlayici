@@ -30,6 +30,12 @@ namespace Teklif_Hazırlayıcı
             ThemeManager.SetTheme(this, dark);
             CenterToScreen();
             WindowState = FormWindowState.Maximized;
+            this.Shown += login_Shown;
+        }
+
+        private async void login_Shown(object sender, EventArgs e)
+        {
+            await UpdateHelper.CheckForUpdates();
         }
 
         private void btnLogin_Click(object sender, EventArgs e)

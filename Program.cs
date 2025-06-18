@@ -16,7 +16,7 @@ namespace Teklif_Hazırlayıcı
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static async Task Main()
+        static void Main()
         {
             try
             {
@@ -24,8 +24,6 @@ namespace Teklif_Hazırlayıcı
 
                 string projectPath = Path.GetFullPath(Path.Combine(Application.StartupPath, @"..\.."));
                 AppDomain.CurrentDomain.SetData("DataDirectory", projectPath);
-
-                await UpdateHelper.CheckForUpdates();
 
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
                 System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.InvariantCulture;
