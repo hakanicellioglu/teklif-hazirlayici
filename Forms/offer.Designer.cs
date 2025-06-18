@@ -167,9 +167,9 @@
             this.btnManageColumns.Text = "Manage Columns";
             this.btnManageColumns.UseVisualStyleBackColor = true;
             this.btnManageColumns.Click += new System.EventHandler(this.btnManageColumns_Click);
-            //
+            // 
             // toolTip1
-            //
+            // 
             this.toolTip1.ToolTipTitle = "Teklif Hazırlayıcı";
             // 
             // btnRefresh
