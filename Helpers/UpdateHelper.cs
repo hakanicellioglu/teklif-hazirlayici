@@ -167,7 +167,6 @@ namespace Teklif_Hazırlayıcı.Helpers
                             }
                         }
                     }
-                }
             }
             catch (Exception ex)
             {
