@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Forms;
 using Teklif_Hazırlayıcı.Helpers;
-using Teklif_Hazırlayıcı.DataAccess; // Assuming DataAccess namespace contains SqlDbConnection and OfferRepository
+using Teklif_Hazırlayıcı.DataAccess;
+using System.Collections.Generic; // Assuming DataAccess namespace contains SqlDbConnection and OfferRepository
 
 namespace Teklif_Hazırlayıcı.Business
 {

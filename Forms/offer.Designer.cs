@@ -71,8 +71,9 @@
             this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
             // 
             // cmbStatus
-            //
+            // 
             this.cmbStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbStatus.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.cmbStatus.FormattingEnabled = true;
             this.cmbStatus.Items.AddRange(new object[] {
             "Hepsi",
@@ -84,17 +85,17 @@
             this.cmbStatus.Name = "cmbStatus";
             this.cmbStatus.Size = new System.Drawing.Size(100, 21);
             this.cmbStatus.TabIndex = 1;
-            //
+            // 
             // dtStartDate
-            //
+            // 
             this.dtStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtStartDate.Location = new System.Drawing.Point(120, 15);
             this.dtStartDate.Name = "dtStartDate";
             this.dtStartDate.Size = new System.Drawing.Size(100, 20);
             this.dtStartDate.TabIndex = 2;
-            //
+            // 
             // dtEndDate
-            //
+            // 
             this.dtEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtEndDate.Location = new System.Drawing.Point(230, 15);
             this.dtEndDate.Name = "dtEndDate";
