@@ -20,6 +20,7 @@ namespace Teklif_Hazırlayıcı.Forms
     {
         private readonly OfferManager _offerManager;
         private readonly offerEditor _offerEditor;
+        private readonly ColumnForm _columnForm;
 
         public offer(OfferManager offerManager, offerEditor offerEditor)
         {
@@ -28,6 +29,16 @@ namespace Teklif_Hazırlayıcı.Forms
             ThemeManager.SetTheme(this, dark);
             _offerManager = offerManager;
             _offerEditor = offerEditor;
+            _columnForm = new ColumnForm(new AuthManager());
+            _columnForm.SetColumnList(new List<(string Name, string DisplayName)>
+            {
+                ("adi", "Firma"),
+                ("isim", "Yetkili İsmi"),
+                ("soyisim", "Yetkili Soyismi"),
+                ("hitap", "Hitap"),
+                ("teklif_tarih", "Teklif Tarihi"),
+                ("durum", "Durum")
+            });
             cmbStatus.SelectedIndex = 0;
             dtStartDate.Value = DateTime.Today.AddMonths(-1);
             dtEndDate.Value = DateTime.Today;
@@ -203,6 +214,29 @@ namespace Teklif_Hazırlayıcı.Forms
         private void panel3_MouseClick(object sender, MouseEventArgs e)
         {
             txtSearch.Focus();
+        }
+
+        private void btnManageColumns_Click(object sender, EventArgs e)
+        {
+            Point globalPos = btnManageColumns.Parent.PointToScreen(btnManageColumns.Location);
+            Rectangle buttonBounds = btnManageColumns.RectangleToScreen(btnManageColumns.ClientRectangle);
+            Point location = new Point(buttonBounds.X, buttonBounds.Bottom);
+
+            _columnForm.StartPosition = FormStartPosition.Manual;
+            _columnForm.Location = location;
+
+            int xWidth = btnManageColumns.Location.X;
+            int newSize = panel2.Width - xWidth;
+            _columnForm.Size = new Size(newSize, _columnForm.Size.Height);
+
+            if (_columnForm.ShowDialog(this) == DialogResult.OK)
+            {
+                List<ColumnItem> selected = _columnForm.SelectedColumns;
+                foreach (DataGridViewColumn col in dataGridView1.Columns)
+                {
+                    col.Visible = selected.Any(s => s.Name == col.Name);
+                }
+            }
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
