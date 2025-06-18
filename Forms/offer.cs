@@ -20,6 +20,7 @@ namespace Teklif_Hazırlayıcı.Forms
     {
         private readonly OfferManager _offerManager;
         private readonly offerEditor _offerEditor;
+        private Button btnManageColumns;
 
         public offer(OfferManager offerManager, offerEditor offerEditor)
         {
@@ -28,10 +29,25 @@ namespace Teklif_Hazırlayıcı.Forms
             ThemeManager.SetTheme(this, dark);
             _offerManager = offerManager;
             _offerEditor = offerEditor;
+            AddManageColumnsButton();
             cmbStatus.SelectedIndex = 0;
             dtStartDate.Value = DateTime.Today.AddMonths(-1);
             dtEndDate.Value = DateTime.Today;
             LoadOffer();
+        }
+
+        private void AddManageColumnsButton()
+        {
+            btnManageColumns = new Button
+            {
+                Text = "Sütunlar",
+                Dock = DockStyle.Right,
+                Width = 80,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnManageColumns.FlatAppearance.BorderSize = 0;
+            btnManageColumns.Click += btnManageColumns_Click;
+            panel2.Controls.Add(btnManageColumns);
         }
 
         private async void LoadOffer()
@@ -211,7 +227,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnManageColumns_Click(object sender, EventArgs e)
         {
-
+            ColumnForm.Open("teklifler", dataGridView1);
         }
     }
 }

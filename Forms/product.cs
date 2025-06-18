@@ -19,13 +19,29 @@ namespace Teklif_Hazırlayıcı.Forms
     public partial class product: Form
     {
         private readonly ProductManager _productManager;
+        private Button btnManageColumns;
         public product(ProductManager productManager)
         {
             InitializeComponent();
             bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
             ThemeManager.SetTheme(this, dark);
             _productManager = productManager;
+            AddManageColumnsButton();
             LoadProduct();
+        }
+
+        private void AddManageColumnsButton()
+        {
+            btnManageColumns = new Button
+            {
+                Text = "Sütunlar",
+                Dock = DockStyle.Right,
+                Width = 80,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnManageColumns.FlatAppearance.BorderSize = 0;
+            btnManageColumns.Click += btnManageColumns_Click;
+            panel2.Controls.Add(btnManageColumns);
         }
 
         PlaceHolder placeHolder = new PlaceHolder("Ürün arayın...");
@@ -165,6 +181,11 @@ namespace Teklif_Hazırlayıcı.Forms
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadProduct();
+        }
+
+        private void btnManageColumns_Click(object sender, EventArgs e)
+        {
+            ColumnForm.Open("urunler", dataGridView1);
         }
     }
 }

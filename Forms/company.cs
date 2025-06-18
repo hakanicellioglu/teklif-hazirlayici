@@ -21,13 +21,29 @@ namespace Teklif_Hazırlayıcı.Forms
     public partial class company : Form
     {
         private readonly CompanyManager _companyManager;
+        private Button btnManageColumns;
         public company(CompanyManager companyManager)
         {
             InitializeComponent();
             bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
             ThemeManager.SetTheme(this, dark);
             _companyManager = companyManager;
+            AddManageColumnsButton();
             LoadCompany();
+        }
+
+        private void AddManageColumnsButton()
+        {
+            btnManageColumns = new Button
+            {
+                Text = "Sütunlar",
+                Dock = DockStyle.Right,
+                Width = 80,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnManageColumns.FlatAppearance.BorderSize = 0;
+            btnManageColumns.Click += btnManageColumns_Click;
+            panel2.Controls.Add(btnManageColumns);
         }
 
         private void LoadCompany()
@@ -158,6 +174,11 @@ namespace Teklif_Hazırlayıcı.Forms
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             LoadCompany();
+        }
+
+        private void btnManageColumns_Click(object sender, EventArgs e)
+        {
+            ColumnForm.Open("firmalar", dataGridView1);
         }
     }
 }
