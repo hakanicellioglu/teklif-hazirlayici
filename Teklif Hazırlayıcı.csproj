@@ -117,6 +117,12 @@
     <Compile Include="Forms\auth.Designer.cs">
       <DependentUpon>auth.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Custom Item\ColumnForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Custom Item\ColumnForm.Designer.cs">
+      <DependentUpon>ColumnForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editor\settings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -225,6 +231,9 @@
     <EmbeddedResource Include="Forms\company.resx">
       <DependentUpon>company.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Custom Item\ColumnForm.resx">
+      <DependentUpon>ColumnForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Custom Item\CustomMessageBox.resx">
       <DependentUpon>CustomMessageBox.cs</DependentUpon>
