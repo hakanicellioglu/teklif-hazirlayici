@@ -28,6 +28,9 @@ namespace Teklif_Hazırlayıcı.Forms
             ThemeManager.SetTheme(this, dark);
             _offerManager = offerManager;
             _offerEditor = offerEditor;
+            cmbStatus.SelectedIndex = 0;
+            dtStartDate.Value = DateTime.Today.AddMonths(-1);
+            dtEndDate.Value = DateTime.Today;
             LoadOffer();
         }
 
@@ -96,24 +99,21 @@ namespace Teklif_Hazırlayıcı.Forms
             dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();
 
-            if (TextboxValidator.IsNullOrWhiteSpace(txtSearch))
+            var result = await _offerManager.SearchAsync(
+                txtSearch.Text,
+                cmbStatus.SelectedItem?.ToString(),
+                dtStartDate.Value,
+                dtEndDate.Value);
+
+            if (result != null)
             {
-                MessageHelper.ShowError("Arama alanı boş bırakılamaz.");
+                dataGridView1.DataSource = result;
+                SetupGridColumnProperties();
+                SetupOfferGridColumns();
             }
             else
             {
-                var result = await _offerManager.SearchAsync(txtSearch.Text);
-
-                if (result != null)
-                {
-                    dataGridView1.DataSource = result;
-                    SetupGridColumnProperties();
-                    SetupOfferGridColumns();
-                }
-                else
-                {
-                    MessageHelper.ShowError("Aramaya uygun teklif bulunamadı.");
-                }
+                MessageHelper.ShowError("Aramaya uygun teklif bulunamadı.");
             }
         }
 
@@ -122,6 +122,9 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             txtSearch.Clear();
             placeHolder.LeavePlaceHolder(txtSearch);
+            cmbStatus.SelectedIndex = 0;
+            dtStartDate.Value = DateTime.Today.AddMonths(-1);
+            dtEndDate.Value = DateTime.Today;
             dataGridView1.DataSource = null;
             LoadOffer();
         }
