@@ -16,13 +16,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
     public partial class ColumnForm : Form
     {
         private readonly AuthManager _authManager;
+        public bool CloseOnDeactivate { get; set; } = true;
+
         public ColumnForm(AuthManager authManager)
         {
             InitializeComponent();
             bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
             ThemeManager.SetTheme(this, dark);
             _authManager = authManager;
-            GetColumns();
         }
 
         
@@ -47,46 +48,13 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
         }
 
 
-        private void GetColumns()
+        public void LoadColumns(string tableName)
         {
-            var table = _authManager.GetAuthWithCompanyName();
-            checkedListBox1.Items.Clear();
-
-            if (table == null)
+            var columns = _authManager.GetColumnDisplayNames(tableName);
+            if (columns == null)
                 return;
 
-            foreach (DataColumn col in table.Columns)
-            {
-                string display = col.ColumnName;
-                if (col.ColumnName == "yetkili_id" || col.ColumnName == "firma_id")
-                    continue;
-                switch (col.ColumnName)
-                {
-                    case "Firma":
-                        display = "Firma Adı";
-                        break;
-                    case "isim":
-                        display = "İsim";
-                        break;
-                    case "soyisim":
-                        display = "Soyisim";
-                        break;
-                    case "hitap":
-                        display = "Hitap";
-                        break;
-                    case "adres":
-                        display = "Adres";
-                        break;
-                    case "telefon":
-                        display = "Telefon";
-                        break;
-                    case "eposta":
-                        display = "E-posta";
-                        break;
-                }
-
-                checkedListBox1.Items.Add(new ColumnItem(col.ColumnName, display), true);
-            }
+            SetColumnList(columns);
         }
         public void SetColumnList(List<(string Name, string DisplayName)> columns)
         {
@@ -95,6 +63,12 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             {
                 checkedListBox1.Items.Add(new ColumnItem(col.Name, col.DisplayName), true);
             }
+        }
+
+        public List<ColumnItem> AskColumnSelection(string tableName)
+        {
+            LoadColumns(tableName);
+            return ShowDialog() == DialogResult.OK ? SelectedColumns : null;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -107,11 +81,14 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
             DialogResult = DialogResult.Cancel;
         }
 
-
         private void ColumnForm_Deactivate(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
-
+            if (CloseOnDeactivate)
+            {
+                this.DialogResult = DialogResult.OK;
+            }
         }
+
+
     }
 }

@@ -31,6 +31,8 @@ namespace Teklif_Hazırlayıcı.Forms
             _companyManager = companyManager;
             _authManager = authManager;
             _columnForm = columnForm;
+            _columnForm.CloseOnDeactivate = false;
+            _columnForm.LoadColumns("yetkililer");
             LoadAuth();
         }
 
@@ -147,12 +149,9 @@ namespace Teklif_Hazırlayıcı.Forms
             _columnForm.Size = new Size(newSize, _columnForm.Size.Height);
 
 
-            // Dialog olarak göster
-            if (_columnForm.ShowDialog(this) == DialogResult.OK)
+            List<ColumnItem> secilenler = _columnForm.AskColumnSelection("yetkililer");
+            if (secilenler != null)
             {
-                List<ColumnItem> secilenler = _columnForm.SelectedColumns;
-
-                // Sütun görünürlüğünü güncelle
                 foreach (DataGridViewColumn col in dataGridView1.Columns)
                 {
                     col.Visible = secilenler.Any(s => s.Name == col.Name);
