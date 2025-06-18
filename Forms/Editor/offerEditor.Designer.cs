@@ -109,6 +109,8 @@
             this.chkFirmalar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkFirmalar.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.chkFirmalar.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.chkFirmalar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.chkFirmalar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.chkFirmalar.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.chkFirmalar.FormattingEnabled = true;
             this.chkFirmalar.Items.AddRange(new object[] {
@@ -137,7 +139,9 @@
             this.chkYetkililer.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkYetkililer.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.chkYetkililer.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.chkYetkililer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.chkYetkililer.Enabled = false;
+            this.chkYetkililer.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.chkYetkililer.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.chkYetkililer.FormattingEnabled = true;
             this.chkYetkililer.Items.AddRange(new object[] {
@@ -186,6 +190,7 @@
             // 
             this.chkTeslimSekli.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkTeslimSekli.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.chkTeslimSekli.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.chkTeslimSekli.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.chkTeslimSekli.FormattingEnabled = true;
             this.chkTeslimSekli.Items.AddRange(new object[] {
@@ -213,6 +218,7 @@
             // 
             this.chkOdemeSekli.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkOdemeSekli.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.chkOdemeSekli.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.chkOdemeSekli.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.chkOdemeSekli.FormattingEnabled = true;
             this.chkOdemeSekli.Items.AddRange(new object[] {
@@ -252,6 +258,7 @@
             // 
             this.chkDovizBirimi.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkDovizBirimi.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.chkDovizBirimi.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.chkDovizBirimi.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.chkDovizBirimi.FormattingEnabled = true;
             this.chkDovizBirimi.Items.AddRange(new object[] {
@@ -445,6 +452,7 @@
             // 
             this.chkVade.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkVade.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.chkVade.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.chkVade.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.chkVade.FormattingEnabled = true;
             this.chkVade.Location = new System.Drawing.Point(327, 133);
@@ -689,9 +697,9 @@
             this.MaximumSize = new System.Drawing.Size(1280, 1080);
             this.MinimumSize = new System.Drawing.Size(1280, 720);
             this.Name = "offerEditor";
-            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(50);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Tag = "form";
             this.Text = "Teklif Hazırlayıcı";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel1.ResumeLayout(false);
