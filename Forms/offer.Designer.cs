@@ -41,7 +41,6 @@
             this.imgButton = new System.Windows.Forms.ImageList(this.components);
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnAddOffer = new System.Windows.Forms.Button();
-            this.btnManageColumns = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnRefresh = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -157,17 +156,6 @@
             this.btnAddOffer.UseVisualStyleBackColor = true;
             this.btnAddOffer.Click += new System.EventHandler(this.btnAddOffer_Click);
             // 
-            // btnManageColumns
-            // 
-            this.btnManageColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnManageColumns.Location = new System.Drawing.Point(370, 10);
-            this.btnManageColumns.Name = "btnManageColumns";
-            this.btnManageColumns.Size = new System.Drawing.Size(130, 30);
-            this.btnManageColumns.TabIndex = 5;
-            this.btnManageColumns.Text = "Manage Columns";
-            this.btnManageColumns.UseVisualStyleBackColor = true;
-            this.btnManageColumns.Click += new System.EventHandler(this.btnManageColumns_Click);
-            // 
             // toolTip1
             // 
             this.toolTip1.ToolTipTitle = "Teklif Hazırlayıcı";
@@ -203,7 +191,6 @@
             // 
             this.panel2.Controls.Add(this.btnRefresh);
             this.panel2.Controls.Add(this.panel3);
-            this.panel2.Controls.Add(this.btnManageColumns);
             this.panel2.Controls.Add(this.btnClear);
             this.panel2.Controls.Add(this.btnSearch);
             this.panel2.Controls.Add(this.btnAddOffer);
@@ -326,7 +313,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.ImageList imgButton;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.Button btnManageColumns;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ComboBox cmbStatus;
         private System.Windows.Forms.DateTimePicker dtStartDate;

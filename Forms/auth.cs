@@ -21,18 +21,14 @@ namespace Teklif_Hazırlayıcı.Forms
     {
         private readonly CompanyManager _companyManager;
         private readonly AuthManager _authManager;
-        private readonly ColumnForm _columnForm;
 
-        public auth(CompanyManager companyManager, AuthManager authManager, ColumnForm columnForm)
+        public auth(CompanyManager companyManager, AuthManager authManager)
         {
             InitializeComponent();
             bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
             ThemeManager.SetTheme(this, dark);
             _companyManager = companyManager;
             _authManager = authManager;
-            _columnForm = columnForm;
-            _columnForm.CloseOnDeactivate = false;
-            _columnForm.LoadColumns("yetkililer");
             LoadAuth();
         }
 
@@ -130,36 +126,7 @@ namespace Teklif_Hazırlayıcı.Forms
                 dataGridView1.Columns["eposta"].DisplayIndex = 6;
                 dataGridView1.Columns["eposta"].HeaderText = "E-posta";
             }
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            Point globalPos = button4.Parent.PointToScreen(button4.Location);
-            Point formPos = this.PointToClient(globalPos);
-
-            Rectangle buttonBounds = button4.RectangleToScreen(button4.ClientRectangle);
-            Point location = new Point(buttonBounds.X, buttonBounds.Bottom);
-
-            _columnForm.StartPosition = FormStartPosition.Manual;
-            _columnForm.Location = location;
-
-
-            int xWitdh = button4.Location.X;
-            int newSize = panel2.Width - xWitdh;
-            _columnForm.Size = new Size(newSize, _columnForm.Size.Height);
-
-
-            List<ColumnItem> secilenler = _columnForm.AskColumnSelection("yetkililer");
-            if (secilenler != null)
-            {
-                foreach (DataGridViewColumn col in dataGridView1.Columns)
-                {
-                    col.Visible = secilenler.Any(s => s.Name == col.Name);
-                }
-            }
-        }
-
-        
+        }        
         private void btnSearch_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;

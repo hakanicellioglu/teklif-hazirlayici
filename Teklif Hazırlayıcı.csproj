@@ -117,12 +117,6 @@
     <Compile Include="Forms\auth.Designer.cs">
       <DependentUpon>auth.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Editor\ColumnForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Editor\ColumnForm.Designer.cs">
-      <DependentUpon>ColumnForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\Editor\settings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -240,9 +234,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editor\authEditor.resx">
       <DependentUpon>authEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Editor\ColumnForm.resx">
-      <DependentUpon>ColumnForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editor\companyEditor.resx">
       <DependentUpon>companyEditor.cs</DependentUpon>
