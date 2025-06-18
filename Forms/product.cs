@@ -12,6 +12,7 @@ using Teklif_Hazırlayıcı.Forms.Custom_Item;
 using Teklif_Hazırlayıcı.Forms.Editor;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.Validation;
+using TeklifHazirlayici.Forms.Custom_Item;
 using TeklifHazirlayici.Properties;
 
 namespace Teklif_Hazırlayıcı.Forms
