@@ -208,5 +208,10 @@ namespace Teklif_Hazırlayıcı.Forms
         {
             LoadOffer();
         }
+
+        private void btnManageColumns_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
