@@ -225,7 +225,27 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void btnManageColumns_Click(object sender, EventArgs e)
         {
-            ColumnForm.Open("yetkililer", dataGridView1);
+            ColumnForm columnForm = new ColumnForm("yetkililer", dataGridView1);
+            columnForm.TopLevel = false;
+            columnForm.Parent = panel1;
+
+            columnForm.Location = new Point(btnManageColumns.Left, btnManageColumns.Bottom);
+
+            // Parent ilişkisini kaldır
+            columnForm.Parent = null;
+            columnForm.TopLevel = true;
+
+            // Ana forma göre konumla
+            // Formun ekran üzerindeki konumunu al
+            Point formScreenLocation = this.PointToScreen(Point.Empty);
+
+            // Formun sağ kenarına hizalama
+            int x = formScreenLocation.X + this.Width - columnForm.Width;
+            int y = btnManageColumns.PointToScreen(new Point(0, btnManageColumns.Height + 20)).Y;
+
+            columnForm.Location = new Point(x, y);
+            columnForm.StartPosition = FormStartPosition.Manual;
+            columnForm.ShowDialog();
         }
 
         private void button2_Click(object sender, EventArgs e)

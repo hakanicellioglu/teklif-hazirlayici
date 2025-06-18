@@ -51,11 +51,11 @@
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Location = new System.Drawing.Point(20, 43);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(304, 538);
+            this.checkedListBox1.Size = new System.Drawing.Size(304, 508);
             this.checkedListBox1.TabIndex = 1;
-            //
+            // 
             // btnSave
-            //
+            // 
             this.btnSave.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnSave.Font = new System.Drawing.Font("Century Gothic", 10F);
             this.btnSave.Location = new System.Drawing.Point(20, 551);
@@ -65,9 +65,9 @@
             this.btnSave.Text = "Kaydet";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            //
+            // 
             // ColumnForm
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(344, 601);
@@ -82,6 +82,7 @@
             this.MinimizeBox = false;
             this.Name = "ColumnForm";
             this.Padding = new System.Windows.Forms.Padding(20);
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Teklif Hazırlayıcı";
             this.ResumeLayout(false);
             this.PerformLayout();
