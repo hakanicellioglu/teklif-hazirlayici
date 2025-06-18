@@ -21,6 +21,7 @@ namespace Teklif_Hazırlayıcı.Forms
     {
         private readonly CompanyManager _companyManager;
         private readonly AuthManager _authManager;
+        private Button btnManageColumns;
 
         public auth(CompanyManager companyManager, AuthManager authManager)
         {
@@ -29,7 +30,22 @@ namespace Teklif_Hazırlayıcı.Forms
             ThemeManager.SetTheme(this, dark);
             _companyManager = companyManager;
             _authManager = authManager;
+            AddManageColumnsButton();
             LoadAuth();
+        }
+
+        private void AddManageColumnsButton()
+        {
+            btnManageColumns = new Button
+            {
+                Text = "Sütunlar",
+                Dock = DockStyle.Right,
+                Width = 80,
+                FlatStyle = FlatStyle.Flat
+            };
+            btnManageColumns.FlatAppearance.BorderSize = 0;
+            btnManageColumns.Click += btnManageColumns_Click;
+            panel1.Controls.Add(btnManageColumns);
         }
 
         private void panel3_MouseClick(object sender, MouseEventArgs e)
@@ -204,6 +220,11 @@ namespace Teklif_Hazırlayıcı.Forms
             dataGridView1.DataSource = _authManager.GetAuthWithCompanyName();
             SetupGridColumnProperties();
             SetupAuthGridColumns();
+        }
+
+        private void btnManageColumns_Click(object sender, EventArgs e)
+        {
+            ColumnForm.Open("yetkililer", dataGridView1);
         }
 
         private void button2_Click(object sender, EventArgs e)
