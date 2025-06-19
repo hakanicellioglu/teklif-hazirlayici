@@ -8,7 +8,7 @@
 - **Veri Yönetimi**: Müşteri ve ürün bilgilerini veritabanında saklayarak tekrar kullanım imkanı sunar.
 - **PDF Oluşturma**: Hazırlanan teklifleri PDF formatında dışa aktararak paylaşımı kolaylaştırır.
 - **Şablon Desteği**: Farklı teklif şablonları ile özelleştirilmiş teklifler oluşturabilirsiniz.
-- **Otomatik Güncelleme**: Uygulama açılışta en son sürümü kontrol eder, gerekirse güncellemeyi indirip yükler ve indirdiği arşivi `version.txt` dosyasında belirtilen SHA256 özetiyle doğrular. Doğrulama başarısız olursa güncelleme iptal edilir.
+- **Otomatik Güncelleme**: Uygulama açılışta en son sürümü kontrol eder. Güncelleme gerekiyorsa uygulama kapatılır, mevcut sürüm kaldırılır ve indirilen `setup.exe` çalıştırılır. İndirilen arşiv `version.txt` içindeki SHA256 özetiyle doğrulanır, doğrulama başarısız olursa güncelleme iptal edilir.
 
 ## Kurulum
 

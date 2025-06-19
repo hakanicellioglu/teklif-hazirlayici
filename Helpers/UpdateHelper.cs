@@ -88,6 +88,28 @@ namespace Teklif_Hazırlayıcı.Helpers
             }
         }
 
+        private static void StartUpdateSequence(string setupPath)
+        {
+            string uninstallCmd = GetUninstallCommand();
+            int pid = Process.GetCurrentProcess().Id;
+
+            string batchPath = Path.Combine(Path.GetTempPath(), "teklif_update.bat");
+            var sb = new StringBuilder();
+            sb.AppendLine("@echo off");
+            sb.AppendLine($"taskkill /PID {pid} /F > NUL 2>&1");
+            if (!string.IsNullOrEmpty(uninstallCmd))
+                sb.AppendLine(uninstallCmd);
+            sb.AppendLine($"start \"\" \"{setupPath}\"");
+
+            File.WriteAllText(batchPath, sb.ToString(), Encoding.UTF8);
+            Process.Start(new ProcessStartInfo("cmd.exe", $"/C \"{batchPath}\"")
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false
+            });
+            Environment.Exit(0);
+        }
+
         public static async Task CheckForUpdates()
         {
             try
@@ -216,9 +238,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                             if (File.Exists(setupPath))
                             {
                                 Debug.WriteLine($"[ÇALIŞTIRMA] setup.exe başlatılıyor: {setupPath}");
-                                UninstallCurrentVersion();
-                                Process.Start(setupPath);
-                                Environment.Exit(0);
+                                StartUpdateSequence(setupPath);
                             }
                             else
                             {
