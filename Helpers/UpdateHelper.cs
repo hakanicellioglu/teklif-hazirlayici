@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Text;
+using Microsoft.Win32;
 
 namespace Teklif_Hazırlayıcı.Helpers
 {
@@ -27,6 +28,64 @@ namespace Teklif_Hazırlayıcı.Helpers
                 return sslPolicyErrors == SslPolicyErrors.None;
             };
             return new HttpClient(handler);
+        }
+
+        private static string GetUninstallCommand()
+        {
+            string productName = Application.ProductName;
+            string[] registryPaths = new[]
+            {
+                @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+                @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+            };
+
+            foreach (var root in new[] { Registry.CurrentUser, Registry.LocalMachine })
+            {
+                foreach (var path in registryPaths)
+                {
+                    using (var key = root.OpenSubKey(path))
+                    {
+                        if (key == null) continue;
+                        foreach (var subName in key.GetSubKeyNames())
+                        {
+                            using (var subKey = key.OpenSubKey(subName))
+                            {
+                                if (subKey == null) continue;
+                                string displayName = subKey.GetValue("DisplayName") as string;
+                                if (!string.IsNullOrEmpty(displayName) && displayName.IndexOf(productName, StringComparison.OrdinalIgnoreCase) >= 0)
+                                {
+                                    return subKey.GetValue("UninstallString") as string;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private static void UninstallCurrentVersion()
+        {
+            string cmd = GetUninstallCommand();
+            if (string.IsNullOrEmpty(cmd))
+                return;
+
+            try
+            {
+                var startInfo = new ProcessStartInfo("cmd.exe", "/C \"" + cmd + "\"")
+                {
+                    UseShellExecute = false
+                };
+                using (var proc = Process.Start(startInfo))
+                {
+                    proc?.WaitForExit();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[HATA] Uygulama kaldırılırken hata: {ex.Message}");
+            }
         }
 
         public static async Task CheckForUpdates()
@@ -159,6 +218,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                             if (File.Exists(setupPath))
                             {
                                 Debug.WriteLine($"[ÇALIŞTIRMA] setup.exe başlatılıyor: {setupPath}");
+                                UninstallCurrentVersion();
                                 Process.Start(setupPath);
                                 Environment.Exit(0);
                             }
