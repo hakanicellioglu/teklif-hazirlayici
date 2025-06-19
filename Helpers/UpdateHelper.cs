@@ -228,7 +228,6 @@ namespace Teklif_Hazırlayıcı.Helpers
                         if (File.Exists(setupPath))
                         {
                             Debug.WriteLine($"[ÇALIŞTIRMA] setup.exe başlatılıyor: {setupPath}");
-                            MessageBox.Show(versionString);
                             AssemblyInfoHelper.UpdateAssemblyVersion(versionString);
                             StartUpdateSequence(setupPath);
                         }

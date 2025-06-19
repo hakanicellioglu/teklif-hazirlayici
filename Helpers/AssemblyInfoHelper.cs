@@ -18,7 +18,6 @@ namespace Teklif_Hazırlayıcı.Helpers
 
             // AssemblyInfo.cs dosyasının göreli yolu
             string assemblyInfoPath = Path.Combine(projectRoot, @"Properties", "AssemblyInfo.cs");
-            MessageBox.Show(assemblyInfoPath);
 
             if (!File.Exists(assemblyInfoPath))
                 throw new FileNotFoundException("AssemblyInfo.cs dosyası bulunamadı.", assemblyInfoPath);
