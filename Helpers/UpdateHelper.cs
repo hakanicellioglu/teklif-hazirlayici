@@ -1,17 +1,19 @@
+using Microsoft.Win32;
 using System;
+using System.Deployment.Application;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.Windows.Forms;
-using System.IO.Compression;
-using System.Threading.Tasks;
 using System.Text;
-using Microsoft.Win32;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Teklif_Hazırlayıcı.Helpers
 {
@@ -65,43 +67,31 @@ namespace Teklif_Hazırlayıcı.Helpers
             return null;
         }
 
-        private static void UninstallCurrentVersion()
+        private static void UninstallClickOnceApplication()
         {
-            string cmd = GetUninstallCommand();
-            if (string.IsNullOrEmpty(cmd))
-                return;
-
             try
             {
-                string silentCmd = cmd;
-                if (cmd.IndexOf("msiexec", StringComparison.OrdinalIgnoreCase) >= 0)
+                var startInfo = new ProcessStartInfo
                 {
-                    if (!cmd.Contains("/qn", StringComparison.OrdinalIgnoreCase))
-                        silentCmd += " /qn";
-                }
-                else if (!cmd.Contains("/S", StringComparison.OrdinalIgnoreCase) &&
-                         !cmd.Contains("/silent", StringComparison.OrdinalIgnoreCase) &&
-                         !cmd.Contains("/quiet", StringComparison.OrdinalIgnoreCase) &&
-                         !cmd.Contains("/q", StringComparison.OrdinalIgnoreCase))
-                {
-                    silentCmd += " /S";
-                }
-
-                var startInfo = new ProcessStartInfo("cmd.exe", "/C \"" + silentCmd + "\"")
-                {
+                    FileName = "rundll32.exe",
+                    Arguments = "dfshim.dll, CleanOnlineAppCache",
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
+
                 using (var proc = Process.Start(startInfo))
                 {
                     proc?.WaitForExit();
+                    Debug.WriteLine("[BİLGİ] ClickOnce önbelleği temizlendi.");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[HATA] Uygulama kaldırılırken hata: {ex.Message}");
+                Debug.WriteLine($"[HATA] ClickOnce temizleme işlemi başarısız: {ex}");
             }
         }
+
+
 
         public static async Task CheckForUpdates()
         {
@@ -134,113 +124,113 @@ namespace Teklif_Hazırlayıcı.Helpers
                 string[] lines = versionContent
                     .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    if (lines.Length == 0)
+                if (lines.Length == 0)
+                {
+                    Debug.WriteLine("[HATA] version.txt boş");
+                    return;
+                }
+
+                string versionLine = lines[0].Replace("\uFEFF", "").Trim();
+                string versionString = versionLine.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)[0];
+                string zipUrl = lines.Length > 1 ? lines[1].Trim() : string.Empty;
+                string expectedHash = lines.Length > 2 ? lines[2].Trim() : null;
+
+                if (!Version.TryParse(versionString, out Version latestVersion))
+                {
+                    Debug.WriteLine($"[HATA] Geçersiz sürüm dizesi: '{versionString}'");
+                    MessageHelper.ShowError($"Geçersiz sürüm formatı: {versionString}");
+                    return;
+                }
+
+                Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new Version("1.0.0.0");
+
+                Debug.WriteLine($"[SÜRÜM] Mevcut Sürüm: {currentVersion}");
+                Debug.WriteLine($"[SÜRÜM] Sunucudaki Sürüm: {latestVersion}");
+
+                if (latestVersion > currentVersion)
+                {
+                    DialogResult result = MessageBox.Show(
+                        "Yeni bir sürüm bulundu. Güncelleme yapmak ister misiniz?",
+                        "Güncelleme",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
                     {
-                        Debug.WriteLine("[HATA] version.txt boş");
-                        return;
-                    }
+                        string tempDir = Path.Combine(Path.GetTempPath(), "TeklifHazirlayiciUpdate");
+                        string zipPath = Path.Combine(tempDir, "publish.zip");
 
-                    string versionLine = lines[0].Replace("\uFEFF", "").Trim();
-                    string versionString = versionLine.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries)[0];
-                    string zipUrl = lines.Length > 1 ? lines[1].Trim() : string.Empty;
-                    string expectedHash = lines.Length > 2 ? lines[2].Trim() : null;
+                        if (Directory.Exists(tempDir))
+                            Directory.Delete(tempDir, true);
 
-                    if (!Version.TryParse(versionString, out Version latestVersion))
-                    {
-                        Debug.WriteLine($"[HATA] Geçersiz sürüm dizesi: '{versionString}'");
-                        MessageHelper.ShowError($"Geçersiz sürüm formatı: {versionString}");
-                        return;
-                    }
+                        Directory.CreateDirectory(tempDir);
 
-                    Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new Version("1.0.0.0");
-
-                    Debug.WriteLine($"[SÜRÜM] Mevcut Sürüm: {currentVersion}");
-                    Debug.WriteLine($"[SÜRÜM] Sunucudaki Sürüm: {latestVersion}");
-
-                    if (latestVersion > currentVersion)
-                    {
-                        DialogResult result = MessageBox.Show(
-                            "Yeni bir sürüm bulundu. Güncelleme yapmak ister misiniz?",
-                            "Güncelleme",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question);
-
-                        if (result == DialogResult.Yes)
+                        if (string.IsNullOrEmpty(zipUrl))
                         {
-                            string tempDir = Path.Combine(Path.GetTempPath(), "TeklifHazirlayiciUpdate");
-                            string zipPath = Path.Combine(tempDir, "publish.zip");
+                            zipUrl = localSource
+                                ? "publish.zip"
+                                : $"https://github.com/hakanicellioglu/teklif-hazirlayici/releases/download/{versionString}/publish.zip";
+                        }
 
-                            if (Directory.Exists(tempDir))
-                                Directory.Delete(tempDir, true);
-
-                            Directory.CreateDirectory(tempDir);
-
-                            if (string.IsNullOrEmpty(zipUrl))
+                        if (localSource && !zipUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                        {
+                            string localZip = Path.IsPathRooted(zipUrl) ? zipUrl : Path.Combine(LocalPublishPath, zipUrl);
+                            if (!File.Exists(localZip))
                             {
-                                zipUrl = localSource
-                                    ? "publish.zip"
-                                    : $"https://github.com/hakanicellioglu/teklif-hazirlayici/releases/download/{versionString}/publish.zip";
+                                MessageHelper.ShowError("Güncelleme arşivi bulunamadı.");
+                                return;
+                            }
+                            File.Copy(localZip, zipPath, true);
+                        }
+                        else
+                        {
+                            if (!zipUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                            {
+                                MessageHelper.ShowError("Güncelleme adresi güvenli değil. HTTPS kullanılmalıdır.");
+                                return;
                             }
 
-                            if (localSource && !zipUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                            using (var downloadClient = CreateSecureClient())
                             {
-                                string localZip = Path.IsPathRooted(zipUrl) ? zipUrl : Path.Combine(LocalPublishPath, zipUrl);
-                                if (!File.Exists(localZip))
-                                {
-                                    MessageHelper.ShowError("Güncelleme arşivi bulunamadı.");
-                                    return;
-                                }
-                                File.Copy(localZip, zipPath, true);
-                            }
-                            else
-                            {
-                                if (!zipUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    MessageHelper.ShowError("Güncelleme adresi güvenli değil. HTTPS kullanılmalıdır.");
-                                    return;
-                                }
-
-                                using (var downloadClient = CreateSecureClient())
-                                {
-                                    Debug.WriteLine($"[İNDİRME] Güncelleme arşivi indiriliyor: {zipUrl}");
-                                    var zipBytes = await downloadClient.GetByteArrayAsync(zipUrl);
-                                    File.WriteAllBytes(zipPath, zipBytes);
-                                }
-                            }
-
-                            if (!string.IsNullOrEmpty(expectedHash))
-                            {
-                                using (var sha256 = SHA256.Create())
-                                using (var fs = File.OpenRead(zipPath))
-                                {
-                                    var actual = sha256.ComputeHash(fs);
-                                    string actualHash = BitConverter.ToString(actual).Replace("-", "").ToLowerInvariant();
-                                    if (!string.Equals(actualHash, expectedHash, StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        MessageHelper.ShowError("İndirilen dosyanın bütünlük doğrulaması başarısız. Güncelleme iptal edildi.");
-                                        return;
-                                    }
-                                }
-                            }
-
-                            Debug.WriteLine($"[AÇMA] Zip içeriği çıkarılıyor: {tempDir}");
-                            ZipFile.ExtractToDirectory(zipPath, tempDir);
-
-                            string setupPath = Path.Combine(tempDir, "publish", "setup.exe");
-
-                            if (File.Exists(setupPath))
-                            {
-                                Debug.WriteLine($"[ÇALIŞTIRMA] setup.exe başlatılıyor: {setupPath}");
-                                UninstallCurrentVersion();
-                                Process.Start(setupPath);
-                                Environment.Exit(0);
-                            }
-                            else
-                            {
-                                MessageHelper.ShowError("setup.exe bulunamadı. Güncelleme başlatılamadı.");
+                                Debug.WriteLine($"[İNDİRME] Güncelleme arşivi indiriliyor: {zipUrl}");
+                                var zipBytes = await downloadClient.GetByteArrayAsync(zipUrl);
+                                File.WriteAllBytes(zipPath, zipBytes);
                             }
                         }
+
+                        if (!string.IsNullOrEmpty(expectedHash))
+                        {
+                            using (var sha256 = SHA256.Create())
+                            using (var fs = File.OpenRead(zipPath))
+                            {
+                                var actual = sha256.ComputeHash(fs);
+                                string actualHash = BitConverter.ToString(actual).Replace("-", "").ToLowerInvariant();
+                                if (!string.Equals(actualHash, expectedHash, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    MessageHelper.ShowError("İndirilen dosyanın bütünlük doğrulaması başarısız. Güncelleme iptal edildi.");
+                                    return;
+                                }
+                            }
+                        }
+
+                        Debug.WriteLine($"[AÇMA] Zip içeriği çıkarılıyor: {tempDir}");
+                        ZipFile.ExtractToDirectory(zipPath, tempDir);
+
+                        string setupPath = Path.Combine(tempDir, "publish", "setup.exe");
+
+                        if (File.Exists(setupPath))
+                        {
+                            Debug.WriteLine($"[ÇALIŞTIRMA] setup.exe başlatılıyor: {setupPath}");
+                            UninstallClickOnceApplication();
+                            Process.Start(setupPath);
+                            Environment.Exit(0);
+                        }
+                        else
+                        {
+                            MessageHelper.ShowError("setup.exe bulunamadı. Güncelleme başlatılamadı.");
+                        }
                     }
+                }
             }
             catch (Exception ex)
             {
