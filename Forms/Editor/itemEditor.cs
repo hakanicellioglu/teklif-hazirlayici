@@ -312,7 +312,6 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 int ay = _itemManager.GetVadeAy(teklif_id.Value);
                 decimal vadeliFiyat = vade == 0 ? birimFiyat = sonuc : birimFiyat = sonuc * (1 + (vade / 100) * ay);
 
-                MessageBox.Show(ay.ToString());
 
                 gramaj = _itemManager.GetGramaj(urun_id);
                 decimal boy_m = boy_mm / 1000m;
