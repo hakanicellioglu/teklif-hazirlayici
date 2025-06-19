@@ -1,0 +1,208 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/Helpers/AssemblyInfoHelper.cs b/Helpers/AssemblyInfoHelper.cs
+new file mode 100644
+index 0000000000000000000000000000000000000000..74cdf2f3dcb2b86df25b0ca037cbb1d833ae61f4
+--- /dev/null
++++ b/Helpers/AssemblyInfoHelper.cs
+@@ -0,0 +1,24 @@
++using System;
++using System.IO;
++using System.Text;
++using System.Text.RegularExpressions;
++
++namespace Teklif_Hazırlayıcı.Helpers
++{
++    public static class AssemblyInfoHelper
++    {
++        public static void UpdateAssemblyVersion(string newVersion)
++        {
++            if (string.IsNullOrWhiteSpace(newVersion))
++                throw new ArgumentException("newVersion");
++
++            string assemblyInfoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Properties", "AssemblyInfo.cs");
++            if (!File.Exists(assemblyInfoPath))
++                return;
++
++            string content = File.ReadAllText(assemblyInfoPath, Encoding.UTF8);
++            content = Regex.Replace(content, @"AssemblyVersion\(""[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+""\)", $"AssemblyVersion(\"{newVersion}\")");
++            File.WriteAllText(assemblyInfoPath, content, Encoding.UTF8);
++        }
++    }
++}
+diff --git a/Helpers/UpdateHelper.cs b/Helpers/UpdateHelper.cs
+index 60c6de379796fb6be15c1cec5e7b792040ef75d7..394b0f6e40b2a9e19565e38fe466ad4c3be67dfa 100644
+--- a/Helpers/UpdateHelper.cs
++++ b/Helpers/UpdateHelper.cs
+@@ -66,68 +66,50 @@ namespace Teklif_Hazırlayıcı.Helpers
+             return null;
+         }
+ 
+         private static void StartUpdateSequence(string setupPath)
+         {
+             string uninstallCmd = GetUninstallCommand();
+             int pid = Process.GetCurrentProcess().Id;
+ 
+             string batchPath = Path.Combine(Path.GetTempPath(), "teklif_update.bat");
+             var sb = new StringBuilder();
+             sb.AppendLine("@echo off");
+             sb.AppendLine($"taskkill /PID {pid} /F > NUL 2>&1");
+             if (!string.IsNullOrEmpty(uninstallCmd))
+                 sb.AppendLine(uninstallCmd);
+             sb.AppendLine($"start \"\" \"{setupPath}\"");
+ 
+             File.WriteAllText(batchPath, sb.ToString(), Encoding.UTF8);
+             Process.Start(new ProcessStartInfo("cmd.exe", $"/C \"{batchPath}\"")
+             {
+                 CreateNoWindow = true,
+                 UseShellExecute = false
+             });
+             Environment.Exit(0);
+         }
+ 
+-        private static void UpdateAssemblyInfoVersion(string version)
+-        {
+-            try
+-            {
+-                string assemblyInfoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Properties", "AssemblyInfo.cs");
+-                if (!File.Exists(assemblyInfoPath))
+-                    return;
+-
+-                string content = File.ReadAllText(assemblyInfoPath, Encoding.UTF8);
+-                content = Regex.Replace(content, @"AssemblyVersion\(""[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+""\)", "AssemblyVersion(\"" + version + "\")");
+-                content = Regex.Replace(content, @"AssemblyFileVersion\(""[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+""\)", "AssemblyFileVersion(\"" + version + "\")");
+-                File.WriteAllText(assemblyInfoPath, content, Encoding.UTF8);
+-            }
+-            catch (Exception ex)
+-            {
+-                Debug.WriteLine($"[HATA] AssemblyInfo güncellenemedi: {ex.Message}");
+-            }
+-        }
+ 
+         public static async Task CheckForUpdates()
+         {
+             try
+             {
+                 string versionContent = null;
+                 bool localSource = false;
+                 string localVersionFile = Path.Combine(LocalPublishPath, "version.txt");
+ 
+                 if (File.Exists(localVersionFile))
+                 {
+                     versionContent = File.ReadAllText(localVersionFile, Encoding.UTF8);
+                     localSource = true;
+                 }
+                 else
+                 {
+                     using (var client = CreateSecureClient())
+                     {
+                         if (!VersionInfoUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                         {
+                             MessageHelper.ShowError("Güncelleme adresi güvenli değil. HTTPS kullanılmalıdır.");
+                             return;
+                         }
+ 
+                         versionContent = await client.GetStringAsync(VersionInfoUrl);
+@@ -214,43 +196,43 @@ namespace Teklif_Hazırlayıcı.Helpers
+                         }
+ 
+                         if (!string.IsNullOrEmpty(expectedHash))
+                         {
+                             using (var sha256 = SHA256.Create())
+                             using (var fs = File.OpenRead(zipPath))
+                             {
+                                 var actual = sha256.ComputeHash(fs);
+                                 string actualHash = BitConverter.ToString(actual).Replace("-", "").ToLowerInvariant();
+                                 if (!string.Equals(actualHash, expectedHash, StringComparison.OrdinalIgnoreCase))
+                                 {
+                                     MessageHelper.ShowError("İndirilen dosyanın bütünlük doğrulaması başarısız. Güncelleme iptal edildi.");
+                                     return;
+                                 }
+                             }
+                         }
+ 
+                         Debug.WriteLine($"[AÇMA] Zip içeriği çıkarılıyor: {tempDir}");
+                         ZipFile.ExtractToDirectory(zipPath, tempDir);
+ 
+                         string setupPath = Path.Combine(tempDir, "publish", "setup.exe");
+ 
+                         if (File.Exists(setupPath))
+                         {
+                             Debug.WriteLine($"[ÇALIŞTIRMA] setup.exe başlatılıyor: {setupPath}");
+-                            UpdateAssemblyInfoVersion(versionString);
++                            AssemblyInfoHelper.UpdateAssemblyVersion(versionString);
+                             StartUpdateSequence(setupPath);
+                         }
+                         else
+                         {
+                             MessageHelper.ShowError("setup.exe bulunamadı. Güncelleme başlatılamadı.");
+                         }
+                     }
+                 }
+             }
+             catch (Exception ex)
+             {
+                 Debug.WriteLine($"[HATA] Güncelleme kontrolü başarısız: {ex.Message}");
+                 MessageHelper.ShowError($"Güncelleme kontrolü başarısız: {ex.Message}");
+             }
+         }
+     }
+ }
+diff --git "a/Teklif Haz\304\261rlay\304\261c\304\261.csproj" "b/Teklif Haz\304\261rlay\304\261c\304\261.csproj"
+index 38bc88d2c656784b8d8c4449ff15da144c96c6fb..6afc0d8027811141a4983a9b8c69f44cfe2fd39c 100644
+--- "a/Teklif Haz\304\261rlay\304\261c\304\261.csproj"	
++++ "b/Teklif Haz\304\261rlay\304\261c\304\261.csproj"	
+@@ -186,50 +186,51 @@
+     </Compile>
+     <Compile Include="Forms\login.cs">
+       <SubType>Form</SubType>
+     </Compile>
+     <Compile Include="Forms\login.Designer.cs">
+       <DependentUpon>login.cs</DependentUpon>
+     </Compile>
+     <Compile Include="Forms\offer.cs">
+       <SubType>Form</SubType>
+     </Compile>
+     <Compile Include="Forms\offer.Designer.cs">
+       <DependentUpon>offer.cs</DependentUpon>
+     </Compile>
+     <Compile Include="Forms\product.cs">
+       <SubType>Form</SubType>
+     </Compile>
+     <Compile Include="Forms\product.Designer.cs">
+       <DependentUpon>product.cs</DependentUpon>
+     </Compile>
+     <Compile Include="Helpers\DataGridHelper.cs" />
+     <Compile Include="Helpers\Logger.cs" />
+     <Compile Include="Helpers\MessageHelper.cs" />
+     <Compile Include="Helpers\PlaceHolder.cs" />
+     <Compile Include="Helpers\ThemeManager.cs" />
+     <Compile Include="Helpers\TogglePassword.cs" />
++    <Compile Include="Helpers\AssemblyInfoHelper.cs" />
+     <Compile Include="Helpers\UpdateHelper.cs" />
+     <Compile Include="Models\Company.cs" />
+     <Compile Include="Models\Offer.cs" />
+     <Compile Include="Models\Product.cs" />
+     <Compile Include="Models\User.cs" />
+     <Compile Include="Models\Auth.cs" />
+     <Compile Include="Program.cs" />
+     <Compile Include="Properties\AssemblyInfo.cs" />
+     <Compile Include="Forms\register.cs">
+       <SubType>Form</SubType>
+     </Compile>
+     <Compile Include="Forms\register.Designer.cs">
+       <DependentUpon>register.cs</DependentUpon>
+     </Compile>
+     <Compile Include="Validation\StringValidator.cs" />
+     <Compile Include="Validation\TextboxValidator.cs" />
+     <EmbeddedResource Include="Forms\auth.resx">
+       <DependentUpon>auth.cs</DependentUpon>
+       <SubType>Designer</SubType>
+     </EmbeddedResource>
+     <EmbeddedResource Include="Forms\company.resx">
+       <DependentUpon>company.cs</DependentUpon>
+       <SubType>Designer</SubType>
+     </EmbeddedResource>
+     <EmbeddedResource Include="Forms\Custom Item\ColumnForm.resx">
+ 
+EOF
+)

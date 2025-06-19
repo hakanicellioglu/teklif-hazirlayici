@@ -208,6 +208,7 @@
     <Compile Include="Helpers\PlaceHolder.cs" />
     <Compile Include="Helpers\ThemeManager.cs" />
     <Compile Include="Helpers\TogglePassword.cs" />
+    <Compile Include="Helpers\AssemblyInfoHelper.cs" />
     <Compile Include="Helpers\UpdateHelper.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Offer.cs" />
