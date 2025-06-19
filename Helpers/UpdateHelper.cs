@@ -87,6 +87,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                 CreateNoWindow = true,
                 UseShellExecute = false
             });
+            Application.Exit();
             Environment.Exit(0);
         }
 
