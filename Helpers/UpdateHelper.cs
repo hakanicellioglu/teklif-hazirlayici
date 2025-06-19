@@ -73,9 +73,24 @@ namespace Teklif_Hazırlayıcı.Helpers
 
             try
             {
-                var startInfo = new ProcessStartInfo("cmd.exe", "/C \"" + cmd + "\"")
+                string silentCmd = cmd;
+                if (cmd.IndexOf("msiexec", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    UseShellExecute = false
+                    if (!cmd.Contains("/qn", StringComparison.OrdinalIgnoreCase))
+                        silentCmd += " /qn";
+                }
+                else if (!cmd.Contains("/S", StringComparison.OrdinalIgnoreCase) &&
+                         !cmd.Contains("/silent", StringComparison.OrdinalIgnoreCase) &&
+                         !cmd.Contains("/quiet", StringComparison.OrdinalIgnoreCase) &&
+                         !cmd.Contains("/q", StringComparison.OrdinalIgnoreCase))
+                {
+                    silentCmd += " /S";
+                }
+
+                var startInfo = new ProcessStartInfo("cmd.exe", "/C \"" + silentCmd + "\"")
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true
                 };
                 using (var proc = Process.Start(startInfo))
                 {
