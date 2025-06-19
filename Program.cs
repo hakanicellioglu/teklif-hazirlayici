@@ -30,6 +30,10 @@ namespace Teklif_Hazırlayıcı
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+
+                // Uygulama başlatılmadan önce güncellemeleri denetle
+                UpdateHelper.CheckForUpdates().GetAwaiter().GetResult();
+
                 Application.Run(new login());
             }
             catch (Exception ex)
