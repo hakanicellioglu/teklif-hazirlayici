@@ -79,7 +79,7 @@ namespace Teklif_Hazırlayıcı.Helpers
             if (!string.IsNullOrEmpty(uninstallCmd))
                 sb.AppendLine(uninstallCmd);
             sb.AppendLine($"start \"\" /WAIT \"{setupPath}\"");
-            sb.AppendLine($"start \"\" \"{exePath}\"");
+            //sb.AppendLine($"start \"\" \"{exePath}\"");
 
             File.WriteAllText(batchPath, sb.ToString(), Encoding.UTF8);
             Process.Start(new ProcessStartInfo("cmd.exe", $"/C \"{batchPath}\"")
@@ -89,6 +89,7 @@ namespace Teklif_Hazırlayıcı.Helpers
             });
             Application.Exit();
             Environment.Exit(0);
+
         }
 
 
@@ -221,7 +222,6 @@ namespace Teklif_Hazırlayıcı.Helpers
                         if (File.Exists(setupPath))
                         {
                             Debug.WriteLine($"[ÇALIŞTIRMA] setup.exe başlatılıyor: {setupPath}");
-                            MessageBox.Show(versionString);
                             AssemblyInfoHelper.UpdateAssemblyVersion(versionString);
                             StartUpdateSequence(setupPath);
                         }

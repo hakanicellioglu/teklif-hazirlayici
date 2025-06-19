@@ -41,20 +41,14 @@ namespace Teklif_Hazırlayıcı.DataAccess
         {
             try
             {
-                //MessageHelper.ShowInfo("[BAŞLATILIYOR] Veritabanı kontrol ediliyor...");
-
                 if (!DatabaseExists())
                 {
-                    //MessageHelper.ShowInfo("[OLUŞTURULUYOR] Veritabanı bulunamadı. Yeni veritabanı oluşturuluyor...");
                     CreateDatabase();
-                    //MessageHelper.ShowInfo("[BAŞARILI] Veritabanı oluşturuldu.");
 
                     CreateTables();
-                    //MessageHelper.ShowInfo("[BAŞARILI] Gerekli tablolar oluşturuldu.");
                 }
                 else
                 {
-                    //MessageHelper.ShowInfo("[BİLGİ] Veritabanı zaten mevcut. Tablolar tekrar oluşturulmadı.");
                 }
             }
             catch (Exception ex)
