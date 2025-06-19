@@ -79,7 +79,7 @@ namespace Teklif_Hazırlayıcı.Helpers
             if (!string.IsNullOrEmpty(uninstallCmd))
                 sb.AppendLine(uninstallCmd);
             sb.AppendLine($"start \"\" /WAIT \"{setupPath}\"");
-            sb.AppendLine($"start \"\" \"{exePath}\"");
+            //sb.AppendLine($"start \"\" \"{exePath}\"");
 
             File.WriteAllText(batchPath, sb.ToString(), Encoding.UTF8);
             Process.Start(new ProcessStartInfo("cmd.exe", $"/C \"{batchPath}\"")
