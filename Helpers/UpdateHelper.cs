@@ -70,6 +70,7 @@ namespace Teklif_Hazırlayıcı.Helpers
         {
             string uninstallCmd = GetUninstallCommand();
             int pid = Process.GetCurrentProcess().Id;
+            string exePath = Application.ExecutablePath;
 
             string batchPath = Path.Combine(Path.GetTempPath(), "teklif_update.bat");
             var sb = new StringBuilder();
@@ -77,7 +78,8 @@ namespace Teklif_Hazırlayıcı.Helpers
             sb.AppendLine($"taskkill /PID {pid} /F > NUL 2>&1");
             if (!string.IsNullOrEmpty(uninstallCmd))
                 sb.AppendLine(uninstallCmd);
-            sb.AppendLine($"start \"\" \"{setupPath}\"");
+            sb.AppendLine($"start \"\" /WAIT \"{setupPath}\"");
+            sb.AppendLine($"start \"\" \"{exePath}\"");
 
             File.WriteAllText(batchPath, sb.ToString(), Encoding.UTF8);
             Process.Start(new ProcessStartInfo("cmd.exe", $"/C \"{batchPath}\"")
@@ -85,6 +87,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                 CreateNoWindow = true,
                 UseShellExecute = false
             });
+            Application.Exit();
             Environment.Exit(0);
         }
 
