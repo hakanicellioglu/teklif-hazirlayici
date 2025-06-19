@@ -39,10 +39,7 @@ namespace Teklif_Hazırlayıcı.Helpers
 
                 if (File.Exists(localVersionFile))
                 {
-
-                    // Replace the problematic line with the following:
-                    versionContent = await Task.Run(() => File.ReadAllText(localVersionFile, Encoding.UTF8));
-                    versionContent = File.ReadAllText(localVersionFile);
+                    versionContent = File.ReadAllText(localVersionFile, Encoding.UTF8);
                     localSource = true;
                 }
                 else
@@ -58,6 +55,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                         versionContent = await client.GetStringAsync(VersionInfoUrl);
                     }
                 }
+
 
                 string[] lines = versionContent
                     .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
