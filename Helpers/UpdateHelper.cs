@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
 namespace Teklif_Hazırlayıcı.Helpers
@@ -108,6 +109,25 @@ namespace Teklif_Hazırlayıcı.Helpers
                 UseShellExecute = false
             });
             Environment.Exit(0);
+        }
+
+        private static void UpdateAssemblyInfoVersion(string version)
+        {
+            try
+            {
+                string assemblyInfoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Properties", "AssemblyInfo.cs");
+                if (!File.Exists(assemblyInfoPath))
+                    return;
+
+                string content = File.ReadAllText(assemblyInfoPath, Encoding.UTF8);
+                content = Regex.Replace(content, @"AssemblyVersion\(\"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\"\)", $"AssemblyVersion(\"{version}\")");
+                content = Regex.Replace(content, @"AssemblyFileVersion\(\"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\"\)", $"AssemblyFileVersion(\"{version}\")");
+                File.WriteAllText(assemblyInfoPath, content, Encoding.UTF8);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[HATA] AssemblyInfo güncellenemedi: {ex.Message}");
+            }
         }
 
         public static async Task CheckForUpdates()
@@ -238,6 +258,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                             if (File.Exists(setupPath))
                             {
                                 Debug.WriteLine($"[ÇALIŞTIRMA] setup.exe başlatılıyor: {setupPath}");
+                                UpdateAssemblyInfoVersion(versionString);
                                 StartUpdateSequence(setupPath);
                             }
                             else
