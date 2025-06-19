@@ -88,14 +88,8 @@ namespace Teklif_Hazırlayıcı.Helpers
                 UseShellExecute = false
             });
             Application.Exit();
-            try
-            {
-                Process.GetCurrentProcess().Kill();
-            }
-            catch
-            {
-                Environment.Exit(0);
-            }
+            Environment.Exit(0);
+
         }
 
 
