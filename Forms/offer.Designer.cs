@@ -86,25 +86,25 @@
             this.cmbStatus.Size = new System.Drawing.Size(100, 21);
             this.cmbStatus.TabIndex = 1;
             this.cmbStatus.SelectedIndexChanged += new System.EventHandler(this.cmbStatus_SelectedIndexChanged);
-            //
+            // 
             // dtStartDate
-            //
+            // 
             this.dtStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtStartDate.Location = new System.Drawing.Point(120, 15);
             this.dtStartDate.Name = "dtStartDate";
             this.dtStartDate.Size = new System.Drawing.Size(100, 20);
             this.dtStartDate.TabIndex = 2;
             this.dtStartDate.ValueChanged += new System.EventHandler(this.dtStartDate_ValueChanged);
-            //
+            // 
             // dtEndDate
-            //
+            // 
             this.dtEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtEndDate.Location = new System.Drawing.Point(230, 15);
             this.dtEndDate.Name = "dtEndDate";
             this.dtEndDate.Size = new System.Drawing.Size(100, 20);
             this.dtEndDate.TabIndex = 3;
             this.dtEndDate.ValueChanged += new System.EventHandler(this.dtEndDate_ValueChanged);
-            //
+            // 
             // btnClear
             // 
             this.btnClear.Dock = System.Windows.Forms.DockStyle.Right;
