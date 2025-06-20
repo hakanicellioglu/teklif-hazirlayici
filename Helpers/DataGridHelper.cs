@@ -17,5 +17,17 @@ namespace Teklif_Hazırlayıcı.Helpers
                 col.Resizable = DataGridViewTriState.False;
             }
         }
+        public static void RestoreColumnVisibility(DataGridView grid, Dictionary<string, bool> columnSettings)
+        {
+            foreach (DataGridViewColumn col in grid.Columns)
+            {
+                if (columnSettings.TryGetValue(col.Name, out bool visible))
+                {
+                    col.Visible = visible;
+                }
+            }
+        }
+
     }
+
 }

@@ -306,7 +306,7 @@ namespace Teklif_Hazırlayıcı.Business
         {
             try
             {
-                string query = @"            SELECT y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
+                string query = @"SELECT y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
             FROM (teklifler t
             LEFT JOIN firmalar f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer y ON t.yetkili_id = y.yetkili_id
