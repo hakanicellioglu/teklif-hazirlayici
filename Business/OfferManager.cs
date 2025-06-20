@@ -9,6 +9,7 @@ using Teklif_Hazırlayıcı.Forms;
 using Teklif_Hazırlayıcı.Helpers;
 using Teklif_Hazırlayıcı.DataAccess;
 using System.Collections.Generic; // Assuming DataAccess namespace contains SqlDbConnection and OfferRepository
+using System.Linq;
 
 namespace Teklif_Hazırlayıcı.Business
 {
@@ -22,16 +23,36 @@ namespace Teklif_Hazırlayıcı.Business
         */
         private readonly DataAccess.SqlDbConnection _connection;
         private readonly DataAccess.OfferRepository _offerRepository;
+        private List<string> _offerColumns;
         public OfferManager()
         {
-            /*
-             *
-             * DbConnection sınıfından yeni bir örnek oluşturularak 
-             * _connection alanına atanır. Veritabanı bağlantısını başlatmak için kullanılır.
-             *
-             */
             _connection = new DataAccess.SqlDbConnection();
             _offerRepository = new DataAccess.OfferRepository();
+        }
+
+        private string GetOfferSelectColumns()
+        {
+            if (_offerColumns == null)
+            {
+                _offerColumns = new List<string>();
+                string query = @"SELECT c.name FROM sys.columns c WHERE c.object_id = OBJECT_ID(@TableName) ORDER BY c.column_id";
+                using (var conn = _connection.GetConnection())
+                using (var cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@TableName", "dbo.teklifler");
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string name = reader.GetString(0);
+                            _offerColumns.Add($"t.{name}");
+                        }
+                    }
+                }
+            }
+
+            return string.Join(", ", _offerColumns) + ", f.isim AS adi, y.isim, y.soyisim, y.hitap";
         }
 
 
@@ -237,8 +258,9 @@ namespace Teklif_Hazırlayıcı.Business
         {
             try
             {
-                string query = @"
-            SELECT y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
+                string selectColumns = GetOfferSelectColumns();
+
+                string query = $@"SELECT {selectColumns}
             FROM (teklifler t
             LEFT JOIN firmalar f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer y ON t.yetkili_id = y.yetkili_id
@@ -306,7 +328,9 @@ namespace Teklif_Hazırlayıcı.Business
         {
             try
             {
-                string query = @"SELECT y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
+                string selectColumns = GetOfferSelectColumns();
+
+                string query = $@"SELECT {selectColumns}
             FROM (teklifler t
             LEFT JOIN firmalar f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer y ON t.yetkili_id = y.yetkili_id
