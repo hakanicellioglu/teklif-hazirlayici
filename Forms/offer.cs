@@ -152,6 +152,44 @@ namespace Teklif_Hazırlayıcı.Forms
             }
         }
 
+        private async void dtStartDate_ValueChanged(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = null;
+            dataGridView1.Rows.Clear();
+
+            var result = await _offerManager.SearchAsync(
+                txtSearch.Text,
+                cmbStatus.SelectedItem?.ToString(),
+                dtStartDate.Value,
+                dtEndDate.Value);
+
+            if (result != null)
+            {
+                dataGridView1.DataSource = result;
+                SetupGridColumnProperties();
+                SetupOfferGridColumns();
+            }
+        }
+
+        private async void dtEndDate_ValueChanged(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = null;
+            dataGridView1.Rows.Clear();
+
+            var result = await _offerManager.SearchAsync(
+                txtSearch.Text,
+                cmbStatus.SelectedItem?.ToString(),
+                dtStartDate.Value,
+                dtEndDate.Value);
+
+            if (result != null)
+            {
+                dataGridView1.DataSource = result;
+                SetupGridColumnProperties();
+                SetupOfferGridColumns();
+            }
+        }
+
         PlaceHolder placeHolder = new PlaceHolder("Teklif arayın...");
         private void btnClear_Click(object sender, EventArgs e)
         {
