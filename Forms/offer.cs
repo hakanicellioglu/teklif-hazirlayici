@@ -53,9 +53,15 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private async void LoadOffer()
         {
-            dataGridView1.DataSource = await _offerManager.GetOfferAsync();
-            SetupGridColumnProperties();
-            SetupOfferGridColumns();
+            var dt = await _offerManager.GetOfferAsync();
+
+            if (dt != null)
+            {
+                AddFullNameColumn(dt);
+                dataGridView1.DataSource = dt;
+                SetupGridColumnProperties();
+                SetupOfferGridColumns();
+            }
         }
 
         private void SetupGridColumnProperties()
@@ -63,36 +69,75 @@ namespace Teklif_Hazırlayıcı.Forms
             DataGridHelper.SetupGridColumnProperties(dataGridView1);
         }
 
+        private void AddFullNameColumn(DataTable dt)
+        {
+            if (dt == null)
+                return;
+
+            if (!dt.Columns.Contains("yetkili_ad_soyad"))
+                dt.Columns.Add("yetkili_ad_soyad", typeof(string));
+
+            foreach (DataRow row in dt.Rows)
+            {
+                string ad = row["isim"].ToString();
+                string soyad = row["soyisim"].ToString();
+                row["yetkili_ad_soyad"] = string.Format("{0} {1}", ad, soyad).Trim();
+            }
+        }
+
         private void SetupOfferGridColumns()
         {
+            // Önce tüm sütunları gizle
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+            {
+                column.Visible = false;
+            }
+
             if (dataGridView1.Columns["teklif_id"] != null)
             {
-                dataGridView1.Columns["teklif_id"].HeaderText = "Teklif No";
+                // düzenleme işlemleri için teklif_id değerine ihtiyaç duyulduğundan görünmez bırak
+                dataGridView1.Columns["teklif_id"].Visible = false;
             }
 
             if (dataGridView1.Columns["yetkili_id"] != null)
             {
-                dataGridView1.Columns["yetkili_id"].HeaderText = "Yetkili No";
                 dataGridView1.Columns["yetkili_id"].Visible = false;
             }
 
             if (dataGridView1.Columns["adi"] != null)
-                dataGridView1.Columns["adi"].HeaderText = "Firma";
+            {
+                dataGridView1.Columns["adi"].HeaderText = "Firma Adı";
+                dataGridView1.Columns["adi"].Visible = true;
+                dataGridView1.Columns["adi"].DisplayIndex = 0;
+            }
 
-            if (dataGridView1.Columns["isim"] != null)
-                dataGridView1.Columns["isim"].HeaderText = "Yetkili İsmi";
-
-            if (dataGridView1.Columns["soyisim"] != null)
-                dataGridView1.Columns["soyisim"].HeaderText = "Yetkili Soyismi";
+            if (dataGridView1.Columns["yetkili_ad_soyad"] != null)
+            {
+                dataGridView1.Columns["yetkili_ad_soyad"].HeaderText = "Yetkili Adı - Soyadı";
+                dataGridView1.Columns["yetkili_ad_soyad"].Visible = true;
+                dataGridView1.Columns["yetkili_ad_soyad"].DisplayIndex = 1;
+            }
 
             if (dataGridView1.Columns["hitap"] != null)
-                dataGridView1.Columns["hitap"].HeaderText = "Hitap";
+            {
+                dataGridView1.Columns["hitap"].HeaderText = "Yetkili Hitap";
+                dataGridView1.Columns["hitap"].Visible = true;
+                dataGridView1.Columns["hitap"].DisplayIndex = 2;
+            }
 
             if (dataGridView1.Columns["teklif_tarih"] != null)
+            {
                 dataGridView1.Columns["teklif_tarih"].HeaderText = "Teklif Tarihi";
+                dataGridView1.Columns["teklif_tarih"].Visible = true;
+                dataGridView1.Columns["teklif_tarih"].DisplayIndex = 3;
+            }
 
             if (dataGridView1.Columns["durum"] != null)
-                dataGridView1.Columns["durum"].HeaderText = "Durum";
+            {
+                dataGridView1.Columns["durum"].HeaderText = "Teklif Durumu";
+                dataGridView1.Columns["durum"].Visible = true;
+                dataGridView1.Columns["durum"].DisplayIndex = 4;
+            }
         }
 
         private void btnAddCompany_Click(object sender, EventArgs e)
@@ -123,6 +168,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
             if (result != null)
             {
+                AddFullNameColumn(result);
                 dataGridView1.DataSource = result;
                 SetupGridColumnProperties();
                 SetupOfferGridColumns();
@@ -146,6 +192,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
             if (result != null)
             {
+                AddFullNameColumn(result);
                 dataGridView1.DataSource = result;
                 SetupGridColumnProperties();
                 SetupOfferGridColumns();
@@ -165,6 +212,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
             if (result != null)
             {
+                AddFullNameColumn(result);
                 dataGridView1.DataSource = result;
                 SetupGridColumnProperties();
                 SetupOfferGridColumns();
@@ -184,6 +232,7 @@ namespace Teklif_Hazırlayıcı.Forms
 
             if (result != null)
             {
+                AddFullNameColumn(result);
                 dataGridView1.DataSource = result;
                 SetupGridColumnProperties();
                 SetupOfferGridColumns();
