@@ -69,8 +69,9 @@ namespace Teklif_Hazırlayıcı.Business
                      * Bu veriler bir DataTable nesnesine doldurularak döndürülür.
                      *
                      */
-                string query = @"
-            SELECT t.teklif_id, t.yetkili_id, y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
+                string selectColumns = GetOfferSelectColumns();
+
+                string query = $@"SELECT {selectColumns}
             FROM (teklifler AS t
             LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id;";
@@ -94,7 +95,9 @@ namespace Teklif_Hazırlayıcı.Business
         {
             try
             {
-                string query = @"            SELECT t.teklif_id, t.yetkili_id, y.isim, y.soyisim, y.hitap, f.isim, t.teklif_tarih, t.durum
+                string selectColumns = GetOfferSelectColumns();
+
+                string query = $@"SELECT {selectColumns}
             FROM (teklifler AS t
             LEFT JOIN firmalar AS f ON t.firma_id = f.firma_id)
             LEFT JOIN yetkililer AS y ON t.yetkili_id = y.yetkili_id;";
