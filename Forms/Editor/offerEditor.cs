@@ -152,7 +152,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void LoadProducts()
         {
-            itemManager itemMgr = new itemManager();
+            ItemManager itemMgr = new ItemManager();
             DataTable dtKalemler = itemMgr.GetItemsByTeklifId(offer_id);
 
             if (dtKalemler != null && dtKalemler.Rows.Count > 0)
@@ -478,7 +478,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                         if (MessageHelper.ShowQuestion("Teklif başarıyla oluşturuldu. Ürün eklemek ister misiniz?") == DialogResult.Yes)
                         {
                             Hide();
-                            itemEditor itemEditor = new itemEditor(teklifId, null, "Add", new itemManager());
+                            itemEditor itemEditor = new itemEditor(teklifId, null, "Add", new ItemManager());
                             if (itemEditor.ShowDialog() == DialogResult.OK)
                             {
                                 offerManager.UpdateOfferById(teklifId);
@@ -535,7 +535,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     chkTevkifat.Checked,
                     chkDurum.Text);
 
-                itemManager itemMgr = new itemManager();
+                ItemManager itemMgr = new ItemManager();
                 itemMgr.UpdateItemPricesByOffer(offer_id);
                 _offerManager.UpdateOfferById(offer_id);
 
@@ -562,7 +562,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                 if (result == CustomMessageBox.CustomResult.Duzenle)
                 {
                     Hide();
-                    itemEditor editor = new itemEditor(offer_id, kalemId, "Edit", new itemManager());
+                    itemEditor editor = new itemEditor(offer_id, kalemId, "Edit", new ItemManager());
                     editor.Width = Screen.PrimaryScreen.WorkingArea.Width;
                     editor.Height = Screen.PrimaryScreen.WorkingArea.Height;
                     editor.ShowDialog();
@@ -574,7 +574,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
                     var confirm = MessageHelper.ShowQuestion("Bu kalemi silmek istediğinize emin misiniz?");
                     if (confirm == DialogResult.Yes)
                     {
-                        itemManager manager = new itemManager();
+                        ItemManager manager = new ItemManager();
                         if (manager.DeleteProductByKalemId(kalemId))
                         {
                             MessageHelper.ShowInfo("Kalem başarıyla silindi.");
@@ -640,7 +640,7 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            itemEditor itemEditor = new itemEditor(offer_id, null, "Add", new itemManager());
+            itemEditor itemEditor = new itemEditor(offer_id, null, "Add", new ItemManager());
             itemEditor.ShowDialog();
             LoadProducts();
         }

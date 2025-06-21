@@ -17,9 +17,9 @@ namespace Teklif_Hazırlayıcı.Forms.Editor
     {
         int? teklif_id, kalem_id;
         string kategori, editor_mode;
-        private readonly itemManager _itemManager;
+        private readonly ItemManager _itemManager;
 
-        public itemEditor(int? teklifId, int? kalemId, string editMode, itemManager itemManager)
+        public itemEditor(int? teklifId, int? kalemId, string editMode, ItemManager itemManager)
         {
             InitializeComponent();
             bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
