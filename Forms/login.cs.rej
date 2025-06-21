@@ -1,0 +1,39 @@
+diff a/Forms/login.cs b/Forms/login.cs	(rejected hunks)
+@@ -1,36 +1,37 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.ComponentModel;
+ using System.Configuration;
+ using System.Data;
+ using System.Drawing;
+ using System.Drawing.Drawing2D;
+ using System.Linq;
+ using System.Text;
+ using System.Threading.Tasks;
+ using System.Windows.Forms;
++using Guna.UI2.WinForms;
+ using Teklif_Hazırlayıcı.Business;
+ using Teklif_Hazırlayıcı.Forms;
+ using Teklif_Hazırlayıcı.Helpers;
+ using TeklifHazirlayici.Properties;
+ using Teklif_Hazırlayıcı.Validation;
+ using StringValidator = Teklif_Hazırlayıcı.Validation.StringValidator;
+ 
+ namespace Teklif_Hazırlayıcı
+ {
+     public partial class login : Form
+     {
+         UserManager UserManager = new UserManager();
+         MessageHelper MessageHelper = new MessageHelper();
+ 
+         public login()
+         {
+             InitializeComponent();
+             bool dark = TeklifHazirlayici.Properties.Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+             ThemeManager.SetTheme(this, dark);
+             CenterToScreen();
+             WindowState = FormWindowState.Maximized;
+             // Güncelleme kontrolü giriş ekranı gösterildiğinde yapılmıyor
+             //this.Shown += login_Shown;
+         }
+ 

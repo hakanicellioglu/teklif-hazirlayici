@@ -1,0 +1,208 @@
+diff a/Helpers/ThemeManager.cs b/Helpers/ThemeManager.cs	(rejected hunks)
+@@ -1,86 +1,87 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.Drawing;
+ using System.Linq;
+ using System.Runtime.InteropServices;
+ using System.Text;
+ using System.Threading.Tasks;
+ using System.Windows.Forms;
++using Guna.UI2.WinForms;
+ 
+ namespace Teklif_Hazırlayıcı.Helpers
+ {
+     public static class ThemeManager
+     {
+         private static bool _isDarkMode = false;
+ 
+         public static void ToggleTheme(Form form)
+         {
+             SetTheme(form, !_isDarkMode);
+         }
+ 
+         public static void SetTheme(Form form, bool darkMode)
+         {
+             _isDarkMode = darkMode;
+ 
+             EnsureTags(form);
+ 
+             Color darkBackground = SystemColors.ControlDarkDark;
+             Color lightBackground = SystemColors.ControlLightLight;
+ 
+             Color backgroundColor = _isDarkMode ? darkBackground : lightBackground;
+ 
+             form.BackColor = backgroundColor;
+ 
+             ApplyTheme(form);
+         }
+ 
+         public static void ApplyThemeToAllOpenForms(bool darkMode)
+         {
+             foreach (Form form in Application.OpenForms)
+             {
+                 SetTheme(form, darkMode);
+             }
+         }
+ 
+         private static void EnsureTags(Control parent)
+         {
+             if (parent.Tag == null)
+             {
+                 if (parent is Label)
+                     parent.Tag = "label";
+-                else if (parent is Button)
++                else if (parent is Button || parent is Guna2Button)
+                     parent.Tag = "button";
+-                else if (parent is TextBox || parent is ComboBox || parent is MaskedTextBox || parent is NumericUpDown)
++                else if (parent is TextBox || parent is ComboBox || parent is MaskedTextBox || parent is NumericUpDown || parent is Guna2TextBox)
+                     parent.Tag = "input";
+-                else if (parent is CheckBox)
++                else if (parent is CheckBox || parent is Guna2CheckBox)
+                     parent.Tag = "checkbox";
+                 else if (parent is LinkLabel)
+                     parent.Tag = "link";
+-                else if (parent is Panel)
++                else if (parent is Panel || parent is Guna2Panel)
+                     parent.Tag = "panel";
+-                else if (parent is DataGridView)
++                else if (parent is DataGridView || parent is Guna2DataGridView)
+                     parent.Tag = "grid";
+             }
+ 
+             foreach (Control ctrl in parent.Controls)
+             {
+                 EnsureTags(ctrl);
+             }
+         }
+ 
+ 
+         private static void ApplyTheme(Control parent)
+         {
+             Color darkColor1 = SystemColors.ControlDarkDark;
+             Color darkColor2 = SystemColors.ControlDark;
+             Color darkColor3 = SystemColors.Control;
+             Color darkColor4 = SystemColors.ControlLight;
+             Color darkColor5 = SystemColors.ControlLightLight;
+ 
+             Color lightColor1 = SystemColors.ControlLightLight;
+             Color lightColor2 = SystemColors.ControlLight;
+             Color lightColor3 = SystemColors.ControlDark;
+             Color lightColor4 = SystemColors.ControlText;
+             Color lightColor5 = SystemColors.ControlText;
+ 
+             Color background = _isDarkMode ? darkColor1 : lightColor1;
+@@ -95,76 +96,91 @@ namespace Teklif_Hazırlayıcı.Helpers
+ 
+             foreach (Control ctrl in parent.Controls)
+             {
+                 if (ctrl.Tag != null)
+                 {
+                     var tags = ctrl.Tag.ToString().Split(' ').Select(t => t.Trim().ToLower());
+ 
+                     if (tags.Contains("label"))
+                         ctrl.ForeColor = textPrimary;
+ 
+                     if (tags.Contains("input"))
+                     {
+                         // Make inputs blend with their parent background
+                         ctrl.BackColor = ctrl.Parent?.BackColor ?? background;
+                         ctrl.ForeColor = textPrimary;
+                     }
+ 
+                     if (tags.Contains("button"))
+                     {
+                         if (ctrl is Button btn)
+                         {
+                             btn.FlatStyle = FlatStyle.Flat;
+                             btn.UseVisualStyleBackColor = false;
+                         }
+ 
+-                        if (tags.Contains("primary"))
++                        if (ctrl is Guna2Button gbtn)
+                         {
+-                            ctrl.BackColor = border;
+-                            ctrl.ForeColor = textPrimary;
++                            gbtn.FillColor = tags.Contains("primary") ? border : secondary;
++                            gbtn.ForeColor = textPrimary;
+                         }
+-                        else if (tags.Contains("secondary"))
+-                        { 
+-                            ctrl.BackColor = secondary;
+-                            ctrl.ForeColor = textPrimary;
++                        else
++                        {
++                            if (tags.Contains("primary"))
++                            {
++                                ctrl.BackColor = border;
++                                ctrl.ForeColor = textPrimary;
++                            }
++                            else if (tags.Contains("secondary"))
++                            {
++                                ctrl.BackColor = secondary;
++                                ctrl.ForeColor = textPrimary;
++                            }
+                         }
+                     }
+ 
+-                    if (tags.Contains("grid") && ctrl is DataGridView grid)
++                    if (tags.Contains("grid"))
+                     {
+-                        grid.BackgroundColor = background;
+-                        grid.GridColor = border;
+-                        
+-                        grid.ColumnHeadersDefaultCellStyle.BackColor = panel;
+-                        grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+-                        grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = panel;
+-                        grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;
+-
+-                        grid.DefaultCellStyle.BackColor = panel;
+-                        grid.DefaultCellStyle.ForeColor = border;
+-                        grid.DefaultCellStyle.SelectionBackColor = background;
+-                        grid.DefaultCellStyle.SelectionForeColor = secondary;
+-                        
+-                        grid.EnableHeadersVisualStyles = false;
++                        DataGridView grid = ctrl as DataGridView;
++                        if (ctrl is Guna2DataGridView)
++                            grid = ctrl as DataGridView; // Guna2DataGridView derives from DataGridView
++
++                        if (grid != null)
++                        {
++                            grid.BackgroundColor = background;
++                            grid.GridColor = border;
++
++                            grid.ColumnHeadersDefaultCellStyle.BackColor = panel;
++                            grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
++                            grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = panel;
++                            grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.Black;
++
++                            grid.DefaultCellStyle.BackColor = panel;
++                            grid.DefaultCellStyle.ForeColor = border;
++                            grid.DefaultCellStyle.SelectionBackColor = background;
++                            grid.DefaultCellStyle.SelectionForeColor = secondary;
++
++                            grid.EnableHeadersVisualStyles = false;
++                        }
+                     }
+ 
+ 
+                     if (tags.Contains("icon"))
+                     {
+                         ctrl.BackColor = Color.Transparent;
+                         ctrl.ForeColor = textPrimary;
+                     }
+ 
+                     if (tags.Contains("checkbox"))
+                         ctrl.ForeColor = textPrimary;
+ 
+                     if (tags.Contains("link") && ctrl is LinkLabel link)
+                         link.LinkColor = textSecondary;
+                 }
+ 
+                 if (ctrl.HasChildren)
+                     ApplyTheme(ctrl);
+             }
+         }
+ 
+     }
+ }

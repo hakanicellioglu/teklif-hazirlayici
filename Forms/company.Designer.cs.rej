@@ -1,0 +1,85 @@
+diff a/Forms/company.Designer.cs b/Forms/company.Designer.cs	(rejected hunks)
+@@ -22,51 +22,51 @@
+ 
+         #region Windows Form Designer generated code
+ 
+         /// <summary>
+         /// Required method for Designer support - do not modify
+         /// the contents of this method with the code editor.
+         /// </summary>
+         private void InitializeComponent()
+         {
+             this.components = new System.ComponentModel.Container();
+             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(company));
+             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+             this.txtSearch = new System.Windows.Forms.TextBox();
+             this.btnClear = new System.Windows.Forms.Button();
+             this.imgButton = new System.Windows.Forms.ImageList(this.components);
+             this.btnSearch = new System.Windows.Forms.Button();
+             this.btnAddCompany = new System.Windows.Forms.Button();
+             this.panel1 = new System.Windows.Forms.Panel();
+             this.panel2 = new System.Windows.Forms.Panel();
+             this.btnRefresh = new System.Windows.Forms.Button();
+             this.panel3 = new System.Windows.Forms.Panel();
+             this.label1 = new System.Windows.Forms.Label();
+             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
++            this.dataGridView1 = new Guna.UI2.WinForms.Guna2DataGridView();
+             this.panel1.SuspendLayout();
+             this.panel2.SuspendLayout();
+             this.panel3.SuspendLayout();
+             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+             this.SuspendLayout();
+             // 
+             // txtSearch
+             // 
+             this.txtSearch.BackColor = System.Drawing.SystemColors.Control;
+             this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
+             this.txtSearch.Dock = System.Windows.Forms.DockStyle.Right;
+             this.txtSearch.Font = new System.Drawing.Font("Century Gothic", 11F);
+             this.txtSearch.ForeColor = System.Drawing.Color.Silver;
+             this.txtSearch.Location = new System.Drawing.Point(400, 15);
+             this.txtSearch.Name = "txtSearch";
+             this.txtSearch.Size = new System.Drawing.Size(150, 18);
+             this.txtSearch.TabIndex = 0;
+             this.txtSearch.Text = "Firma arayın...";
+             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
+             this.txtSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyUp);
+             this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
+             // 
+             // btnClear
+             // 
+             this.btnClear.Dock = System.Windows.Forms.DockStyle.Right;
+@@ -253,28 +253,28 @@
+             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+             this.Tag = "form";
+             this.Text = "Teklif Hazırlayıcı";
+             this.panel1.ResumeLayout(false);
+             this.panel1.PerformLayout();
+             this.panel2.ResumeLayout(false);
+             this.panel3.ResumeLayout(false);
+             this.panel3.PerformLayout();
+             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+             this.ResumeLayout(false);
+ 
+         }
+ 
+         #endregion
+         private System.Windows.Forms.TextBox txtSearch;
+         private System.Windows.Forms.Button btnClear;
+         private System.Windows.Forms.Button btnSearch;
+         private System.Windows.Forms.Button btnAddCompany;
+         private System.Windows.Forms.Panel panel1;
+         private System.Windows.Forms.Label label1;
+         private System.Windows.Forms.Panel panel2;
+         private System.Windows.Forms.ToolTip toolTip1;
+         private System.Windows.Forms.Panel panel3;
+         private System.Windows.Forms.ImageList imgButton;
+         private System.Windows.Forms.Button btnRefresh;
+-        private System.Windows.Forms.DataGridView dataGridView1;
++        private Guna.UI2.WinForms.Guna2DataGridView dataGridView1;
+     }
+ }
+\ No newline at end of file

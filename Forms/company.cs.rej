@@ -1,0 +1,38 @@
+diff a/Forms/company.cs b/Forms/company.cs	(rejected hunks)
+@@ -1,35 +1,36 @@
+ ﻿using System;
+ using System.Collections.Generic;
+ using System.ComponentModel;
+ using System.Configuration;
+ using System.Data;
+ using System.Drawing;
+ using System.Linq;
+ using System.Text;
+ using System.Threading.Tasks;
+ using System.Windows.Forms;
++using Guna.UI2.WinForms;
+ using Teklif_Hazırlayıcı.Business;
+ using Teklif_Hazırlayıcı.Forms.Custom_Item;
+ using Teklif_Hazırlayıcı.Forms.Editor;
+ using Teklif_Hazırlayıcı.Helpers;
+ using Teklif_Hazırlayıcı.Validation;
+ using Teklif_Hazırlayıcı.Models;
+ using TeklifHazirlayici.Properties;
+ using TeklifHazirlayici.Forms.Custom_Item;
+ 
+ namespace Teklif_Hazırlayıcı.Forms
+ {
+     public partial class company : Form
+     {
+         private readonly CompanyManager _companyManager;
+         private Button btnManageColumns;
+         public company(CompanyManager companyManager)
+         {
+             InitializeComponent();
+             bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+             ThemeManager.SetTheme(this, dark);
+             _companyManager = companyManager;
+             AddManageColumnsButton();
+             LoadCompany();
+         }
+ 
