@@ -12,7 +12,7 @@ using System.Data.SqlClient;
 
 namespace Teklif_Hazırlayıcı.Business
 {
-    public class itemManager
+    public class ItemManager
     {
         /*
         *
@@ -21,7 +21,7 @@ namespace Teklif_Hazırlayıcı.Business
         *
         */
         private readonly DataAccess.SqlDbConnection _connection;
-        public itemManager()
+        public ItemManager()
         {
             /*
              *

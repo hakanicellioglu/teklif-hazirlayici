@@ -99,7 +99,7 @@
   <ItemGroup>
     <Compile Include="Business\AuthManager.cs" />
     <Compile Include="Business\CompanyManager.cs" />
-    <Compile Include="Business\itemManager.cs" />
+    <Compile Include="Business\ItemManager.cs" />
     <Compile Include="Business\OfferManager.cs" />
     <Compile Include="Business\ProductManager.cs" />
     <Compile Include="Business\UserManager.cs" />
