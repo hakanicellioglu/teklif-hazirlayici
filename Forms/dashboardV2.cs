@@ -1,0 +1,112 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Teklif_Hazırlayıcı.Forms.Editor;
+using Teklif_Hazırlayıcı.Helpers;
+using TeklifHazirlayici.Properties;
+
+
+namespace Teklif_Hazırlayıcı.Forms
+{
+    public partial class dashboardV2 : Form
+    {
+        public dashboardV2()
+        {
+            InitializeComponent();
+            bool dark = Settings.Default.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+            ThemeManager.SetTheme(this, dark);
+            LoadForm(new home());
+        }
+
+        private void LoadForm(Form formToLoad)
+        {
+            if (pnlForm.Controls.Count > 0)
+            {
+                var oldForm = pnlForm.Controls[0] as Form;
+                oldForm?.Dispose();
+                pnlForm.Controls.Clear();
+            }
+            formToLoad.TopLevel = false;
+            formToLoad.Dock = DockStyle.Fill;
+            pnlForm.Controls.Add(formToLoad);
+            formToLoad.Show();
+        }
+
+
+        private void btnHome_Click(object sender, EventArgs e)
+        {
+            LoadForm(new home());
+        }
+
+        private void btnCompany_Click(object sender, EventArgs e)
+        {
+            LoadForm(new company(new Business.CompanyManager()));
+        }
+
+        private void btnAuth_Click(object sender, EventArgs e)
+        {
+            LoadForm(new auth(new Business.CompanyManager(), new Business.AuthManager()));
+        }
+
+        private void dashboardV2_Resize(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnProduct_Click(object sender, EventArgs e)
+        {
+            LoadForm(new product(new Business.ProductManager()));
+        }
+
+        private void btnOffer_Click(object sender, EventArgs e)
+        {
+            LoadForm(new offer(new Business.OfferManager(), new offerEditor(null, "Add", new Business.AuthManager(), new Business.CompanyManager(), new Business.OfferManager())));
+        }
+
+        private void btnReports_Click(object sender, EventArgs e)
+        {
+            LoadForm(new reports());
+        }
+
+        private void btnTheme_Click(object sender, EventArgs e)
+        {
+            ThemeManager.ToggleTheme(this);
+        }
+
+        private async void btnUpdate_Click(object sender, EventArgs e)
+        {
+            await UpdateHelper.CheckForUpdates();
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void btnLogout_Click_1(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            LoadForm(new settings());
+        }
+    }
+}
