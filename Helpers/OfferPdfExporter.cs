@@ -165,6 +165,25 @@ namespace Teklif_Hazırlayıcı.Helpers
                 doc.Add(ustBilgiTable);
                 doc.Add(new Paragraph(" ") { SpacingAfter = 2f });
 
+                // Yardımcı fonksiyonlar: hücre üreticilerAdd commentMore actions
+                PdfPCell CreateLeftCell(string text, iTextSharp.text.Font font)
+                {
+                    return new PdfPCell(new Phrase(text, font))
+                    {
+                        Border = iTextSharp.text.Rectangle.NO_BORDER,
+                        HorizontalAlignment = Element.ALIGN_LEFT
+                    };
+                }
+
+                PdfPCell CreateRightCell(string text, iTextSharp.text.Font font)
+                {
+                    return new PdfPCell(new Phrase(text, font))
+                    {
+                        Border = iTextSharp.text.Rectangle.NO_BORDER,
+                        HorizontalAlignment = Element.ALIGN_RIGHT
+                    };
+                }
+
                 var kalemler = offerManager.GetTeklifKalemleri(offerId);
                 PdfPTable table = new PdfPTable(10)
                 {
