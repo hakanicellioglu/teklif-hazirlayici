@@ -1,2 +1,2 @@
-1.0.0.19
+2.0.0.1
 https://github.com/hakanicellioglu/teklif-hazirlayici/releases/download/1.0.0.17/publish.zip
