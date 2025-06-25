@@ -146,35 +146,47 @@ namespace Teklif_Hazırlayıcı.Forms
 
         private void AddExportPdfColumn()
         {
+            DataGridViewButtonColumn btn;
             if (dataGridView1.Columns.Contains("export_pdf"))
-                return;
-
-            DataGridViewButtonColumn btn = new DataGridViewButtonColumn
             {
-                Name = "export_pdf",
-                HeaderText = "PDF",
-                Text = "PDF",
-                UseColumnTextForButtonValue = true,
-                Width = 60
-            };
-            dataGridView1.Columns.Add(btn);
+                btn = (DataGridViewButtonColumn)dataGridView1.Columns["export_pdf"];
+            }
+            else
+            {
+                btn = new DataGridViewButtonColumn
+                {
+                    Name = "export_pdf",
+                    HeaderText = "PDF",
+                    Text = "PDF",
+                    UseColumnTextForButtonValue = true,
+                    Width = 60
+                };
+                dataGridView1.Columns.Add(btn);
+            }
+            btn.Visible = true;
             btn.DisplayIndex = dataGridView1.Columns.Count - 1;
         }
 
         private void AddPrintColumn()
         {
+            DataGridViewButtonColumn btn;
             if (dataGridView1.Columns.Contains("print_offer"))
-                return;
-
-            DataGridViewButtonColumn btn = new DataGridViewButtonColumn
             {
-                Name = "print_offer",
-                HeaderText = "Yazdır",
-                Text = "Yazdır",
-                UseColumnTextForButtonValue = true,
-                Width = 60
-            };
-            dataGridView1.Columns.Add(btn);
+                btn = (DataGridViewButtonColumn)dataGridView1.Columns["print_offer"];
+            }
+            else
+            {
+                btn = new DataGridViewButtonColumn
+                {
+                    Name = "print_offer",
+                    HeaderText = "Yazdır",
+                    Text = "Yazdır",
+                    UseColumnTextForButtonValue = true,
+                    Width = 60
+                };
+                dataGridView1.Columns.Add(btn);
+            }
+            btn.Visible = true;
             btn.DisplayIndex = dataGridView1.Columns.Count - 1;
         }
 
