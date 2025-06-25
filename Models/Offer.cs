@@ -22,6 +22,7 @@ namespace Teklif_Hazırlayıcı.Models
         public string Vade { get; set; }
         public float VadeFarki { get; set; }
         public float Lme { get; set; }
+        public bool LmeGoster { get; set; }
         public float Iscilik { get; set; }
         public float ToplamAdet { get; set; }
         public float ToplamKg { get; set; }

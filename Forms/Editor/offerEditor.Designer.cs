@@ -51,7 +51,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
+            this.chkLME = new System.Windows.Forms.CheckBox();
             this.txtLME = new System.Windows.Forms.TextBox();
             this.txtIskonto = new System.Windows.Forms.TextBox();
             this.chkTevkifat = new System.Windows.Forms.CheckBox();
@@ -307,17 +307,18 @@
             this.label10.TabIndex = 10;
             this.label10.Text = "Vade";
             // 
-            // label11
-            // 
-            this.label11.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.label11.Location = new System.Drawing.Point(851, 171);
-            this.label11.Margin = new System.Windows.Forms.Padding(7);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(87, 19);
-            this.label11.TabIndex = 22;
-            this.label11.Text = "LME (₺/ton)";
+            // chkLME
+            //
+            this.chkLME.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.chkLME.AutoSize = true;
+            this.chkLME.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.chkLME.Location = new System.Drawing.Point(851, 171);
+            this.chkLME.Margin = new System.Windows.Forms.Padding(7);
+            this.chkLME.Name = "chkLME";
+            this.chkLME.Size = new System.Drawing.Size(58, 23);
+            this.chkLME.TabIndex = 22;
+            this.chkLME.Text = "LME";
+            this.chkLME.UseVisualStyleBackColor = true;
             // 
             // txtLME
             // 
@@ -669,7 +670,7 @@
             this.panel2.Controls.Add(this.chkVade);
             this.panel2.Controls.Add(this.txtLME);
             this.panel2.Controls.Add(this.label14);
-            this.panel2.Controls.Add(this.label11);
+            this.panel2.Controls.Add(this.chkLME);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.txtDovizKuru);
             this.panel2.Controls.Add(this.label10);
@@ -728,7 +729,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.CheckBox chkLME;
         private System.Windows.Forms.TextBox txtLME;
         private System.Windows.Forms.TextBox txtIskonto;
         private System.Windows.Forms.CheckBox chkTevkifat;

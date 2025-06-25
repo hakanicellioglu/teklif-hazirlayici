@@ -154,6 +154,7 @@ namespace Teklif_Hazırlayıcı.DataAccess
                 vade NVARCHAR(100),
                 vade_farki FLOAT,
                 lme FLOAT,
+                lme_goster BIT,
                 iscilik FLOAT,
                 toplam_adet FLOAT,
                 toplam_kg FLOAT,

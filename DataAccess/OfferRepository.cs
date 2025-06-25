@@ -22,11 +22,11 @@ namespace Teklif_Hazırlayıcı.DataAccess
         /// </summary>
         public int InsertOffer(int firmaId, int yetkiliId, DateTime teklifTarih, string teslimSekli,
             string odemeSekli, int odemeVade, int teklifSure, string dovizKuru, char dovizBirimi,
-            string vade, float vadeFarki, decimal lme, decimal iscilik, decimal iskontoOrani,
+            string vade, float vadeFarki, decimal lme, bool lmeGoster, decimal iscilik, decimal iskontoOrani,
             decimal kdvOrani, bool tevkifat, string durum)
         {
-            string query = "INSERT INTO teklifler (firma_id, yetkili_id, teklif_tarih, teslim_sekli, odeme_sekli, odeme_vade, teklif_sure, doviz_kuru, doviz_birimi, vade, vade_farki, lme, iscilik, iskonto_orani, kdv_orani, tevkifat, tevkifat_orani, durum) " +
-                           "VALUES (@CompanyId, @AuthorizedPersonId, @OfferDate, @DeliveryMethod, @PaymentMethod, @PaymentDue, @OfferValidity, @ExchangeRate, @CurrencyUnit, @Term, @TermRate, @Lme, @Workmanship, @DiscountRate, @VatRate, @Withholding, @WithholdingRate, @Status); SELECT CAST(SCOPE_IDENTITY() AS INT);";
+            string query = "INSERT INTO teklifler (firma_id, yetkili_id, teklif_tarih, teslim_sekli, odeme_sekli, odeme_vade, teklif_sure, doviz_kuru, doviz_birimi, vade, vade_farki, lme, lme_goster, iscilik, iskonto_orani, kdv_orani, tevkifat, tevkifat_orani, durum) " +
+                           "VALUES (@CompanyId, @AuthorizedPersonId, @OfferDate, @DeliveryMethod, @PaymentMethod, @PaymentDue, @OfferValidity, @ExchangeRate, @CurrencyUnit, @Term, @TermRate, @Lme, @LmeGoster, @Workmanship, @DiscountRate, @VatRate, @Withholding, @WithholdingRate, @Status); SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
             using (SqlConnection conn = _connection.GetConnection())
             {
@@ -45,6 +45,7 @@ namespace Teklif_Hazırlayıcı.DataAccess
                     cmd.Parameters.Add("@Term", SqlDbType.NVarChar).Value = vade;
                     cmd.Parameters.Add("@TermRate", SqlDbType.Float).Value = vadeFarki;
                     cmd.Parameters.Add("@Lme", SqlDbType.Decimal).Value = lme;
+                    cmd.Parameters.Add("@LmeGoster", SqlDbType.Bit).Value = lmeGoster;
                     cmd.Parameters.Add("@Workmanship", SqlDbType.Decimal).Value = iscilik;
                     cmd.Parameters.Add("@DiscountRate", SqlDbType.Decimal).Value = iskontoOrani;
                     cmd.Parameters.Add("@VatRate", SqlDbType.Decimal).Value = kdvOrani;
@@ -62,7 +63,7 @@ namespace Teklif_Hazırlayıcı.DataAccess
         /// </summary>
         public void UpdateOffer(int teklifId, int firmaId, int yetkiliId, DateTime teklifTarih, string teslimSekli,
             string odemeSekli, int odemeVade, int teklifSure, string dovizKuru, char dovizBirimi,
-            string vade, float vadeFarki, decimal lme, decimal iscilik, decimal iskontoOrani,
+            string vade, float vadeFarki, decimal lme, bool lmeGoster, decimal iscilik, decimal iskontoOrani,
             decimal kdvOrani, bool tevkifat, string durum)
         {
             string updateQuery = @"UPDATE teklifler SET
@@ -78,6 +79,7 @@ namespace Teklif_Hazırlayıcı.DataAccess
                             vade = @Vade,
                             vade_farki = @TermRate,
                             lme = @Lme,
+                            lme_goster = @LmeGoster,
                             iscilik = @Workmanship,
                             iskonto_orani = @IskontoOrani,
                             kdv_orani = @KdvOrani,
@@ -103,6 +105,7 @@ namespace Teklif_Hazırlayıcı.DataAccess
                     cmd.Parameters.AddWithValue("@Vade", vade);
                     cmd.Parameters.AddWithValue("@TermRate", vadeFarki);
                     cmd.Parameters.AddWithValue("@Lme", lme);
+                    cmd.Parameters.AddWithValue("@LmeGoster", lmeGoster);
                     cmd.Parameters.AddWithValue("@Workmanship", iscilik);
                     cmd.Parameters.AddWithValue("@IskontoOrani", iskontoOrani);
                     cmd.Parameters.AddWithValue("@KdvOrani", kdvOrani);
@@ -130,6 +133,7 @@ namespace Teklif_Hazırlayıcı.DataAccess
                 offer.Vade,
                 offer.VadeFarki,
                 (decimal)offer.Lme,
+                offer.LmeGoster,
                 (decimal)offer.Iscilik,
                 (decimal)offer.IskontoOrani,
                 (decimal)offer.KdvOrani,
@@ -153,6 +157,7 @@ namespace Teklif_Hazırlayıcı.DataAccess
                 offer.Vade,
                 offer.VadeFarki,
                 (decimal)offer.Lme,
+                offer.LmeGoster,
                 (decimal)offer.Iscilik,
                 (decimal)offer.IskontoOrani,
                 (decimal)offer.KdvOrani,
