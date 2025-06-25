@@ -395,7 +395,7 @@ namespace Teklif_Hazırlayıcı.Business
         /// <summary>
         /// Adds a new offer and returns its identifier.
         /// </summary>
-        public int AddOffer(int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, float vadefarki, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
+        public int AddOffer(int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, float vadefarki, string lme, bool lme_goster, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
         {
             try
             {
@@ -417,6 +417,7 @@ namespace Teklif_Hazırlayıcı.Business
                     vade,
                     vadefarki,
                     lmeDecimal,
+                    lme_goster,
                     iscilikDecimal,
                     iskontoDecimal,
                     kdvDecimal,
@@ -436,7 +437,7 @@ namespace Teklif_Hazırlayıcı.Business
         /// <summary>
         /// Updates an offer with the provided values.
         /// </summary>
-        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, float vade_farki, string lme, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
+        public void UpdateOffer(int? teklif_id, int firma_id, int yetkili_id, DateTime teklif_tarih, string teslim_sekli, string odeme_sekli, int odeme_vadesi, int teklif_suresi, string doviz_kuru, char doviz_birimi, string vade, float vade_farki, string lme, bool lme_goster, string iscilik, string iskonto_orani, string kdv_orani, bool tevkifat, string durum)
         {
             try
             {
@@ -465,6 +466,7 @@ namespace Teklif_Hazırlayıcı.Business
                     vade,
                     vade_farki,
                     lmeDecimal,
+                    lme_goster,
                     iscilikDecimal,
                     iskontoDecimal,
                     kdvDecimal,
