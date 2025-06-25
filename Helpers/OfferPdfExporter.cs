@@ -28,9 +28,12 @@ namespace Teklif_Hazırlayıcı.Helpers
 
                 DataTable teklifGenel = await offerManager.GetOfferByIdAsync(offerId);
                 decimal lmeExport = 0;
+                bool lmeGoster = true;
                 if (teklifGenel != null && teklifGenel.Rows.Count > 0)
                 {
                     decimal.TryParse(teklifGenel.Rows[0]["lme"].ToString(), NumberStyles.Any, new CultureInfo("tr-TR"), out lmeExport);
+                    if (teklifGenel.Columns.Contains("lme_goster") && teklifGenel.Rows[0]["lme_goster"] != DBNull.Value)
+                        lmeGoster = Convert.ToBoolean(teklifGenel.Rows[0]["lme_goster"]);
                 }
 
                 var row = teklifDetay.Rows[0];
@@ -253,8 +256,11 @@ namespace Teklif_Hazırlayıcı.Helpers
                 teslimBilgiTable.AddCell(CreateCell(dovizKuru, smallFont));
                 teslimBilgiTable.AddCell(CreateCell("VADE", smallFont));
                 teslimBilgiTable.AddCell(CreateCell(vade, smallFont));
-                teslimBilgiTable.AddCell(CreateCell("LME (" + doviz_birimi + "/ton)", smallFont));
-                teslimBilgiTable.AddCell(CreateCell(lmeExport.ToString("N2", new CultureInfo("tr-TR")), smallFont));
+                if (lmeGoster)
+                {
+                    teslimBilgiTable.AddCell(CreateCell("LME (" + doviz_birimi + "/ton)", smallFont));
+                    teslimBilgiTable.AddCell(CreateCell(lmeExport.ToString("N2", new CultureInfo("tr-TR")), smallFont));
+                }
                 teslimBilgiTable.HorizontalAlignment = Element.ALIGN_LEFT;
 
                 string[,] toplamlar = {

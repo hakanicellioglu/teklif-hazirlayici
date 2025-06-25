@@ -143,6 +143,7 @@ namespace Teklif_Hazırlayıcı.Business
         t.vade,
         t.vade_farki,
         t.lme,
+        t.lme_goster,
         t.iscilik,
         t.toplam_adet,
         t.toplam_kg,
@@ -208,6 +209,7 @@ namespace Teklif_Hazırlayıcı.Business
         t.vade,
         t.vade_farki,
         t.lme,
+        t.lme_goster,
         t.iscilik,
         t.toplam_adet,
         t.toplam_kg,
@@ -707,7 +709,8 @@ namespace Teklif_Hazırlayıcı.Business
                     t.teklif_sure,
                     t.doviz_kuru,
                     t.vade,
-                    t.vade_farki
+                    t.vade_farki,
+                    t.lme_goster
                 FROM ((teklifler t
                 LEFT JOIN firmalar f ON f.firma_id = t.firma_id)
                 LEFT JOIN yetkililer y ON y.yetkili_id = t.yetkili_id)
