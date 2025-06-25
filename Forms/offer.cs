@@ -141,6 +141,7 @@ namespace Teklif_Hazırlayıcı.Forms
             }
 
             AddExportPdfColumn();
+            AddPrintColumn();
         }
 
         private void AddExportPdfColumn()
@@ -153,6 +154,23 @@ namespace Teklif_Hazırlayıcı.Forms
                 Name = "export_pdf",
                 HeaderText = "PDF",
                 Text = "PDF",
+                UseColumnTextForButtonValue = true,
+                Width = 60
+            };
+            dataGridView1.Columns.Add(btn);
+            btn.DisplayIndex = dataGridView1.Columns.Count - 1;
+        }
+
+        private void AddPrintColumn()
+        {
+            if (dataGridView1.Columns.Contains("print_offer"))
+                return;
+
+            DataGridViewButtonColumn btn = new DataGridViewButtonColumn
+            {
+                Name = "print_offer",
+                HeaderText = "Yazdır",
+                Text = "Yazdır",
                 UseColumnTextForButtonValue = true,
                 Width = 60
             };
@@ -176,6 +194,18 @@ namespace Teklif_Hazırlayıcı.Forms
                         tevkifat = Convert.ToBoolean(val);
                 }
                 await OfferPdfExporter.ExportOfferToPdfAsync(teklifId, tevkifat);
+            }
+            else if (dataGridView1.Columns[e.ColumnIndex].Name == "print_offer")
+            {
+                int teklifId = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["teklif_id"].Value);
+                bool tevkifat = false;
+                if (dataGridView1.Columns.Contains("tevkifat"))
+                {
+                    object val = dataGridView1.Rows[e.RowIndex].Cells["tevkifat"].Value;
+                    if (val != DBNull.Value)
+                        tevkifat = Convert.ToBoolean(val);
+                }
+                await OfferPdfExporter.PrintOfferAsync(teklifId, tevkifat);
             }
         }
 
