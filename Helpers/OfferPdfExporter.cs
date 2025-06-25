@@ -4,6 +4,7 @@ using System;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Teklif_Hazırlayıcı.Business;
@@ -13,7 +14,7 @@ namespace Teklif_Hazırlayıcı.Helpers
 {
     public static class OfferPdfExporter
     {
-        public static async Task ExportOfferToPdfAsync(int offerId, bool tevkifat)
+        public static async Task ExportOfferToPdfAsync(int offerId, bool tevkifat, string filePath = null)
         {
             try
             {
@@ -74,13 +75,18 @@ namespace Teklif_Hazırlayıcı.Helpers
                 string odenecekTutarStr = odenecekTutar.ToString("N2", new CultureInfo("tr-TR"));
                 char doviz_birimi = row["doviz_birimi"] != DBNull.Value ? Convert.ToChar(row["doviz_birimi"]) : '₺';
 
-                SaveFileDialog saveFile = new SaveFileDialog
+                string savePath = filePath;
+                if (string.IsNullOrEmpty(savePath))
                 {
-                    Filter = "PDF dosyası (*.pdf)|*.pdf",
-                    FileName = $"Teklif_{offerId}.pdf"
-                };
-                if (saveFile.ShowDialog() != DialogResult.OK)
-                    return;
+                    SaveFileDialog saveFile = new SaveFileDialog
+                    {
+                        Filter = "PDF dosyası (*.pdf)|*.pdf",
+                        FileName = $"Teklif_{offerId}.pdf"
+                    };
+                    if (saveFile.ShowDialog() != DialogResult.OK)
+                        return;
+                    savePath = saveFile.FileName;
+                }
 
                 BaseFont baseFont;
                 try
@@ -101,7 +107,7 @@ namespace Teklif_Hazırlayıcı.Helpers
                 var smallFont = new iTextSharp.text.Font(baseFont, 5);
 
                 Document doc = new Document(PageSize.A4, 40, 40, 40, 40);
-                PdfWriter.GetInstance(doc, new FileStream(saveFile.FileName, FileMode.Create));
+                PdfWriter.GetInstance(doc, new FileStream(savePath, FileMode.Create));
                 doc.Open();
 
                 string logoPath = Path.Combine(Application.StartupPath, "Forms", "Resources", "logo.jpeg");
@@ -368,7 +374,10 @@ namespace Teklif_Hazırlayıcı.Helpers
                 onayTable.AddCell(musteriCell);
                 doc.Add(onayTable);
                 doc.Close();
-                MessageBox.Show("PDF başarıyla oluşturuldu.", "PDF Çıktısı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    MessageBox.Show("PDF başarıyla oluşturuldu.", "PDF Çıktısı", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -395,6 +404,27 @@ namespace Teklif_Hazırlayıcı.Helpers
         private static string FormatDecimalTr(decimal value, int precision = 2)
         {
             return value.ToString($"N{precision}", new CultureInfo("tr-TR"));
+        }
+
+        public static async Task PrintOfferAsync(int offerId, bool tevkifat)
+        {
+            try
+            {
+                string tempPath = Path.Combine(Path.GetTempPath(), $"Teklif_{offerId}_{Guid.NewGuid():N}.pdf");
+                await ExportOfferToPdfAsync(offerId, tevkifat, tempPath);
+                var psi = new ProcessStartInfo
+                {
+                    FileName = tempPath,
+                    Verb = "print",
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                };
+                Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                MessageHelper.ShowError("Yazdırma başlatılamadı: " + ex.Message);
+            }
         }
     }
 }
