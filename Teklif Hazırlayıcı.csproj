@@ -213,6 +213,7 @@
     <Compile Include="Helpers\TogglePassword.cs" />
     <Compile Include="Helpers\AssemblyInfoHelper.cs" />
     <Compile Include="Helpers\UpdateHelper.cs" />
+    <Compile Include="Helpers\OfferPdfExporter.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Offer.cs" />
     <Compile Include="Models\Product.cs" />

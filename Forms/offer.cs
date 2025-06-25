@@ -31,6 +31,7 @@ namespace Teklif_Hazırlayıcı.Forms
             _offerManager = offerManager;
             _offerEditor = offerEditor;
             AddManageColumnsButton();
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             cmbStatus.SelectedIndex = 0;
             dtStartDate.Value = DateTime.Today.AddMonths(-1);
             dtEndDate.Value = DateTime.Today;
@@ -137,6 +138,44 @@ namespace Teklif_Hazırlayıcı.Forms
                 dataGridView1.Columns["durum"].HeaderText = "Teklif Durumu";
                 dataGridView1.Columns["durum"].Visible = true;
                 dataGridView1.Columns["durum"].DisplayIndex = 4;
+            }
+
+            AddExportPdfColumn();
+        }
+
+        private void AddExportPdfColumn()
+        {
+            if (dataGridView1.Columns.Contains("export_pdf"))
+                return;
+
+            DataGridViewButtonColumn btn = new DataGridViewButtonColumn
+            {
+                Name = "export_pdf",
+                HeaderText = "PDF",
+                Text = "PDF",
+                UseColumnTextForButtonValue = true,
+                Width = 60
+            };
+            dataGridView1.Columns.Add(btn);
+            btn.DisplayIndex = dataGridView1.Columns.Count - 1;
+        }
+
+        private async void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "export_pdf")
+            {
+                int teklifId = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["teklif_id"].Value);
+                bool tevkifat = false;
+                if (dataGridView1.Columns.Contains("tevkifat"))
+                {
+                    object val = dataGridView1.Rows[e.RowIndex].Cells["tevkifat"].Value;
+                    if (val != DBNull.Value)
+                        tevkifat = Convert.ToBoolean(val);
+                }
+                await OfferPdfExporter.ExportOfferToPdfAsync(teklifId, tevkifat);
             }
         }
 

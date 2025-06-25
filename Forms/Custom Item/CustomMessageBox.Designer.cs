@@ -96,9 +96,9 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(600, 200);
             this.Name = "CustomMessageBox";
-            this.Tag = "form";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Tag = "form";
             this.Text = "Teklif Hazırlayıcı";
             this.ResumeLayout(false);
             this.PerformLayout();
